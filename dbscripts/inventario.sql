@@ -1,11 +1,46 @@
 BEGIN TRANSACTION;
-CREATE TABLE IF NOT EXISTS "Users" (
-       "Id"  TEXT NOT NULL UNIQUE,
-       "Email"	          TEXT NOT NULL UNIQUE,
-       "IsActive"              INTEGER DEFAULT 0,
-       "PasswordHash"	   BLOB NOT NULL,
-       "PasswordSalt"	   BLOB NOT NULL,
-       "DateCreated"	TEXT NOT NULL,
+CREATE TABLE IF NOT EXISTS "Categorias" (
+       "Id"  	    	  TEXT NOT NULL UNIQUE,
+       "Item"		  INTEGER AUTOINCREMENT,
+       "Nombre"	          TEXT NOT NULL
+       PRIMARY KEY("Id")
+);
+
+CREATE TABLE IF NOT EXISTS "UnidadesMedida" (
+       "Id"  	    	  TEXT NOT NULL UNIQUE,
+       "Item"		  INTEGER AUTOINCREMENT,
+       "Nombre"	          TEXT NOT NULL
+       PRIMARY KEY("Id")
+);
+
+
+CREATE TABLE IF NOT EXISTS "Productos" (
+       "Id"  	    	   	       TEXT NOT NULL UNIQUE,
+       "Item"		  	       INTEGER AUTOINCREMENT,
+       "Nombre"	               	       TEXT NOT NULL,
+       "UnidadMedidaId"	       	       TEXT NOT NULL,
+       "CodigoBarrasItem"	       TEXT NOT NULL, -- Si el item tiene codigo de barras por ejemplo codigo barras en un lapiz
+       "CodigoBarrasCaja"	       TEXT NOT NULL, -- Si la caja tiene un codigo de barras por ejemplo caja lapices
+       PRIMARY KEY("Id")
+);
+
+
+CREATE TABLE IF NOT EXISTS "CategoriasProductos" (
+       "Id"  	    	  TEXT NOT NULL UNIQUE,
+       "CategoriaId"	  TEXT NOT NULL,
+       "ProductoId"       TEXT NOT NULL,       
+       PRIMARY KEY("Id"),
+       FOREIGN KEY("ProductoId") REFERENCES "Productos"("Id") ON DELETE CASCADE
+       FOREIGN KEY("CategoriaId") REFERENCES "Categorias"("Id") ON DELETE CASCADE
+);
+
+
+CREATE TABLE IF NOT EXISTS "CompraProductos" (
+       "Id"  	    	  TEXT NOT NULL UNIQUE,
+       "Item"	          INTEGER AUTOINCREMENT,
+       "FechaCompra"      TEXT NOT NULL,
+       "FechaArribo"	  TEXT,
+       "CostoPaqueteria"  NUMERIC -- decimal
        PRIMARY KEY("Id")
 );
 
