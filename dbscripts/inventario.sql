@@ -35,14 +35,28 @@ CREATE TABLE IF NOT EXISTS "CategoriasProductos" (
 );
 
 
-CREATE TABLE IF NOT EXISTS "CompraProductos" (
+CREATE TABLE IF NOT EXISTS "Compras" (
        "Id"  	    	  TEXT NOT NULL UNIQUE,
        "Item"	          INTEGER AUTOINCREMENT,
+       "Notas"	  	  TEXT,
        "FechaCompra"      TEXT NOT NULL,
        "FechaArribo"	  TEXT,
        "CostoPaqueteria"  NUMERIC -- decimal
+       "TotalCompra"      NUMERIC -- decimal
        PRIMARY KEY("Id")
 );
+
+CREATE TABLE IF NOT EXISTS "ComprasProductos" (
+       "Id"  	    	  TEXT NOT NULL UNIQUE,
+       "Item"	          INTEGER AUTOINCREMENT,
+       ""	  	  TEXT,
+       "FechaCompra"      TEXT NOT NULL,
+       "FechaArribo"	  TEXT,
+       "CostoPaqueteria"  NUMERIC -- decimal
+       "TotalCompra"      NUMERIC -- decimal
+       PRIMARY KEY("Id")
+);
+
 
 CREATE TABLE IF NOT EXISTS "Roles" (
        "Id"	TEXT NOT NULL UNIQUE,
