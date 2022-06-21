@@ -49,11 +49,9 @@ CREATE TABLE IF NOT EXISTS "Compras" (
 CREATE TABLE IF NOT EXISTS "ComprasProductos" (
        "Id"  	    	  TEXT NOT NULL UNIQUE,
        "Item"	          INTEGER AUTOINCREMENT,
-       ""	  	  TEXT,
-       "FechaCompra"      TEXT NOT NULL,
-       "FechaArribo"	  TEXT,
-       "CostoPaqueteria"  NUMERIC -- decimal
-       "TotalCompra"      NUMERIC -- decimal
+       "ProductoID"	  TEXT NOT NULL,
+       "CompraID"	  TEXT NOT NULL,
+       "Cantidad"         NUMERIC -- decimal
        PRIMARY KEY("Id")
 );
 
