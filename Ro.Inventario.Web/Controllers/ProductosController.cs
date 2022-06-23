@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Ro.Inventario.Web.Models;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Ro.Inventario.Web.Controllers;
 
@@ -23,7 +25,7 @@ public class ProductosController : Controller
         return View(new CompraNuevosProductos());
     }
 
-    public IActionResult Guardar(CompraNuevosProductos model, HttpPostedFileBase file)
+    public IActionResult Guardar(CompraNuevosProductos model, List<IFormFile> files)
     {
         return View(new CompraNuevosProductos());
     }
