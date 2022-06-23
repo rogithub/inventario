@@ -4,7 +4,7 @@
 }
 
 <div>
-    <form asp-action="Guardar" asp-controller="Productos" method="post">
+    <form asp-action="Guardar" asp-controller="Productos" method="post" EncType="multipart/form-data">
         <div asp-validation-summary="All" class="text-danger"></div>
 
         <input asp-for="Id" type="hidden" />
@@ -27,8 +27,15 @@
 
         <div class="mb-3">
             <label for="txtNotas" class="form-label">Notas</label>
-            <textarea asp-for="Notas" type="text" class="form-control"></textarea>            
+            <textarea asp-for="Notas" type="text" class="form-control"></textarea>
         </div>
+
+        <div class="mb-3">
+            <label for="theFile" class="form-label">Archivo con productos</label>
+            <input id="oFile" type="file" name="oFile" class="form-control form-control-lg" accept=".csv">
+        </div>
+
+        
 
         <div>
             <a class="btn btn-secondary"

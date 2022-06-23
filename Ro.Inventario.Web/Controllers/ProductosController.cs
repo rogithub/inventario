@@ -23,6 +23,11 @@ public class ProductosController : Controller
         return View(new CompraNuevosProductos());
     }
 
+    public IActionResult Guardar(CompraNuevosProductos model)
+    {
+        return View(new CompraNuevosProductos());
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
