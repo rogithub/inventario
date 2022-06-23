@@ -25,10 +25,10 @@ INSERT INTO Categorias  (Id, Nombre) VALUES ('710ad3c8-b75e-49b3-a3cd-43507ac959
 
 CREATE TABLE IF NOT EXISTS "Productos" (
        "Id"  	    	   	       TEXT NOT NULL UNIQUE,
-       "Nombre"	               	       TEXT NOT NULL,
-       "UnidadMedidaId"	       	       TEXT NOT NULL,
-       "CodigoBarrasItem"	       TEXT NOT NULL, -- Si el item tiene codigo de barras por ejemplo codigo barras en un lapiz
-       "CodigoBarrasCaja"	       TEXT NOT NULL, -- Si la caja tiene un codigo de barras por ejemplo caja lapices
+       "Nombre"	              TEXT NOT NULL,
+       "UnidadMedidaId"	       TEXT,
+       "CodigoBarrasItem"	       TEXT, -- Si el item tiene codigo de barras por ejemplo codigo barras en un lapiz
+       "CodigoBarrasCaja"	       TEXT, -- Si la caja tiene un codigo de barras por ejemplo caja lapices
        PRIMARY KEY("Id")
 );
 
@@ -52,12 +52,12 @@ CREATE TABLE IF NOT EXISTS "CategoriasProductos" (
 );
 
 CREATE TABLE IF NOT EXISTS "Compras" (
-       "Id"  	    	  TEXT NOT NULL UNIQUE,
-       "Notas"	  	  TEXT,
-       "FechaCompra"      TEXT NOT NULL,
-       "FechaArribo"	  TEXT,
-       "CostoPaqueteria"  NUMERIC, -- decimal
-       "TotalCompra"      NUMERIC, -- decimal
+       "Id"  	    	   TEXT NOT NULL UNIQUE,
+       "Notas"	   TEXT,
+       "FechaFactura"   TEXT NOT NULL,       
+       "FechaCreado"    TEXT NOT NULL,
+       "CostoPaqueteria"   NUMERIC, -- decimal
+       "TotalFactura"      NUMERIC, -- decimal
        PRIMARY KEY("Id")
 );
 

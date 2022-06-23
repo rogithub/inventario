@@ -1,0 +1,40 @@
+@{
+    ViewData["Title"] = "Productos Nuevos";
+    @model Ro.Inventario.Web.Models.CompraNuevosProductos;
+}
+
+<div>
+    <form asp-action="Guardar" asp-controller="Productos" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <input asp-for="Id" type="hidden" />
+        <input asp-for="FechaCreado" type="hidden" />
+
+        <div class="mb-3">
+            <label for="totalFlete" class="form-label">Total Paquetería</label>
+            <input asp-for="CostoPaqueteria" type="text" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label for="totalFactura" class="form-label">Total de la factura</label>
+            <input asp-for="TotalFactura" type="text" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label for="fechaFactura" class="form-label">Fecha factura</label>
+            <input asp-for="FechaFactura" type="date" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label for="txtNotas" class="form-label">Notas</label>
+            <textarea asp-for="Notas" type="text" class="form-control"></textarea>            
+        </div>
+
+        <div>
+            <a class="btn btn-secondary"
+                    asp-action="Index"
+                    asp-controller="Productos">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+    </form>
+</div>

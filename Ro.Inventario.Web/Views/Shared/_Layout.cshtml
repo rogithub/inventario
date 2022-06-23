@@ -21,7 +21,33 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
-                        </li>                        
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="ddVentas" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Ventas
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="ddVentas">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Ventas" asp-action="Index">Ventas</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-action="Nuevo" asp-controller="Ventas">Nuevo</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="ddProductos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Productos
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="ddProductos">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Productos" asp-action="Index">Productos</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-action="Nuevo" asp-controller="Productos">Nuevo</a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </div>
