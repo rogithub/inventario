@@ -23,7 +23,7 @@ public class ProductosController : Controller
         return View(new CompraNuevosProductos());
     }
 
-    public IActionResult Guardar(CompraNuevosProductos model)
+    public IActionResult Guardar(CompraNuevosProductos model, HttpPostedFileBase file)
     {
         return View(new CompraNuevosProductos());
     }
