@@ -23,8 +23,6 @@ INSERT INTO Categorias  (Id, Nombre) VALUES ('d0ce9c76-58d2-4462-a41f-1849b413ff
 INSERT INTO Categorias  (Id, Nombre) VALUES ('20161328-7f62-4631-86c7-95be7f094f29', 'Metro');
 INSERT INTO Categorias  (Id, Nombre) VALUES ('710ad3c8-b75e-49b3-a3cd-43507ac959c9', 'Caja');
 
-
-
 CREATE TABLE IF NOT EXISTS "Productos" (
        "Id"  	    	   	       TEXT NOT NULL UNIQUE,
        "Nombre"	               	       TEXT NOT NULL,
@@ -33,6 +31,16 @@ CREATE TABLE IF NOT EXISTS "Productos" (
        "CodigoBarrasCaja"	       TEXT NOT NULL, -- Si la caja tiene un codigo de barras por ejemplo caja lapices
        PRIMARY KEY("Id")
 );
+
+CREATE TABLE IF NOT EXISTS "PreciosProductos" (
+       "Id"  	    	  TEXT NOT NULL UNIQUE,
+       "FechaCreado"	  TEXT NOT NULL, -- el ultimo creado es el bueno
+       "ProductoId"       TEXT NOT NULL,
+       "PrecioVenta"	  NUMERIC,
+       PRIMARY KEY("Id"),
+       FOREIGN KEY("ProductoId") REFERENCES "Productos"("Id") ON DELETE CASCADE
+);
+
 
 CREATE TABLE IF NOT EXISTS "CategoriasProductos" (
        "Id"  	    	  TEXT NOT NULL UNIQUE,
@@ -58,6 +66,7 @@ CREATE TABLE IF NOT EXISTS "ComprasProductos" (
        "ProductoId"	  TEXT NOT NULL,
        "CompraId"	  TEXT NOT NULL,
        "Cantidad"         NUMERIC, -- decimal
+       "PrecioCompra"	  NUMERIC, -- el precio al que yo lo compré
        PRIMARY KEY("Id"),
        FOREIGN KEY("ProductoId") REFERENCES "Productos"("Id") ON DELETE CASCADE
        FOREIGN KEY("CompraId") REFERENCES "Compras"("Id") ON DELETE CASCADE
