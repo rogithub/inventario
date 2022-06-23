@@ -6,12 +6,25 @@ CREATE TABLE IF NOT EXISTS "Categorias" (
        PRIMARY KEY("Id")
 );
 
+-- Init data
+INSERT INTO Categorias  (Id, Nombre) VALUES ('3f75daaa-04c6-4d04-aaa1-e243a00ef2c6', 'General');
+INSERT INTO Categorias  (Id, Nombre) VALUES ('e6e15392-7c43-49a6-bb5c-4ed6a6794c62', 'SHEIN');
+INSERT INTO Categorias  (Id, Nombre) VALUES ('84debfc5-a23b-44c6-9945-248dfc4e4239', 'Monografias');
+INSERT INTO Categorias  (Id, Nombre) VALUES ('20e61d99-6d05-4b8b-a9b3-bf5273558f9d', 'Biografias');
+INSERT INTO Categorias  (Id, Nombre) VALUES ('c046b206-5a37-4463-925c-c195e267cc74', 'Kawaii');
+
+
 CREATE TABLE IF NOT EXISTS "UnidadesMedida" (
        "Id"  	    	  TEXT NOT NULL UNIQUE,
        "Item"		  INTEGER AUTOINCREMENT,
        "Nombre"	          TEXT NOT NULL
        PRIMARY KEY("Id")
 );
+
+INSERT INTO Categorias  (Id, Nombre) VALUES ('d0ce9c76-58d2-4462-a41f-1849b413ffbe', 'Pieza');
+INSERT INTO Categorias  (Id, Nombre) VALUES ('20161328-7f62-4631-86c7-95be7f094f29', 'Metro');
+INSERT INTO Categorias  (Id, Nombre) VALUES ('710ad3c8-b75e-49b3-a3cd-43507ac959c9', 'Caja');
+
 
 
 CREATE TABLE IF NOT EXISTS "Productos" (
@@ -24,7 +37,6 @@ CREATE TABLE IF NOT EXISTS "Productos" (
        PRIMARY KEY("Id")
 );
 
-
 CREATE TABLE IF NOT EXISTS "CategoriasProductos" (
        "Id"  	    	  TEXT NOT NULL UNIQUE,
        "CategoriaId"	  TEXT NOT NULL,
@@ -33,7 +45,6 @@ CREATE TABLE IF NOT EXISTS "CategoriasProductos" (
        FOREIGN KEY("ProductoId") REFERENCES "Productos"("Id") ON DELETE CASCADE
        FOREIGN KEY("CategoriaId") REFERENCES "Categorias"("Id") ON DELETE CASCADE
 );
-
 
 CREATE TABLE IF NOT EXISTS "Compras" (
        "Id"  	    	  TEXT NOT NULL UNIQUE,
@@ -49,154 +60,35 @@ CREATE TABLE IF NOT EXISTS "Compras" (
 CREATE TABLE IF NOT EXISTS "ComprasProductos" (
        "Id"  	    	  TEXT NOT NULL UNIQUE,
        "Item"	          INTEGER AUTOINCREMENT,
-       "ProductoID"	  TEXT NOT NULL,
-       "CompraID"	  TEXT NOT NULL,
+       "ProductoId"	  TEXT NOT NULL,
+       "CompraId"	  TEXT NOT NULL,
        "Cantidad"         NUMERIC -- decimal
+       PRIMARY KEY("Id"),
+       FOREIGN KEY("ProductoId") REFERENCES "Productos"("Id") ON DELETE CASCADE
+       FOREIGN KEY("CompraId") REFERENCES "Compras"("Id") ON DELETE CASCADE
+);
+
+
+CREATE TABLE IF NOT EXISTS "Ventas" (
+       "Id"  	    	  TEXT NOT NULL UNIQUE,
+       "Item"	          INTEGER AUTOINCREMENT,
+       "Notas"	  	  TEXT,
+       "FechaVenta"       TEXT NOT NULL,
        PRIMARY KEY("Id")
 );
 
-
-CREATE TABLE IF NOT EXISTS "Roles" (
-       "Id"	TEXT NOT NULL UNIQUE,
-       "Role"	TEXT NOT NULL UNIQUE,
-       PRIMARY KEY("Id")
-);
-
-CREATE TABLE IF NOT EXISTS "User_Roles" (
-       "Id"	TEXT NOT NULL UNIQUE,
-       "RoleId" TEXT NOT NULL,
-       "UserId" TEXT NOT NULL,       
+CREATE TABLE IF NOT EXISTS "VentasProductos" (
+       "Id"  	    	  TEXT NOT NULL UNIQUE,
+       "Item"	          INTEGER AUTOINCREMENT,
+       "ProductoId"	  TEXT NOT NULL,
+       "VentaId"	  TEXT NOT NULL,
+       "Cantidad"         NUMERIC -- decimal
        PRIMARY KEY("Id"),
-       FOREIGN KEY("RoleId") REFERENCES "Roles"("Id") ON DELETE CASCADE
-       FOREIGN KEY("UserId") REFERENCES "Users"("Id") ON DELETE CASCADE
+       FOREIGN KEY("ProductoId") REFERENCES "Productos"("Id") ON DELETE CASCADE
+       FOREIGN KEY("VentaId") REFERENCES "Ventas"("Id") ON DELETE CASCADE
+
 );
 
-CREATE TABLE IF NOT EXISTS "Reset_Password" (
-       "Id"                    TEXT NOT NULL UNIQUE,
-       "UserId"                TEXT NOT NULL,       
-       "UsedDate"	          TEXT NULL,
-       "ExpiryDate"	          TEXT NOT NULL,
-       PRIMARY KEY("Id"),
-       FOREIGN KEY("UserId") REFERENCES "Users"("Id") ON DELETE CASCADE
-);
-
-
-CREATE TABLE IF NOT EXISTS "Generador_Cobros" (
-       "Id"	                     TEXT NOT NULL UNIQUE,
-       "IsActive"                  INTEGER DEFAULT 0,
-       "Nombre"	              TEXT NOT NULL,
-       "Recurrencia"               INTEGER,             -- UNICO,MENSUAL
-       "RecurrenciaCada"           INTEGER DEFAULT 1,   -- CADAxMESES
-       "Monto"	              REAL,
-       "MontoRecargo"	       REAL,         -- Valor de recargo si paga vencido
-       "FechaInicio"	              TEXT NOT NULL,
-       "FechaFin"	              TEXT,         -- NULL is es por tiempo indefinido
-       "FechaVencimiento"          TEXT NULL,    -- Fecha de vencimiento si pago único
-       "DiaVencimiento"	       INTEGER NULL, -- Día de vencimiento si pago mensual (día del mes, valores 1-31)
-       "DateCreated"	              TEXT NOT NULL,
-       "DateModified"	       TEXT NOT NULL,
-       PRIMARY KEY("Id")
-);
-
-CREATE TABLE IF NOT EXISTS "Cobros" (
-       "Id"	                     TEXT NOT NULL UNIQUE,
-       "GeneradorId"	              TEXT NOT NULL UNIQUE,
-       "Nombre"	              TEXT NOT NULL,      
-       "Monto"	              REAL,
-       "MontoRecargo"	       REAL,
-       "FechaVencimiento"          TEXT NULL,
-       "DiaVencimiento"	       INTEGER NULL, 
-       "DateCreated"	              TEXT NOT NULL,
-       "Mes"                       INTEGER NULL, -- se llena en pagos mensuales únicamente
-       "Anio"                      INTEGER NULL, -- se llena en pagos mensuales únicamente
-       PRIMARY KEY("Id"),
-       FOREIGN KEY("GeneradorId") REFERENCES "Generador_Cobros"("Id") ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS "Casas" (
-       "Id"	              TEXT NOT NULL UNIQUE,
-       "UserId"             TEXT NOT NULL,
-       "Direccion"	       TEXT,
-       "DateCreated"	       TEXT NOT NULL,
-       "DateModified"	TEXT NOT NULL,
-       PRIMARY KEY("Id"),
-       FOREIGN KEY("UserId") REFERENCES "Users"("Id") ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS "Pagos" (
-       "Id"	              TEXT NOT NULL UNIQUE,
-       "CasaId"             TEXT NOT NULL,
-       "CobroId"            TEXT NOT NULL,       
-       "Monto"	       REAL,
-       "DateCreated"	       TEXT NOT NULL,
-       "DateModified"	TEXT NOT NULL,
-       "FileName"	       TEXT,
-       "Comprobante"	       BLOB,
-       PRIMARY KEY("Id"),
-       FOREIGN KEY("CasaId") REFERENCES "Casas"("Id") ON DELETE CASCADE
-       FOREIGN KEY("CobroId") REFERENCES "Cobros"("Id") ON DELETE CASCADE
-);
-
--- Siempre se crean, nunca se borran, el ultimo creado es el bueno
-CREATE TABLE IF NOT EXISTS "Pagos_Estatus" (
-       "Id"	              TEXT NOT NULL UNIQUE,
-       "UserId"             TEXT NOT NULL,
-       "PagoId"             TEXT NOT NULL,       
-       "Estatus"	       TEXT NOT NULL,
-       "Comentario"	       TEXT,
-       "DateCreated"	       TEXT NOT NULL,
-       PRIMARY KEY("Id"),
-       FOREIGN KEY("UserId") REFERENCES "Users"("Id") ON DELETE CASCADE
-       FOREIGN KEY("PagoId") REFERENCES "Pagos"("Id") ON DELETE CASCADE
-);
-
-
--- Views
-DROP VIEW IF EXISTS v_cobros_vencimientos;
-CREATE VIEW v_cobros_vencimientos
-AS
-SELECT 
-	CASE WHEN 
-		(gc.Recurrencia = 0 AND datetime('now','localtime') > datetime(c.FechaVencimiento)) OR
-		(gc.Recurrencia = 1 AND gc.RecurrenciaCada >= 1 AND strftime('%d',  datetime('now','localtime')) > c.DiaVencimiento)
-	THEN 
-		1 
-	ELSE 
-		0 
-	END AS EsPagoVencido,    
-	IFNULL(c.Monto, 0) AS PorPagar,
-	IFNULL(c.Monto, 0) + IFNULL(c.MontoRecargo, 0) AS PorPagarConRecargo,
-	c.* 
-FROM 
-	Cobros c JOIN Generador_Cobros gc ON gc.Id = c.GeneradorId;
-
-
-DROP VIEW IF EXISTS v_pagos_estatus;
-CREATE VIEW v_pagos_estatus
-AS
-SELECT 
-	CASE WHEN 
-		EXISTS (SELECT * FROM Pagos_Estatus WHERE PagoId = p.Id)		
-	THEN 
-		(SELECT Estatus FROM  Pagos_Estatus WHERE PagoId = p.Id ORDER BY DATETIME(DateCreated) DESC LIMIT 1)
-	ELSE 
-		'Nuevo'
-	END AS Estatus,
-	CASE WHEN 
-		EXISTS (SELECT * FROM Pagos_Estatus WHERE PagoId = p.Id)		
-	THEN 
-		(SELECT Comentario FROM  Pagos_Estatus WHERE PagoId = p.Id ORDER BY DATETIME(DateCreated) DESC LIMIT 1)
-	ELSE 
-		''
-	END AS Comentario,
-	p.* 
-FROM Pagos p;
-
-
--- Init data
-INSERT INTO Roles  (Id, Role) VALUES ('82d97bc9-c2d2-4eae-b7ca-754fd2dfe53a', 'Admin');
-INSERT INTO Roles  (Id, Role) VALUES ('28694aae-6193-4678-8c93-b1b9654a503f', 'User');
-INSERT INTO Roles  (Id, Role) VALUES ('524354a2-ab68-4474-a2a0-ed6217029a55', 'Tesorero');
 
 COMMIT;
 
