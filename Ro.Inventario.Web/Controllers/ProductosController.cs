@@ -27,6 +27,7 @@ public class ProductosController : Controller
 
     public IActionResult Guardar(CompraNuevosProductos model, List<IFormFile> files)
     {
+        _logger.Lof        
         return View(new CompraNuevosProductos());
     }
 
