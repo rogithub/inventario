@@ -25,6 +25,8 @@ public class ProductosController : Controller
         return View(new CompraNuevosProductos());
     }
 
+    
+
     public IActionResult Guardar([FromForm]CompraNuevosProductos model)
     {
         _logger.LogInformation("model {model.Id}", model.Id);
@@ -33,9 +35,10 @@ public class ProductosController : Controller
         _logger.LogInformation("model {model.Notas}", model.Notas);
         _logger.LogInformation("model {model.CostoPaqueteria}", model.CostoPaqueteria);
         _logger.LogInformation("model {model.TotalFactura}", model.TotalFactura);
-        
-        _logger.LogInformation("files {filename}", model.Archivo?.FileName);
-        _logger.LogInformation("files {length}", model.Archivo?.Length);
+        var lines = model.Archivo.ReadLines();
+        //if (!lines.ValidateProducts()) return;
+        var products = lines.ParseProducts();        
+                
         return View("Nuevo", model);
     }
 
