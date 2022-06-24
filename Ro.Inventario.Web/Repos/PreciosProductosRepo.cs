@@ -4,13 +4,13 @@ using System.Data;
 
 namespace Ro.Inventario.Web.Repos;
 
-public interface IPreciosProductos
+public interface IPreciosProductosRepo
 {
     Task<int> Save(PrecioProducto it);
     Task<PrecioProducto> GetOne(Guid id);
 }
 
-public class PreciosProductosRepo : IPreciosProductos
+public class PreciosProductosRepo : IPreciosProductosRepo
 {
     private const string DATE_FORMAT = "yyy-MM-dd HH:mm:ss.fff";
     private IDbAsync Db;

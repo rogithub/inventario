@@ -1,4 +1,20 @@
+using Ro.Inventario.Web.Repos;
+using Ro.SQLite.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var connString = builder.Configuration.GetSection("DefaultConnection").Value;
+builder.Services.AddTransient<IDbAsync>(svc => {
+    return new Database(connString);
+});
+
+builder.Services.AddScoped<IComprasProductosRepo, ComprasProductosRepo>();
+builder.Services.AddScoped<IComprasRepo, ComprasRepo>();
+builder.Services.AddScoped<IPreciosProductosRepo, PreciosProductosRepo>();
+builder.Services.AddScoped<IProductosRepo, ProductosRepo>();
+builder.Services.AddScoped<IUnidadMedidaRepo, UnidadMedidaRepo>();
+
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
