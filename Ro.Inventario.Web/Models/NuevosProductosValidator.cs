@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Ro.Inventario.Web.Entities;
 namespace Ro.Inventario.Web.Models;
 
 public class ProductoNuevoLinea
@@ -20,6 +21,18 @@ public class ProductoNuevoLinea
     public string CodigoBarrasItem { get; set; }
     public string CodigoBarrasCaja { get; set; }
     public string UnidadDeMedida { get; set; }
+
+    public Producto ToEntity(Dictionary<string,Guid> unidadesMedida)
+    {
+        var p = new Producto();
+        p.Id = this.Id;
+        p.Nombre = this.Nombre;        
+        p.CodigoBarrasItem = this.CodigoBarrasItem;
+        p.CodigoBarrasCaja = this.CodigoBarrasCaja;
+        p.UnidadMedidaId = unidadesMedida[this.UnidadDeMedida];
+
+        return p;
+    }
 }
 
 public static class NuevosProductosValidator

@@ -12,6 +12,7 @@ public interface IUnidadMedidaRepo
     Task<UnidadMedida> GetOne(Guid id);
     Task<int> BulkInsert(string[] list);
     Task<IEnumerable<UnidadMedida>> GetAll();
+    Task<Dictionary<string,Guid>> GetDictionary();
 }
 
 public class UnidadMedidaRepo : IUnidadMedidaRepo
@@ -75,5 +76,21 @@ public class UnidadMedidaRepo : IUnidadMedidaRepo
         var sql = "SELECT ID, NOMBRE FROM UnidadesMedida";
         var cmd = sql.ToCmd();
         return Db.GetRows(cmd, GetData);
+    }
+
+    public async Task<Dictionary<string,Guid>> GetDictionary()
+    {
+        var d = new Dictionary<string,Guid>();
+
+        var all = await GetAll();
+        foreach (var it in all)
+        {
+            if (!d.ContainsKey(it.Nombre))
+            {
+                d.Add(it.Nombre, it.Id);
+            }
+        }
+        
+        return d;
     }
 }

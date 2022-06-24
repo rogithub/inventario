@@ -1,6 +1,7 @@
 using Ro.SQLite.Data;
 using Ro.Inventario.Web.Entities;
 using System.Data;
+using System.Text;
 
 namespace Ro.Inventario.Web.Repos;
 
@@ -8,6 +9,7 @@ public interface IComprasProductosRepo
 {
     Task<int> Save(CompraProducto it);
     Task<CompraProducto> GetOne(Guid id);
+    Task<int> BulkSave(CompraProducto[] list);
 }
 
 public class ComprasProductosRepo : IComprasProductosRepo
@@ -17,6 +19,25 @@ public class ComprasProductosRepo : IComprasProductosRepo
     public ComprasProductosRepo(IDbAsync db)
     {
         this.Db = db;
+    }
+
+    public Task<int> BulkSave(CompraProducto[] list)
+    {                
+        var parameters = new List<IDbDataParameter>();
+        var sqlLine = @"INSERT INTO ComprasProductos (Id,ProductoId,CompraId,Cantidad,PrecioCompra) VALUES (@id{0},@productoId{0},@compraId{0},@cantidad{0},@precioCompra{0});";
+        var sb = new StringBuilder();
+        for (int i = 0; i < list.Length; i++)
+        {   
+            var it = list[i];
+            sb.AppendLine(string.Format(sqlLine, i));
+            parameters.Add(string.Format("@id{0}", i).ToParam(DbType.String, it.Id.ToString()));
+            parameters.Add(string.Format("@productoId{0}", i).ToParam(DbType.String, it.ProductoId.ToString()));
+            parameters.Add(string.Format("@compraId{0}", i).ToParam(DbType.String, it.CompraId.ToString()));
+            parameters.Add(string.Format("@cantidad{0}", i).ToParam(DbType.Decimal, it.Cantidad));
+            parameters.Add(string.Format("@precioCompra{0}", i).ToParam(DbType.Decimal, it.PrecioCompra));
+        }
+        var cmd = sb.ToString().ToCmd(parameters.ToArray());
+        return Db.ExecuteNonQuery(cmd);
     }
     
     public Task<int> Save(CompraProducto it)
