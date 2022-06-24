@@ -41,7 +41,7 @@ public class ComprasService: IComprasService
         _logger.LogInformation("Generando compra {id}", compra.Id);
         
         var unidadesMedida = (from p in productLines select p.UnidadDeMedida);
-        var uMedidaCounter = await _uMedida.BulkInsert(unidadesMedida.ToArray());
+        var uMedidaCounter = await _uMedida.BulkSave(unidadesMedida.ToArray());
         _logger.LogInformation("{uMedidaCounter} Unidades de medida guardadas", uMedidaCounter);        
         var dUnidadMedida = await _uMedida.GetDictionary();
 

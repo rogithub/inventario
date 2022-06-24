@@ -10,7 +10,7 @@ public interface IUnidadMedidaRepo
 {
     Task<int> Save(UnidadMedida it);
     Task<UnidadMedida> GetOne(Guid id);
-    Task<int> BulkInsert(string[] list);
+    Task<int> BulkSave(string[] list);
     Task<IEnumerable<UnidadMedida>> GetAll();
     Task<Dictionary<string,Guid>> GetDictionary();
 }
@@ -45,18 +45,17 @@ public class UnidadMedidaRepo : IUnidadMedidaRepo
         return Db.GetOneRow(cmd, GetData);
     }
 
-    public Task<int> BulkInsert(string[] list)
+    public Task<int> BulkSave(string[] list)
     {
         var parameters = new List<IDbDataParameter>();
-        var sqlLine = "INSERT INTO UnidadesMedida (Id,Nombre) SELECT {0}, {1} WHERE NOT EXISTS (SELECT Id FROM UnidadesMedida WHERE NOMBRE = {1});";
+        var sqlLine = "INSERT INTO UnidadesMedida (Id,Nombre) SELECT @id{0}, @nombre{0} WHERE NOT EXISTS (SELECT Id FROM UnidadesMedida WHERE NOMBRE = @nombre{0});";
         var sb = new StringBuilder();
         for (int i = 0; i < list.Length; i++)
         {
-            var idStrParam = string.Format("@id{0}",i);
-            var nombreStrParam = string.Format("@nombre{0}",i);
-            sb.AppendLine(string.Format(sqlLine, idStrParam, nombreStrParam));
-            parameters.Add(idStrParam.ToParam(DbType.String, Guid.NewGuid().ToString()));
-            parameters.Add(nombreStrParam.ToParam(DbType.String, list[i].ToString()));
+            var it = list[i];
+            sb.AppendLine(string.Format(sqlLine, i));
+            parameters.Add(string.Format("@id{0}", i).ToParam(DbType.String, Guid.NewGuid().ToString()));
+            parameters.Add(string.Format("@nombre{0}", i).ToParam(DbType.String, it));
         }
         var cmd = sb.ToString().ToCmd(parameters.ToArray());
         return Db.ExecuteNonQuery(cmd);
