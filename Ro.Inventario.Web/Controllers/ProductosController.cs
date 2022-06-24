@@ -25,10 +25,18 @@ public class ProductosController : Controller
         return View(new CompraNuevosProductos());
     }
 
-    public IActionResult Guardar(CompraNuevosProductos model, List<IFormFile> files)
+    public IActionResult Guardar([FromForm]CompraNuevosProductos model)
     {
-        _logger.Lof        
-        return View(new CompraNuevosProductos());
+        _logger.LogInformation("model {model.Id}", model.Id);
+        _logger.LogInformation("model {model.FechaCreado}", model.FechaCreado);
+        _logger.LogInformation("model {model.FechaFactura}", model.FechaFactura);
+        _logger.LogInformation("model {model.Notas}", model.Notas);
+        _logger.LogInformation("model {model.CostoPaqueteria}", model.CostoPaqueteria);
+        _logger.LogInformation("model {model.TotalFactura}", model.TotalFactura);
+        
+        _logger.LogInformation("files {filename}", model.Archivo?.FileName);
+        _logger.LogInformation("files {length}", model.Archivo?.Length);
+        return View("Nuevo", model);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

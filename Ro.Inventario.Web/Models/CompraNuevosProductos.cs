@@ -9,7 +9,7 @@ public class CompraNuevosProductos
         this.Id = Guid.NewGuid();
         this.FechaCreado = DateTime.Now;
         this.FechaFactura = DateTime.Now;
-        this.Notas = string.Empty;   
+        this.Notas = string.Empty;          
     }
     public Guid Id { get; set; }
     public string Notas { get; set; }
@@ -25,4 +25,8 @@ public class CompraNuevosProductos
     [Display(Name = "Total de la factura")]
     [Required(ErrorMessage = "Total de la factura es requerido")]
     public decimal TotalFactura { get; set; }    
+
+    [Display(Name = "Archivo")]
+    [Required(ErrorMessage = "Se requiere que suba el archivo")]
+    public IFormFile? Archivo {get; set;}
 }
