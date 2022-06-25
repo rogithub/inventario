@@ -16,6 +16,8 @@ public class ComprasService: IComprasService
     private IComprasRepo _compras;
     private ICategoriasRepo _categorias;
     private ICategoriasProductosRepo _categoriasProds;
+    private IPreciosProductosRepo _precios;
+    private IComprasProductosRepo _comprasProductos;
     private readonly ILogger<ComprasService> _logger;
     public ComprasService(
         ILogger<ComprasService> logger,
@@ -23,7 +25,9 @@ public class ComprasService: IComprasService
         IProductosRepo productRepo,
         IComprasRepo comprasRepo,
         ICategoriasRepo categoriasRepo,
-        ICategoriasProductosRepo categoriasProductosRepo)
+        ICategoriasProductosRepo categoriasProductosRepo,
+        IPreciosProductosRepo preciosRepo,
+        IComprasProductosRepo comprasProductosRepo)
     {
         _logger = logger;
        _uMedida = unidadMedida;       
@@ -31,6 +35,8 @@ public class ComprasService: IComprasService
        _compras = comprasRepo;
        _categorias = categoriasRepo;
        _categoriasProds = categoriasProductosRepo;
+       _precios = preciosRepo;
+       _comprasProductos = comprasProductosRepo;
     }    
 
     public async Task ProcessModel(CompraNuevosProductos model, 
@@ -70,5 +76,27 @@ public class ComprasService: IComprasService
             });        
         var catProdCounter = await _categoriasProds.BulkSave(catProds.ToArray());
         _logger.LogInformation("{catProdCounter} Produtos asociados a una categoría", catProdCounter);
+
+        var preciosProds = 
+            (from p in productLines
+            select new PrecioProducto()
+            {
+                ProductoId = p.Id,
+                PrecioVenta = p.PrecioVenta
+            });        
+        var preciosCounter = await _precios.BulkSave(preciosProds.ToArray());
+        _logger.LogInformation("{preciosCounter} Produtos asociados a un precio", preciosCounter);
+
+        var productosComprados = 
+            (from p in productLines
+            select new CompraProducto()
+            {
+                ProductoId = p.Id,
+                Cantidad = p.Cantidad,
+                CompraId = compra.Id,
+                PrecioCompra = p.PrecioCompra
+            });        
+        var productosEnCompra = await _comprasProductos.BulkSave(productosComprados.ToArray());
+        _logger.LogInformation("{productosEnCompra} Produtos asociados a esta compra", productosEnCompra);
     }
 }
