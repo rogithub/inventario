@@ -14,17 +14,23 @@ public class ComprasService: IComprasService
     private IUnidadMedidaRepo _uMedida;
     private IProductosRepo _producto;
     private IComprasRepo _compras;
+    private ICategoriasRepo _categorias;
+    private ICategoriasProductosRepo _categoriasProds;
     private readonly ILogger<ComprasService> _logger;
     public ComprasService(
         ILogger<ComprasService> logger,
         IUnidadMedidaRepo unidadMedida,
         IProductosRepo productRepo,
-        IComprasRepo comprasRepo)
+        IComprasRepo comprasRepo,
+        ICategoriasRepo categoriasRepo,
+        ICategoriasProductosRepo categoriasProductosRepo)
     {
         _logger = logger;
        _uMedida = unidadMedida;       
        _producto = productRepo;
        _compras = comprasRepo;
+       _categorias = categoriasRepo;
+       _categoriasProds = categoriasProductosRepo;
     }    
 
     public async Task ProcessModel(CompraNuevosProductos model, 
@@ -45,9 +51,24 @@ public class ComprasService: IComprasService
         _logger.LogInformation("{uMedidaCounter} Unidades de medida guardadas", uMedidaCounter);        
         var dUnidadMedida = await _uMedida.GetDictionary();
 
+        var categorias = (from p in productLines select p.Categoria);
+        var categoriasCounter = await _categorias.BulkSave(categorias.ToArray());
+        _logger.LogInformation("{categoriasCounter} Categorias guardadas", categoriasCounter);        
+        var dCategorias = await _categorias.GetDictionary();
+
         var productos = (from p in productLines select p.ToEntity(dUnidadMedida));
         var prodCounter = await _producto.BulkSave(productos.ToArray());
         _logger.LogInformation("{prodCounter} Produtos nuevos guardados", prodCounter);
-        
+
+        var catProds = 
+            (from p in productLines
+            from c in dCategorias
+            select new CategoriaProducto()
+            {
+                ProductoId = p.Id,
+                CategoriaId = dCategorias[p.Categoria]
+            });        
+        var catProdCounter = await _categoriasProds.BulkSave(catProds.ToArray());
+        _logger.LogInformation("{catProdCounter} Produtos asociados a una categoría", catProdCounter);
     }
 }

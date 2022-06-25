@@ -32,7 +32,7 @@ public class ProductoNuevoLinea
         p.CodigoBarrasItem = this.CodigoBarrasItem;
         p.CodigoBarrasCaja = this.CodigoBarrasCaja;
         p.UnidadMedidaId = unidadesMedida[this.UnidadDeMedida];
-        
+            
         return p;
     }
 }
