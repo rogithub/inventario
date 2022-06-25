@@ -14,5 +14,5 @@ public class Producto
     public Guid UnidadMedidaId { get; set; }
     public string Nombre { get; set; }        
     public string CodigoBarrasItem { get; set; }
-    public string CodigoBarrasCaja { get; set; }    
+    public string CodigoBarrasCaja { get; set; }  
 }

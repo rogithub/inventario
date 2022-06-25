@@ -14,6 +14,8 @@ builder.Services.AddScoped<IComprasRepo, ComprasRepo>();
 builder.Services.AddScoped<IPreciosProductosRepo, PreciosProductosRepo>();
 builder.Services.AddScoped<IProductosRepo, ProductosRepo>();
 builder.Services.AddScoped<IUnidadMedidaRepo, UnidadMedidaRepo>();
+builder.Services.AddScoped<ICategoriasRepo, CategoriasRepo>();
+builder.Services.AddScoped<ICategoriasProductosRepo, CategoriasProductosRepo>();
 builder.Services.AddScoped<IComprasService, ComprasService>();
 
 // Add services to the container.

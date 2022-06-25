@@ -12,6 +12,7 @@ public class ProductoNuevoLinea
         CodigoBarrasItem = string.Empty;
         CodigoBarrasCaja = string.Empty;
         UnidadDeMedida = string.Empty;
+        Categoria = string.Empty;
     }
     public Guid Id { get; set; }
     public string Nombre { get; set; }    
@@ -21,6 +22,7 @@ public class ProductoNuevoLinea
     public string CodigoBarrasItem { get; set; }
     public string CodigoBarrasCaja { get; set; }
     public string UnidadDeMedida { get; set; }
+    public string Categoria { get; set; }
 
     public Producto ToEntity(Dictionary<string,Guid> unidadesMedida)
     {
@@ -30,7 +32,7 @@ public class ProductoNuevoLinea
         p.CodigoBarrasItem = this.CodigoBarrasItem;
         p.CodigoBarrasCaja = this.CodigoBarrasCaja;
         p.UnidadMedidaId = unidadesMedida[this.UnidadDeMedida];
-
+        
         return p;
     }
 }
@@ -39,13 +41,14 @@ public static class NuevosProductosValidator
 {
     private static bool IsValid(string line)
     {
-        var length = 7;
+        var length = 8;
         var arr = line.Split(",");
         if (arr.Length != length) return false;
         if (string.IsNullOrWhiteSpace(arr[0])) return false;
         if (decimal.TryParse(arr[1], out var cantidad)) return false;
         if (decimal.TryParse(arr[2], out var compra)) return false;
         if (decimal.TryParse(arr[3], out var venta)) return false;
+        if (string.IsNullOrWhiteSpace(arr[7])) return false;
 
         return true;
     }
@@ -66,7 +69,8 @@ public static class NuevosProductosValidator
             PrecioVenta = venta,
             CodigoBarrasItem = Convert.ToString(arr[4]),
             CodigoBarrasCaja = Convert.ToString(arr[5]),
-            UnidadDeMedida = Convert.ToString(arr[6])
+            UnidadDeMedida = Convert.ToString(arr[6]),
+            Categoria = Convert.ToString(arr[7])
         };
     }
 

@@ -1,27 +1,15 @@
 BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS "Categorias" (
        "Id"  	    	  TEXT NOT NULL UNIQUE,
-       "Nombre"	          TEXT NOT NULL,
+       "Nombre"	  TEXT NOT NULL,
        PRIMARY KEY("Id")
 );
-
--- Init data
-INSERT INTO Categorias (id, Nombre) VALUES ('3f75daaa-04c6-4d04-aaa1-e243a00ef2c6', 'General');
-INSERT INTO Categorias (id, Nombre) VALUES ('e6e15392-7c43-49a6-bb5c-4ed6a6794c62', 'SHEIN');
-INSERT INTO Categorias (id, Nombre) VALUES ('84debfc5-a23b-44c6-9945-248dfc4e4239', 'Monografias');
-INSERT INTO Categorias (id, Nombre) VALUES ('20e61d99-6d05-4b8b-a9b3-bf5273558f9d', 'Biografias');
-INSERT INTO Categorias (id, Nombre) VALUES ('c046b206-5a37-4463-925c-c195e267cc74', 'Kawaii');
-
 
 CREATE TABLE IF NOT EXISTS "UnidadesMedida" (
        "Id"  	    	  TEXT NOT NULL UNIQUE,
        "Nombre"	          TEXT NOT NULL,
        PRIMARY KEY("Id")
 );
-
-INSERT INTO Categorias  (Id, Nombre) VALUES ('d0ce9c76-58d2-4462-a41f-1849b413ffbe', 'Pieza');
-INSERT INTO Categorias  (Id, Nombre) VALUES ('20161328-7f62-4631-86c7-95be7f094f29', 'Metro');
-INSERT INTO Categorias  (Id, Nombre) VALUES ('710ad3c8-b75e-49b3-a3cd-43507ac959c9', 'Caja');
 
 CREATE TABLE IF NOT EXISTS "Productos" (
        "Id"  	    	   	       TEXT NOT NULL UNIQUE,
