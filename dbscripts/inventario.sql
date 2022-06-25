@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS "Compras" (
        "FechaCreado"    TEXT NOT NULL,
        "CostoPaqueteria"   NUMERIC, -- decimal
        "TotalFactura"      NUMERIC, -- decimal
+       "PorcentajeFacturaIVA" NUMERIC, -- decimal
        PRIMARY KEY("Id")
 );
 

@@ -16,4 +16,5 @@ public class Compra
     public DateTime FechaCreado { get; set; }
     public decimal CostoPaqueteria { get; set; }
     public decimal TotalFactura { get; set; }
+    public decimal PorcentajeFacturaIVA { get; set; }
 }

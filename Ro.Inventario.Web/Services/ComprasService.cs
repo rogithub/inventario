@@ -6,7 +6,7 @@ namespace Ro.Inventario.Web.Services;
 
 public interface  IComprasService
 {
-    Task ProcessModel(CompraNuevosProductos model);
+    Task ProcessModel(CompraNuevosProductos model, IEnumerable<string> lines);
 }
 
 public class ComprasService: IComprasService
@@ -27,9 +27,9 @@ public class ComprasService: IComprasService
        _compras = comprasRepo;
     }    
 
-    public async Task ProcessModel(CompraNuevosProductos model)
-    {
-        var lines = model.Archivo.ReadLines();        
+    public async Task ProcessModel(CompraNuevosProductos model, 
+        IEnumerable<string> lines)
+    {        
         var productLines = lines.ParseProducts();
 
         var compra = new Compra();

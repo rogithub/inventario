@@ -1,4 +1,5 @@
 using Ro.Inventario.Web.Repos;
+using Ro.Inventario.Web.Services;
 using Ro.SQLite.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,8 +14,7 @@ builder.Services.AddScoped<IComprasRepo, ComprasRepo>();
 builder.Services.AddScoped<IPreciosProductosRepo, PreciosProductosRepo>();
 builder.Services.AddScoped<IProductosRepo, ProductosRepo>();
 builder.Services.AddScoped<IUnidadMedidaRepo, UnidadMedidaRepo>();
-
-
+builder.Services.AddScoped<IComprasService, ComprasService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

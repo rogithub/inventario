@@ -72,7 +72,7 @@ public static class NuevosProductosValidator
 
     public static bool ValidateProducts(this IEnumerable<string> list)
     {        
-        return list.Skip(1).All(line => IsValid(line));
+        return list.Skip(1).All(line => IsValid(line)) && list.Count() >= 2;
     }
 
     public static IEnumerable<ProductoNuevoLinea> ParseProducts(this IEnumerable<string> list)

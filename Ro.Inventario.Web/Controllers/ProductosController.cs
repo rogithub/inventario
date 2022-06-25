@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Ro.Inventario.Web.Models;
-using System.IO;
+using Ro.Inventario.Web.Services;
 using Microsoft.AspNetCore.Hosting;
 
 namespace Ro.Inventario.Web.Controllers;
@@ -9,10 +9,14 @@ namespace Ro.Inventario.Web.Controllers;
 public class ProductosController : Controller
 {
     private readonly ILogger<ProductosController> _logger;
+    private readonly IComprasService _comprasSvc;
 
-    public ProductosController(ILogger<ProductosController> logger)
+    public ProductosController(
+        ILogger<ProductosController> logger,
+        IComprasService comprasService)
     {
         _logger = logger;
+        _comprasSvc = comprasService;
     }
 
     public IActionResult Index()
@@ -23,23 +27,25 @@ public class ProductosController : Controller
     public IActionResult Nuevo()
     {
         return View(new CompraNuevosProductos());
-    }
-
-    
+    }        
 
     public IActionResult Guardar([FromForm]CompraNuevosProductos model)
     {
-        _logger.LogInformation("model {model.Id}", model.Id);
-        _logger.LogInformation("model {model.FechaCreado}", model.FechaCreado);
-        _logger.LogInformation("model {model.FechaFactura}", model.FechaFactura);
-        _logger.LogInformation("model {model.Notas}", model.Notas);
-        _logger.LogInformation("model {model.CostoPaqueteria}", model.CostoPaqueteria);
-        _logger.LogInformation("model {model.TotalFactura}", model.TotalFactura);
-        var lines = model.Archivo.ReadLines();
-        //if (!lines.ValidateProducts()) return;
-        var products = lines.ParseProducts();        
-                
-        return View("Nuevo", model);
+        if (ModelState.IsValid == false)
+        {
+          return View("Nuevo", model);
+        }
+        
+        var lines = model.Archivo?.ReadLines();
+        var areLinesValid = lines?.ValidateProducts();
+        if (!areLinesValid.GetValueOrDefault())
+        {
+            ModelState.AddModelError("Archivo", 
+            "El archivo tiene datos incorrectos, quite comas y verifique no tener columnas extra.");
+            return View("Nuevo", model);
+        }
+        
+        return Index();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

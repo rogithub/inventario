@@ -9,7 +9,7 @@ public class CompraNuevosProductos
         this.Id = Guid.NewGuid();
         this.FechaCreado = DateTime.Now;
         this.FechaFactura = DateTime.Now;
-        this.Notas = string.Empty;          
+        this.Notas = string.Empty;
     }
     public Guid Id { get; set; }
     public string Notas { get; set; }
@@ -20,8 +20,11 @@ public class CompraNuevosProductos
     public DateTime FechaFactura { get; set; }
     
     [Display(Name = "Costo de paquetería")]
-    [Required(ErrorMessage = "Costo de paquetería es requerido")]
+    [Required(ErrorMessage = "Costo de paquetería es requerido")]    
     public decimal CostoPaqueteria { get; set; }
+    [Display(Name = "Porcentaje Iva de la Factura")]
+    [Required(ErrorMessage = "El % de IVA en la factura es requerido")]
+    public decimal PorcentajeFacturaIVA { get; set; }
     [Display(Name = "Total de la factura")]
     [Required(ErrorMessage = "Total de la factura es requerido")]
     public decimal TotalFactura { get; set; }    

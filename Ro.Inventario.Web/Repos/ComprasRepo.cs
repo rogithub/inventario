@@ -21,8 +21,8 @@ public class ComprasRepo : IComprasRepo
     
     public Task<int> Save(Compra it)
     {
-        var sql = @"INSERT INTO Compras (Id,Notas,FechaFactura,FechaCreado,CostoPaqueteria,TotalFactura) VALUES 
-                    (@id,@notas,@fechaFactura,@fechaCreado,@costoPaqueteria,@totalFactura);";
+        var sql = @"INSERT INTO Compras (Id,Notas,FechaFactura,FechaCreado,CostoPaqueteria,TotalFactura,PorcentajeFacturaIVA) VALUES 
+                    (@id,@notas,@fechaFactura,@fechaCreado,@costoPaqueteria,@totalFactura,@porcentajeFacturaIVA);";
         var cmd = sql.ToCmd
         (
             "@id".ToParam(DbType.String, it.Id.ToString()),
@@ -30,14 +30,15 @@ public class ComprasRepo : IComprasRepo
             "@fechaFactura".ToParam(DbType.String, it.FechaFactura.ToString(DATE_FORMAT)),
             "@fechaCreado".ToParam(DbType.String, it.FechaCreado.ToString(DATE_FORMAT)),
             "@costoPaqueteria".ToParam(DbType.Decimal, it.CostoPaqueteria),
-            "@totalFactura".ToParam(DbType.Decimal, it.TotalFactura)
+            "@totalFactura".ToParam(DbType.Decimal, it.TotalFactura),
+            "@porcentajeFacturaIVA".ToParam(DbType.Decimal, it.PorcentajeFacturaIVA)
         );
         return Db.ExecuteNonQuery(cmd);
     }
 
     public Task<Compra> GetOne(Guid id)
     {
-        var sql = "SELECT Id,Notas,FechaFactura,FechaCreado,CostoPaqueteria,TotalFactura FROM Compras WHERE Id = @id";
+        var sql = "SELECT Id,Notas,FechaFactura,FechaCreado,CostoPaqueteria,TotalFactura,PorcentajeFacturaIVA FROM Compras WHERE Id = @id";
         var cmd = sql.ToCmd
         (            
             "@id".ToParam(DbType.String, id.ToString())
@@ -55,7 +56,8 @@ public class ComprasRepo : IComprasRepo
             FechaFactura = DateTime.Parse(dr.GetString("FechaFactura")),
             FechaCreado = DateTime.Parse(dr.GetString("FechaCreado")),
             CostoPaqueteria = dr.GetDecilmal("CostoPaqueteria"),
-            TotalFactura = dr.GetDecilmal("TotalFactura")
+            TotalFactura = dr.GetDecilmal("TotalFactura"),
+            PorcentajeFacturaIVA = dr.GetDecilmal("TotalFactura")
         };
     }   
 }
