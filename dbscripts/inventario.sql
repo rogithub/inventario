@@ -11,13 +11,12 @@ CREATE TABLE IF NOT EXISTS "UnidadesMedida" (
        PRIMARY KEY("Id")
 );
 
-CREATE TABLE IF NOT EXISTS "Productos" (
-       "Id"                     TEXT NOT NULL UNIQUE,
-       "Nombre"	                TEXT NOT NULL,
-       "UnidadMedidaId"	        TEXT,
-       "CodigoBarrasItem"	    TEXT, -- Si el item tiene codigo de barras por ejemplo codigo barras en un lapiz
-       "CodigoBarrasCaja"	    TEXT, -- Si la caja tiene un codigo de barras por ejemplo caja lapices
-       PRIMARY KEY("Id")
+CREATE VIRTUAL TABLE Productos USING fts5 (
+    Nombre,
+    Id UNINDEXED,
+    UnidadMedidaId UNINDEXED,
+    CodigoBarrasItem UNINDEXED, -- Si el item tiene codigo de barras por ejemplo codigo barras en un lapiz
+    CodigoBarrasCaja UNINDEXED  -- Si la caja tiene un codigo de barras por ejemplo caja lapices       
 );
 
 CREATE TABLE IF NOT EXISTS "PreciosProductos" (
