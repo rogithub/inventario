@@ -10,11 +10,11 @@ public interface IVentasRepo
     Task<Venta> GetOne(Guid id);
 }
 
-public class Venta : IVentasRepo
+public class VentasRepo : IVentasRepo
 {
     private const string DATE_FORMAT = "yyy-MM-dd HH:mm:ss.fff";
     private IDbAsync Db;
-    public Venta(IDbAsync db)
+    public VentasRepo(IDbAsync db)
     {
         this.Db = db;
     }
