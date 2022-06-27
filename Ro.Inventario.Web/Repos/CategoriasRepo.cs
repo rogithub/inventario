@@ -48,7 +48,7 @@ public class CategoriasRepo : ICategoriasRepo
     public Task<int> BulkSave(string[] list)
     {
         var parameters = new List<IDbDataParameter>();
-        var sqlLine = "INSERT INTO Categorias (Id,Nombre) SELECT @id{0}, @nombre{0} WHERE NOT EXISTS (SELECT Id FROM UnidadesMedida WHERE NOMBRE = @nombre{0});";
+        var sqlLine = "INSERT INTO Categorias (Id,Nombre) SELECT @id{0}, @nombre{0} WHERE NOT EXISTS (SELECT Id FROM Categorias WHERE NOMBRE = @nombre{0});";
         var sb = new StringBuilder();
         for (int i = 0; i < list.Length; i++)
         {
