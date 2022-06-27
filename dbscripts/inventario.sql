@@ -39,8 +39,8 @@ CREATE TABLE IF NOT EXISTS "CategoriasProductos" (
 );
 
 CREATE TABLE IF NOT EXISTS "Compras" (
-       "Id"  	    	TEXT NOT NULL UNIQUE,
-       "Notas"	        TEXT,
+       "Id"  	    	   TEXT NOT NULL UNIQUE,
+       "Proveedor"	   TEXT,
        "FechaFactura"   TEXT NOT NULL,       
        "FechaCreado"    TEXT NOT NULL,
        "CostoPaqueteria"   NUMERIC, -- decimal

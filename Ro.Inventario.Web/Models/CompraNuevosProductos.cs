@@ -9,10 +9,10 @@ public class CompraNuevosProductos
         this.Id = Guid.NewGuid();
         this.FechaCreado = DateTime.Now;
         this.FechaFactura = DateTime.Now;
-        this.Notas = string.Empty;
+        this.Proveedor = string.Empty;
     }
     public Guid Id { get; set; }
-    public string Notas { get; set; }
+    public string Proveedor { get; set; }
     public DateTime FechaCreado { get; set; }
 
     [Display(Name = "Fecha de factura")]

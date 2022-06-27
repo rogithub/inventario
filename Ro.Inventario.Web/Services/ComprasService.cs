@@ -45,7 +45,7 @@ public class ComprasService: IComprasService
         var productLines = lines.ParseProducts();
 
         var compra = new Compra();
-        compra.Notas = model.Notas;
+        compra.Proveedor = model.Proveedor;
         compra.FechaFactura = model.FechaFactura;
         compra.CostoPaqueteria = model.CostoPaqueteria;
         compra.TotalFactura = model.TotalFactura;
