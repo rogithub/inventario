@@ -63,16 +63,17 @@ CREATE TABLE IF NOT EXISTS "ComprasProductos" (
 
 CREATE TABLE IF NOT EXISTS "Ventas" (
        "Id"  	    	TEXT NOT NULL UNIQUE,
-       "Notas"	        TEXT,
-       "FechaVenta"     TEXT NOT NULL,
+       "Pago"        NUMERIC, -- cantidad que pagó el cliente
+       "Cambio"      NUMERIC, -- cambio que le dimos
+       "FechaVenta"  TEXT NOT NULL,
        PRIMARY KEY("Id")
 );
 
 CREATE TABLE IF NOT EXISTS "VentasProductos" (
        "Id"  	        TEXT NOT NULL UNIQUE,
-       "ProductoId"	    TEXT NOT NULL,
-       "VentaId"	    TEXT NOT NULL,
-       "Cantidad"       NUMERIC, -- decimal
+       "ProductoId"  TEXT NOT NULL,
+       "VentaId"     TEXT NOT NULL,
+       "Cantidad"    NUMERIC, -- decimal
        PRIMARY KEY("Id"),
        FOREIGN KEY("ProductoId") REFERENCES "Productos"("Id") ON DELETE CASCADE
        FOREIGN KEY("VentaId") REFERENCES "Ventas"("Id") ON DELETE CASCADE
