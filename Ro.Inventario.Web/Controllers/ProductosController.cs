@@ -10,13 +10,16 @@ public class ProductosController : Controller
 {
     private readonly ILogger<ProductosController> _logger;
     private readonly IComprasService _comprasSvc;
+    private readonly INuevosProductosValidatorService _pValidator;
 
     public ProductosController(
         ILogger<ProductosController> logger,
-        IComprasService comprasService)
+        IComprasService comprasService,
+        INuevosProductosValidatorService pValidator)
     {
         _logger = logger;
         _comprasSvc = comprasService;
+        _pValidator = pValidator;
     }
 
     public IActionResult Index()
@@ -37,8 +40,8 @@ public class ProductosController : Controller
         }
         
         var lines = model.Archivo?.ReadLines();
-        var areLinesValid = lines?.ValidateProducts();
-        if (!areLinesValid.GetValueOrDefault())
+        var areLinesValid = _pValidator.ValidateProducts(lines);
+        if (!areLinesValid)
         {
             ModelState.AddModelError("Archivo", 
             "El archivo tiene datos incorrectos, quite comas y verifique no tener columnas extra.");

@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-namespace Ro.Inventario.Web.Models;
+namespace Ro.Inventario.Web.Services;
 
 public static class CsvLineParser
 {

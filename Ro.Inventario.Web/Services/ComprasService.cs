@@ -18,6 +18,7 @@ public class ComprasService: IComprasService
     private ICategoriasProductosRepo _categoriasProds;
     private IPreciosProductosRepo _precios;
     private IComprasProductosRepo _comprasProductos;
+    private INuevosProductosValidatorService _pValidator;
     private readonly ILogger<ComprasService> _logger;
     public ComprasService(
         ILogger<ComprasService> logger,
@@ -27,7 +28,8 @@ public class ComprasService: IComprasService
         ICategoriasRepo categoriasRepo,
         ICategoriasProductosRepo categoriasProductosRepo,
         IPreciosProductosRepo preciosRepo,
-        IComprasProductosRepo comprasProductosRepo)
+        IComprasProductosRepo comprasProductosRepo,
+        INuevosProductosValidatorService pValidator)
     {
         _logger = logger;
        _uMedida = unidadMedida;       
@@ -37,12 +39,13 @@ public class ComprasService: IComprasService
        _categoriasProds = categoriasProductosRepo;
        _precios = preciosRepo;
        _comprasProductos = comprasProductosRepo;
+        _pValidator = pValidator;
     }    
 
     public async Task ProcessModel(CompraNuevosProductos model, 
         IEnumerable<string> lines)
     {        
-        var productLines = lines.ParseProducts();
+        var productLines = _pValidator.ParseProducts(lines);
 
         var compra = new Compra();
         compra.Proveedor = model.Proveedor;
