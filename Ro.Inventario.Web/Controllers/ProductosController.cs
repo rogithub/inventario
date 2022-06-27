@@ -32,7 +32,8 @@ public class ProductosController : Controller
         return View(new CompraNuevosProductos());
     }        
 
-    public IActionResult Guardar([FromForm]CompraNuevosProductos model)
+    [HttpPost]
+    public IActionResult Nuevo([FromForm]CompraNuevosProductos model)
     {
         if (ModelState.IsValid == false)
         {
