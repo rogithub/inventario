@@ -32,7 +32,7 @@ public class NuevosProductosValidatorService : INuevosProductosValidatorService
 
         if (!isValid)
         {
-            _logger.LogInformation("Bad data length {length}", length);
+            _logger.LogInformation("Bad data length actual {l1} expected {l2} ", arr.Length, length);
             _logger.LogInformation("values: {a},{b},{c},{d},{e},{f},{g},{h}",
             arr[0],arr[1],arr[2],arr[3],arr[4],arr[5],arr[6],arr[7]);
         }
