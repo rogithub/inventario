@@ -33,11 +33,11 @@ public class ProductosController : Controller
     }        
 
     [HttpPost]
-    public IActionResult Nuevo([FromForm]CompraNuevosProductos model)
+    public async Task<IActionResult> Nuevo([FromForm]CompraNuevosProductos model)
     {
         if (ModelState.IsValid == false)
         {
-          return View("Nuevo", model);
+          return View(model);
         }
         
         var lines = model.Archivo?.ReadLines();
@@ -46,8 +46,10 @@ public class ProductosController : Controller
         {
             ModelState.AddModelError("Archivo", 
             "El archivo tiene datos incorrectos, quite comas y verifique no tener columnas extra.");
-            return View("Nuevo", model);
+            return View(model);
         }
+
+        await _comprasSvc.ProcessModel(model, lines);
         
         return Index();
     }
