@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS "AjustesProductos" (
 
 );
 
-
+-- Vista Productos
 DROP VIEW IF EXISTS v_productos;
 CREATE VIEW v_productos
 AS
@@ -121,6 +121,18 @@ FROM Productos p
 JOIN CategoriasProductos cp ON p.Id = cp.ProductoId
 JOIN Categorias c ON c.Id = cp.CategoriaId
 JOIN UnidadesMedida um ON p.UnidadMedidaId = um.Id;
+
+-- Vista Inventario
+DROP VIEW IF EXISTS v_inventario;
+CREATE VIEW v_inventario
+AS
+SELECT 
+	p.*,	
+	((SELECT ifnull(SUM(cp.Cantidad), 0) FROM ComprasProductos cp WHERE cp.ProductoId = p.Id) 
+	- (SELECT ifnull(SUM(ap.Cantidad), 0) FROM AjustesProductos ap WHERE ap.ProductoId = p.Id)) AS Stock
+FROM 
+	v_productos p;
+	
 
 COMMIT;
 
