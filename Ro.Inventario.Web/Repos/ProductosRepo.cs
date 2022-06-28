@@ -10,6 +10,7 @@ public interface IProductosRepo
 {
     Task<int> Save(Producto it);
     Task<Producto> GetOne(Guid id);
+    Task<IEnumerable<Producto>> FulSearchText(string pattern);
     Task<int> BulkSave(Producto[] list);
 }
 
@@ -63,6 +64,19 @@ public class ProductosRepo : IProductosRepo
             "@id".ToParam(DbType.String, id.ToString())
         );
         return Db.GetOneRow(cmd, GetData);
+    }
+
+
+    public Task<IEnumerable<Producto>> FulSearchText(string pattern)
+    {
+        var sql = @"SELECT Id,Nombre,UnidadMedidaId,CodigoBarrasItem,CodigoBarrasCaja FROM Productos WHERE 
+                    ROWID IN (SELECT ROWID FROM Productos_fst WHERE Productos_fst MATCH @pattern ORDER BY rank)
+                    LIMIT 100";
+        var cmd = sql.ToCmd
+        (            
+            "@pattern".ToParam(DbType.String, pattern)
+        );
+        return Db.GetRows(cmd, GetData);
     }
    
 
