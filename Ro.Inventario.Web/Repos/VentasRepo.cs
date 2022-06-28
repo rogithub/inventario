@@ -21,21 +21,21 @@ public class VentasRepo : IVentasRepo
     
     public Task<int> Save(Venta it)
     {
-        var sql = @"INSERT INTO Ventas (Id,Pago,Cambio,FechaVenta) VALUES 
-                    (@id,@pago,@cambio,@fechaVenta);";
+        var sql = @"INSERT INTO Ajustes (Id,Pago,Cambio,FechaAjuste) VALUES 
+                    (@id,@pago,@cambio,@fechaAjuste);";
         var cmd = sql.ToCmd
         (            
             "@id".ToParam(DbType.String, it.Id.ToString()),
             "@pago".ToParam(DbType.Decimal, it.Pago),
             "@cambio".ToParam(DbType.Decimal, it.Cambio),
-            "@fechaVenta".ToParam(DbType.String, it.FechaVenta.ToString(DATE_FORMAT))
+            "@fechaAjuste".ToParam(DbType.String, it.FechaVenta.ToString(DATE_FORMAT))
         );
         return Db.ExecuteNonQuery(cmd);
     }
 
     public Task<Venta> GetOne(Guid id)
     {
-        var sql = "SELECT Id,Pago,Cambio,FechaVenta FROM Ventas WHERE Id = @id";
+        var sql = "SELECT Id,Pago,Cambio,FechaAjuste FROM Ajustes WHERE Id = @id";
         var cmd = sql.ToCmd
         (            
             "@id".ToParam(DbType.String, id.ToString())
@@ -51,7 +51,7 @@ public class VentasRepo : IVentasRepo
             Id = Guid.Parse(dr.GetString("Id")),
             Pago = dr.GetDecimal("Pago"),
             Cambio = dr.GetDecimal("Cambio"),
-            FechaVenta = DateTime.Parse(dr.GetString("FechaVenta"))
+            FechaVenta = DateTime.Parse(dr.GetString("FechaAjuste"))
         };
     }   
 }

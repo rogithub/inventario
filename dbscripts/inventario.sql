@@ -85,22 +85,25 @@ CREATE TABLE IF NOT EXISTS "ComprasProductos" (
 );
 
 
-CREATE TABLE IF NOT EXISTS "Ventas" (
-       "Id"  	    	TEXT NOT NULL UNIQUE,
-       "Pago"        NUMERIC, -- cantidad que pagó el cliente
-       "Cambio"      NUMERIC, -- cambio que le dimos
-       "FechaVenta"  TEXT NOT NULL,
+CREATE TABLE IF NOT EXISTS "Ajustes" (
+       "Id"  	    	 TEXT NOT NULL UNIQUE,
+       "Pago"         NUMERIC, -- cantidad que pagó el cliente
+       "Cambio"       NUMERIC, -- cambio que le dimos
+       "FechaAjuste"  TEXT NOT NULL,
+       "TipoAjuste"   INTEGER DEFAULT 0, -- 0 es Venta
+       "Notas"        TEXT,
        PRIMARY KEY("Id")
 );
 
-CREATE TABLE IF NOT EXISTS "VentasProductos" (
+CREATE TABLE IF NOT EXISTS "AjustesProductos" (
        "Id"  	        TEXT NOT NULL UNIQUE,
-       "ProductoId"  TEXT NOT NULL,
-       "VentaId"     TEXT NOT NULL,
-       "Cantidad"    NUMERIC, -- decimal
+       "ProductoId"   TEXT NOT NULL,
+       "AjusteId"     TEXT NOT NULL,
+       "Cantidad"     NUMERIC, -- decimal
+       "Notas"        TEXT,
        PRIMARY KEY("Id"),
        FOREIGN KEY("ProductoId") REFERENCES "Productos"("Id") ON DELETE CASCADE
-       FOREIGN KEY("VentaId") REFERENCES "Ventas"("Id") ON DELETE CASCADE
+       FOREIGN KEY("AjusteId") REFERENCES "Ajustes"("Id") ON DELETE CASCADE
 
 );
 
