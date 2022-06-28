@@ -1,17 +1,16 @@
 import { BinderService } from '../services/binderService';
 import { Api } from '../services/api';
 
-export class App {
+export class Ventas {
 
-    public title: KnockoutObservable<string>;
+    public pattern: KnockoutObservable<string>;
     public api: Api;
     public url: string;
 
     constructor() {
-
-        this.url = "api/Feeds/client";
+        this.url = $("#productSearch").val() as string;
         this.api = new Api();
-        this.title = ko.observable<string>("Titulo de prueba desde Knockout!!!");
+        this.pattern = ko.observable<string>("");
     }
 
     public async load(): Promise<void> {
@@ -20,12 +19,12 @@ export class App {
 
     public bind(): void {
         const self = this;
-        BinderService.bind(self, "#roApp");
+        BinderService.bind(self, "#ventasPage");
     }
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    var page = new App();
+    var page = new Ventas();
     page.bind();
     console.log("binding ko");
 }, false);

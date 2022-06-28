@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 159:
+/***/ 826:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -43,16 +43,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.App = void 0;
+exports.Ventas = void 0;
 var binderService_1 = __webpack_require__(575);
 var api_1 = __webpack_require__(711);
-var App = /** @class */ (function () {
-    function App() {
-        this.url = "api/Feeds/client";
+var Ventas = /** @class */ (function () {
+    function Ventas() {
+        this.url = $("#productSearch").val();
         this.api = new api_1.Api();
-        this.title = ko.observable("Titulo de prueba desde Knockout!!!");
+        this.pattern = ko.observable("");
     }
-    App.prototype.load = function () {
+    Ventas.prototype.load = function () {
         return __awaiter(this, void 0, void 0, function () {
             var self;
             return __generator(this, function (_a) {
@@ -61,15 +61,15 @@ var App = /** @class */ (function () {
             });
         });
     };
-    App.prototype.bind = function () {
+    Ventas.prototype.bind = function () {
         var self = this;
-        binderService_1.BinderService.bind(self, "#roApp");
+        binderService_1.BinderService.bind(self, "#ventasPage");
     };
-    return App;
+    return Ventas;
 }());
-exports.App = App;
+exports.Ventas = Ventas;
 document.addEventListener('DOMContentLoaded', function () {
-    var page = new App();
+    var page = new Ventas();
     page.bind();
     console.log("binding ko");
 }, false);
@@ -225,7 +225,7 @@ exports.BinderService = BinderService;
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __webpack_require__(159);
+/******/ 	var __webpack_exports__ = __webpack_require__(826);
 /******/ 	
 /******/ })()
 ;
