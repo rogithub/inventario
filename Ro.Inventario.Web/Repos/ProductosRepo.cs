@@ -69,6 +69,10 @@ public class ProductosRepo : IProductosRepo
 
     public Task<IEnumerable<Producto>> FulSearchText(string pattern)
     {
+        if (string.IsNullOrWhiteSpace(pattern)) 
+        {
+            return Task.FromResult(Enumerable.Empty<Producto>());
+        }
         var sql =
             @"SELECT Id,Nombre,UnidadMedidaId,CodigoBarrasItem,CodigoBarrasCaja FROM Productos p WHERE             
             ROWID IN (SELECT ROWID FROM Productos_fst WHERE Productos_fst MATCH @pattern ORDER BY rank)

@@ -48,9 +48,26 @@ var binderService_1 = __webpack_require__(575);
 var api_1 = __webpack_require__(711);
 var Ventas = /** @class */ (function () {
     function Ventas() {
-        this.url = $("#productSearch").val();
+        var _this = this;
+        this.url = "ventas/buscarProducto";
+        //$("#productSearch").val() as string;
         this.api = new api_1.Api();
         this.pattern = ko.observable("");
+        var self = this;
+        this.pattern.subscribe(function (newValue) { return __awaiter(_this, void 0, void 0, function () {
+            var apiUrl, prods;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        apiUrl = "".concat(self.url, "?pattern=").concat(newValue);
+                        return [4 /*yield*/, self.api.get(apiUrl)];
+                    case 1:
+                        prods = _a.sent();
+                        console.log(prods);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
     }
     Ventas.prototype.load = function () {
         return __awaiter(this, void 0, void 0, function () {

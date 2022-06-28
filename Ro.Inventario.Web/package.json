@@ -4,8 +4,8 @@
   "description": "inventario",
   "main": "index.js",
   "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1",
-      "build:webpack": "webpack"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:webpack": "webpack"
   },
   "author": "ro",
   "license": "ISC",

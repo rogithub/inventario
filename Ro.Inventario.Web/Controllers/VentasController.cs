@@ -38,7 +38,7 @@ public class VentasController : Controller
             new { id = p.Id, value = p.Nombre }
         ).ToArray();
 
-        return Json(res, true);
+        return Json(res);
     }
 
 

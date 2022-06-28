@@ -8,9 +8,16 @@ export class Ventas {
     public url: string;
 
     constructor() {
-        this.url = $("#productSearch").val() as string;
+        this.url = "ventas/buscarProducto"
+        //$("#productSearch").val() as string;
         this.api = new Api();
         this.pattern = ko.observable<string>("");
+        const self = this;
+        this.pattern.subscribe(async (newValue) => {
+            let apiUrl = `${self.url}?pattern=${newValue}`;
+            let prods = await self.api.get(apiUrl);
+            console.log(prods);
+        });
     }
 
     public async load(): Promise<void> {
