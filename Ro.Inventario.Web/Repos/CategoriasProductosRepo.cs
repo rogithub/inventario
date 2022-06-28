@@ -68,7 +68,7 @@ public class CategoriasProductosRepo : ICategoriasProductosRepo
         {
             Id = Guid.Parse(dr.GetString("Id")),
             ProductoId = Guid.Parse(dr.GetString("ProductoId")),
-            CategoriaId = Guid.Parse(dr.GetString("CompraId"))
+            CategoriaId = Guid.Parse(dr.GetString("CategoriaId"))
         };
     }   
 }

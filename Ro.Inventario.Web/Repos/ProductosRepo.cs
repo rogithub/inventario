@@ -32,10 +32,10 @@ public class ProductosRepo : IProductosRepo
             var it = list[i];
             sb.AppendLine(string.Format(sqlLine, i));
             parameters.Add(string.Format("@id{0}", i).ToParam(DbType.String, it.Id.ToString()));
-            parameters.Add(string.Format("@nombre{0}", i).ToParam(DbType.String, it.Id.ToString()));
-            parameters.Add(string.Format("@unidadMedidaId{0}", i).ToParam(DbType.String, it.Id.ToString()));
-            parameters.Add(string.Format("@codigoItem{0}", i).ToParam(DbType.String, it.Id.ToString()));
-            parameters.Add(string.Format("@codigoCaja{0}", i).ToParam(DbType.String, it.Id.ToString()));
+            parameters.Add(string.Format("@nombre{0}", i).ToParam(DbType.String, it.Nombre));
+            parameters.Add(string.Format("@unidadMedidaId{0}", i).ToParam(DbType.String, it.UnidadMedidaId.ToString()));
+            parameters.Add(string.Format("@codigoItem{0}", i).ToParam(DbType.String, it.CodigoBarrasItem));
+            parameters.Add(string.Format("@codigoCaja{0}", i).ToParam(DbType.String, it.CodigoBarrasCaja));
         }
         var cmd = sb.ToString().ToCmd(parameters.ToArray());
         return Db.ExecuteNonQuery(cmd);

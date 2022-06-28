@@ -22,13 +22,7 @@ namespace Ro.SQLite.Data
                 conn.Open();
                 var c = conn as SQLiteConnection;
                 c.EnableExtensions(true);
-                //c.LoadExtension("fts5");
-                //c.LoadExtension("fts5");
-                //c.LoadExtension("SQLite.Interop.dll", "sqlite3_fts5_init");
-                c.EnableExtensions(true); 
                 c.LoadExtension(path, "sqlite3_fts5_init");
-                //c.LoadExtension("/home/ro/Documents/code/inventario/Ro.Inventario.Web/bin/Debug/net6.0/System.Data.SQLite.dll", "sqlite3_fts5_init");
-
             }
             return conn;
         }

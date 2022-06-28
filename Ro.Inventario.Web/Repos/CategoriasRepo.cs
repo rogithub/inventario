@@ -72,7 +72,7 @@ public class CategoriasRepo : ICategoriasRepo
 
     public Task<IEnumerable<Categoria>> GetAll()
     {
-        var sql = "SELECT ID, NOMBRE FROM UnidadesMedida";
+        var sql = "SELECT ID, NOMBRE FROM Categorias";
         var cmd = sql.ToCmd();
         return Db.GetRows(cmd, GetData);
     }

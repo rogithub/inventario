@@ -71,7 +71,6 @@ public class ComprasService: IComprasService
 
         var catProds = 
             (from p in productLines
-            from c in dCategorias
             select new CategoriaProducto()
             {
                 ProductoId = p.Id,
