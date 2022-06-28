@@ -105,6 +105,20 @@ CREATE TABLE IF NOT EXISTS "VentasProductos" (
 );
 
 
+DROP VIEW IF EXISTS v_productos;
+CREATE VIEW v_productos
+AS
+SELECT 
+	p.Id, p.Nombre, c.Nombre as Categoria, um.Nombre as UnidadMedida,
+	(SELECT PrecioVenta FROM PreciosProductos pp WHERE p.Id = pp.ProductoId ORDER BY datetime(pp.FechaCreado) DESC LIMIT 1) as PrecioVenta,
+	p.CodigoBarrasItem,
+	p.CodigoBarrasCaja
+
+FROM Productos p 
+JOIN CategoriasProductos cp ON p.Id = cp.ProductoId
+JOIN Categorias c ON c.Id = cp.CategoriaId
+JOIN UnidadesMedida um ON p.UnidadMedidaId = um.Id;
+
 COMMIT;
 
 
