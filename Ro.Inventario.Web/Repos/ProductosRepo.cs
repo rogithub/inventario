@@ -69,9 +69,10 @@ public class ProductosRepo : IProductosRepo
 
     public Task<IEnumerable<Producto>> FulSearchText(string pattern)
     {
-        var sql = @"SELECT Id,Nombre,UnidadMedidaId,CodigoBarrasItem,CodigoBarrasCaja FROM Productos WHERE 
-                    ROWID IN (SELECT ROWID FROM Productos_fst WHERE Productos_fst MATCH @pattern ORDER BY rank)
-                    LIMIT 100";
+        var sql =
+            @"SELECT Id,Nombre,UnidadMedidaId,CodigoBarrasItem,CodigoBarrasCaja FROM Productos p WHERE             
+            ROWID IN (SELECT ROWID FROM Productos_fst WHERE Productos_fst MATCH @pattern ORDER BY rank)
+            LIMIT 100";
         var cmd = sql.ToCmd
         (            
             "@pattern".ToParam(DbType.String, pattern)
