@@ -71,7 +71,7 @@ public class VentasProductosRepo : IVentasProductosRepo
             Id = Guid.Parse(dr.GetString("Id")),
             ProductoId = Guid.Parse(dr.GetString("ProductoId")),
             VentaId = Guid.Parse(dr.GetString("VentaId")),
-            Cantidad = dr.GetDecilmal("Cantidad")
+            Cantidad = dr.GetDecimal("Cantidad")
         };
     }   
 }

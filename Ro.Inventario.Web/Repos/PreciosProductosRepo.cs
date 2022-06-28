@@ -72,7 +72,7 @@ public class PreciosProductosRepo : IPreciosProductosRepo
             Id = Guid.Parse(dr.GetString("Id")),
             ProductoId = Guid.Parse(dr.GetString("ProductoId")),
             FechaCreado = DateTime.Parse(dr.GetString("FechaCreado")),
-            PrecioVenta = dr.GetDecilmal("PrecioVenta")
+            PrecioVenta = dr.GetDecimal("PrecioVenta")
         };
     }   
 }

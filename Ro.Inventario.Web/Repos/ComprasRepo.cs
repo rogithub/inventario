@@ -55,9 +55,9 @@ public class ComprasRepo : IComprasRepo
             Proveedor = dr.GetString("Proveedor"),
             FechaFactura = DateTime.Parse(dr.GetString("FechaFactura")),
             FechaCreado = DateTime.Parse(dr.GetString("FechaCreado")),
-            CostoPaqueteria = dr.GetDecilmal("CostoPaqueteria"),
-            TotalFactura = dr.GetDecilmal("TotalFactura"),
-            PorcentajeFacturaIVA = dr.GetDecilmal("TotalFactura")
+            CostoPaqueteria = dr.GetDecimal("CostoPaqueteria"),
+            TotalFactura = dr.GetDecimal("TotalFactura"),
+            PorcentajeFacturaIVA = dr.GetDecimal("TotalFactura")
         };
     }   
 }

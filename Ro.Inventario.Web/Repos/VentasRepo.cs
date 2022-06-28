@@ -49,8 +49,8 @@ public class VentasRepo : IVentasRepo
         return new Venta()
         {
             Id = Guid.Parse(dr.GetString("Id")),
-            Pago = dr.GetDecilmal("Pago"),
-            Cambio = dr.GetDecilmal("Cambio"),
+            Pago = dr.GetDecimal("Pago"),
+            Cambio = dr.GetDecimal("Cambio"),
             FechaVenta = DateTime.Parse(dr.GetString("FechaVenta"))
         };
     }   

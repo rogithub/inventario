@@ -1,13 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
+  <ItemGroup>
+    <ProjectReference Include="..\Ro.SQLite.Data\Ro.SQLite.Data.csproj" />
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Ro.SQLite.Data" Version="0.0.1" />
-  </ItemGroup>
-
 </Project>

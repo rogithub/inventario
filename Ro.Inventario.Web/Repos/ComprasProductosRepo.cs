@@ -73,8 +73,8 @@ public class ComprasProductosRepo : IComprasProductosRepo
             Id = Guid.Parse(dr.GetString("Id")),
             ProductoId = Guid.Parse(dr.GetString("ProductoId")),
             CompraId = Guid.Parse(dr.GetString("CompraId")),            
-            Cantidad = dr.GetDecilmal("Cantidad"),
-            PrecioCompra = dr.GetDecilmal("PrecioCompra")
+            Cantidad = dr.GetDecimal("Cantidad"),
+            PrecioCompra = dr.GetDecimal("PrecioCompra")
         };
     }   
 }
