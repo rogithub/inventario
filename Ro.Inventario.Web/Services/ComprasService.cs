@@ -45,7 +45,7 @@ public class ComprasService: IComprasService
     public async Task ProcessModel(CompraNuevosProductos model, 
         IEnumerable<string> lines)
     {        
-        var productLines = _pValidator.ParseProducts(lines);
+        var productLines = _pValidator.ParseProducts(lines).ToArray();
 
         var compra = new Compra();
         compra.Proveedor = model.Proveedor;

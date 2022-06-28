@@ -46,7 +46,11 @@ public class ProductosRepo : IProductosRepo
         var sql = "INSERT INTO Productos (Id,Nombre,UnidadMedidaId,CodigoBarrasItem,CodigoBarrasCaja) VALUES (@id,@nombre,@unidadMedidaId,@codigoItem,@codigoCaja)";
         var cmd = sql.ToCmd
         (
-            
+            "@id".ToParam(DbType.String, it.Id.ToString()),
+            "@nombre".ToParam(DbType.String, it.Nombre),
+            "@unidadMedidaId".ToParam(DbType.String, it.UnidadMedidaId.ToString()),
+            "@codigoItem".ToParam(DbType.String, it.CodigoBarrasItem),
+            "@codigoCaja".ToParam(DbType.String, it.CodigoBarrasCaja)
         );
         return Db.ExecuteNonQuery(cmd);
     }

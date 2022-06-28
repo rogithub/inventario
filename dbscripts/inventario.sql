@@ -11,13 +11,37 @@ CREATE TABLE IF NOT EXISTS "UnidadesMedida" (
        PRIMARY KEY("Id")
 );
 
-CREATE VIRTUAL TABLE Productos USING fts5 (
-    Nombre,
-    Id UNINDEXED,
-    UnidadMedidaId UNINDEXED,
-    CodigoBarrasItem UNINDEXED, -- Si el item tiene codigo de barras por ejemplo codigo barras en un lapiz
-    CodigoBarrasCaja UNINDEXED  -- Si la caja tiene un codigo de barras por ejemplo caja lapices       
+
+CREATE TABLE IF NOT EXISTS "Productos" (
+       "nid"            INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+       "Id"  	    	   TEXT NOT NULL UNIQUE,
+       "Nombre"         TEXT NOT NULL,
+       "UnidadMedidaId" TEXT,
+       "CodigoBarrasItem" TEXT, -- Si el item tiene codigo de barras por ejemplo codigo barras en un lapiz
+       "CodigoBarrasCaja" TEXT       
 );
+
+CREATE VIRTUAL TABLE Productos_fst USING fts5 (
+    Nombre,
+    content=Productos,
+    content_rowid='nid' 
+);
+
+CREATE TRIGGER Productos_fst_insert AFTER INSERT ON Productos
+BEGIN
+    INSERT INTO Productos_fst (rowid, nombre) VALUES (new.nid, new.nombre);
+END;
+
+CREATE TRIGGER Productos_fst_delete AFTER DELETE ON Productos
+BEGIN
+    INSERT INTO Productos_fst (Productos_fst, rowid, nombre) VALUES ('delete', old.nid, old.nombre);
+END;
+
+CREATE TRIGGER Productos_fst_update AFTER UPDATE ON Productos
+BEGIN
+    INSERT INTO Productos_fst (Productos_fst, rowid, nombre) VALUES ('delete', old.nid, old.nombre);
+    INSERT INTO Productos_fst (rowid, nombre) VALUES (new.nid, new.nombre);
+END;
 
 CREATE TABLE IF NOT EXISTS "PreciosProductos" (
        "Id"  	    	  TEXT NOT NULL UNIQUE,

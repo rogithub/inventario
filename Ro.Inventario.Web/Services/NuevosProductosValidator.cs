@@ -50,7 +50,7 @@ public class NuevosProductosValidatorService : INuevosProductosValidatorService
 
         return new ProductoNuevoLinea()
         {
-            Id = Guid.NewGuid(),
+            // do not add id here
             Nombre = arr[0],
             Cantidad = cantidad,
             PrecioCompra = compra,
