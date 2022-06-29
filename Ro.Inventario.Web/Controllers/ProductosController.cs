@@ -51,7 +51,7 @@ public class ProductosController : Controller
 
         await _comprasSvc.ProcessModel(model, lines);
         
-        return Index();
+        return Redirect("Home", "Index");
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
