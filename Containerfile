@@ -26,5 +26,5 @@ RUN apt-get update && apt-get -y upgrade \
     && apt-get install -y --allow-unauthenticated \
     sqlite3 
 
-COPY --from=build /app/Ro.Condominios.Web/out ./
+COPY --from=build /app/Ro.Inventario.Web/out ./
 ENTRYPOINT ["dotnet", "Ro.Inventario.Web.dll", "--urls", "http://0.0.0.0:5002;http://0.0.0.0:5003"]
