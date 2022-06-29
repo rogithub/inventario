@@ -3,34 +3,68 @@ import { Api } from '../services/api';
 
 export interface IProduct
 {
+    nid: number,
     id: string,
-    value: string
+    nombre: string,
+    unidadMedida: string,
+    categoria: string,
+    codigoBarrasItem: string,
+    codigoBarrasCaja: string,
+    precioVenta: number
 }
 
-export class Ventas {
+export class ProductLine {
+    public producto: IProduct;
+    public cantidad: KnockoutObservable<number>;
+    public total: KnockoutComputed<number>;
 
-    public pattern: KnockoutObservable<string>;
-    public productos: KnockoutObservableArray<IProduct>;
+    constructor(product: IProduct)
+    {
+        this.producto = product;
+        this.cantidad = ko.observable<number>(1);
+        const self = this;
+        this.total = ko.computed<number>(function() {
+            return self.cantidad() * self.producto.precioVenta;
+        });
+    }
+}
+
+export class Venta {    
+    public lines: KnockoutObservableArray<ProductLine>;
     public api: Api;
     public url: string;
+    public autocomplete: Element;
+    public total: KnockoutComputed<number>;
+    public pagoCliente: KnockoutObservable<number>;
+    public cambio: KnockoutComputed<number>;
 
     constructor() {
         this.url = "ventas/buscarProducto"
         this.api = new Api();
-        this.pattern = ko.observable<string>("");
-        this.productos = ko.observableArray<IProduct>([]);
-        const self = this;
-        this.pattern.subscribe(async (newValue) => {
-            let apiUrl = `${self.url}?pattern=${newValue}`;
-            let prods = await self.api.get<IProduct[]>(apiUrl);
-            self.productos.removeAll();
-            prods.forEach(element => {
-                console.log(element);
-                self.productos.push(element);
-            });
-            
-            console.log(prods);
+        this.lines = ko.observableArray<ProductLine>([]);
+        this.autocomplete = document.querySelector("#autoComplete");
+        this.pagoCliente = ko.observable<number>(0);
+        const self = this;        
+        self.autocomplete.addEventListener("selection", function(e: any) {
+            let p = e.detail.selection.value as IProduct;
+            self.lines.push(new ProductLine(p));
+            $(self.autocomplete).val("");
+            return false;
         });
+
+        this.total = ko.computed<number>(function() {
+            let lines = self.lines();
+            var initialValue = 0;
+            return lines.reduce((sum, prod) => sum + prod.total(), initialValue);
+        });        
+        this.cambio = ko.computed<number>(function() {            
+            return self.pagoCliente() - self.total();
+        });
+    }
+
+    public borrar(line: ProductLine): void {
+        const self = this;
+        self.lines.remove(line);
     }
 
     public async load(): Promise<void> {
@@ -44,7 +78,7 @@ export class Ventas {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    var page = new Ventas();
+    var page = new Venta();
     page.bind();
     console.log("binding ko");    
 }, false);

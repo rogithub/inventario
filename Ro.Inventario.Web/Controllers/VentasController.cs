@@ -8,12 +8,12 @@ namespace Ro.Inventario.Web.Controllers;
 
 public class VentasController : Controller
 {
-    private readonly IProductosRepo _productos;
+    private readonly IBusquedaProductosRepo _productos;
     private readonly ILogger<VentasController> _logger;
 
     public VentasController(
         ILogger<VentasController> logger,
-        IProductosRepo productos
+        IBusquedaProductosRepo productos
         )
     {
         _logger = logger;
@@ -33,12 +33,7 @@ public class VentasController : Controller
     public async Task<IActionResult> BuscarProducto(string pattern)
     {
         var prods = await _productos.FulSearchText(pattern);
-        var res = (
-            from p in prods select 
-            new { id = p.Id, value = p.Nombre }
-        ).ToArray();
-
-        return Json(res);
+        return Json(prods.ToArray());
     }
 
 

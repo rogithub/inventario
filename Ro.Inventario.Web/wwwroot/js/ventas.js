@@ -43,38 +43,49 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Ventas = void 0;
+exports.Venta = exports.ProductLine = void 0;
 var binderService_1 = __webpack_require__(575);
 var api_1 = __webpack_require__(711);
-var Ventas = /** @class */ (function () {
-    function Ventas() {
-        var _this = this;
+var ProductLine = /** @class */ (function () {
+    function ProductLine(product) {
+        this.producto = product;
+        this.cantidad = ko.observable(1);
+        var self = this;
+        this.total = ko.computed(function () {
+            return self.cantidad() * self.producto.precioVenta;
+        });
+    }
+    return ProductLine;
+}());
+exports.ProductLine = ProductLine;
+var Venta = /** @class */ (function () {
+    function Venta() {
         this.url = "ventas/buscarProducto";
         this.api = new api_1.Api();
-        this.pattern = ko.observable("");
-        this.productos = ko.observableArray([]);
+        this.lines = ko.observableArray([]);
+        this.autocomplete = document.querySelector("#autoComplete");
+        this.pagoCliente = ko.observable(0);
         var self = this;
-        this.pattern.subscribe(function (newValue) { return __awaiter(_this, void 0, void 0, function () {
-            var apiUrl, prods;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        apiUrl = "".concat(self.url, "?pattern=").concat(newValue);
-                        return [4 /*yield*/, self.api.get(apiUrl)];
-                    case 1:
-                        prods = _a.sent();
-                        self.productos.removeAll();
-                        prods.forEach(function (element) {
-                            console.log(element);
-                            self.productos.push(element);
-                        });
-                        console.log(prods);
-                        return [2 /*return*/];
-                }
-            });
-        }); });
+        self.autocomplete.addEventListener("selection", function (e) {
+            var p = e.detail.selection.value;
+            self.lines.push(new ProductLine(p));
+            $(self.autocomplete).val("");
+            return false;
+        });
+        this.total = ko.computed(function () {
+            var lines = self.lines();
+            var initialValue = 0;
+            return lines.reduce(function (sum, prod) { return sum + prod.total(); }, initialValue);
+        });
+        this.cambio = ko.computed(function () {
+            return self.pagoCliente() - self.total();
+        });
     }
-    Ventas.prototype.load = function () {
+    Venta.prototype.borrar = function (line) {
+        var self = this;
+        self.lines.remove(line);
+    };
+    Venta.prototype.load = function () {
         return __awaiter(this, void 0, void 0, function () {
             var self;
             return __generator(this, function (_a) {
@@ -83,15 +94,15 @@ var Ventas = /** @class */ (function () {
             });
         });
     };
-    Ventas.prototype.bind = function () {
+    Venta.prototype.bind = function () {
         var self = this;
         binderService_1.BinderService.bind(self, "#ventasPage");
     };
-    return Ventas;
+    return Venta;
 }());
-exports.Ventas = Ventas;
+exports.Venta = Venta;
 document.addEventListener('DOMContentLoaded', function () {
-    var page = new Ventas();
+    var page = new Venta();
     page.bind();
     console.log("binding ko");
 }, false);

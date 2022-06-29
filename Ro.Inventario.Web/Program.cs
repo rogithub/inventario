@@ -18,6 +18,8 @@ builder.Services.AddScoped<ICategoriasRepo, CategoriasRepo>();
 builder.Services.AddScoped<ICategoriasProductosRepo, CategoriasProductosRepo>();
 builder.Services.AddScoped<IComprasService, ComprasService>();
 builder.Services.AddScoped<INuevosProductosValidatorService, NuevosProductosValidatorService>();
+builder.Services.AddScoped<IBusquedaProductosRepo, BusquedaProductosRepo>();
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
