@@ -139,6 +139,11 @@ CREATE VIEW v_ventas_hoy
 AS
 SELECT * FROM Ajustes WHERE TipoAjuste = 0 AND datetime(FechaAjuste) BETWEEN DATETIME('now','start of day') AND DATETIME('now','start of day', '+1 day');
 
+-- Ventas Productos Hoy
+DROP VIEW IF EXISTS v_ventas_productos_hoy;
+CREATE VIEW v_ventas_productos_hoy
+AS
+SELECT v.Id as VentaId, v.FechaAjuste as FechaVenta, p.* FROM v_ventas_hoy v JOIN AjustesProductos a on v.Id = a.AjusteId JOIN v_productos p on a.ProductoId = p.Id;
 
 COMMIT;
 
