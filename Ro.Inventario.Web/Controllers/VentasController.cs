@@ -57,7 +57,7 @@ public class VentasController : Controller
             Cantidad = l.Cantidad
         }).ToArray();
 
-        _logger.LogInformation("Venta id {id}",model.Id);
+        _logger.LogInformation("Venta id {id}", v.Id.ToString());
         _logger.LogInformation("Venta pago {pago}",model.Pago); 
         _logger.LogInformation("Venta cambio {cambio}",model.Cambio); 
         _logger.LogInformation("Items {len}",model.Items.Length); 
