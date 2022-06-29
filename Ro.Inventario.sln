@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ro.Inventario.Web", "Ro.Inventario.Web\Ro.Inventario.Web.csproj", "{07D08161-8210-4A57-B6F4-E1F4A8A7C5FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ro.SQLite.Data", "Ro.SQLite.Data\Ro.SQLite.Data.csproj", "{E1F05F53-6909-4E7C-95F3-D949E44F4DCE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{07D08161-8210-4A57-B6F4-E1F4A8A7C5FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07D08161-8210-4A57-B6F4-E1F4A8A7C5FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07D08161-8210-4A57-B6F4-E1F4A8A7C5FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1F05F53-6909-4E7C-95F3-D949E44F4DCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1F05F53-6909-4E7C-95F3-D949E44F4DCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1F05F53-6909-4E7C-95F3-D949E44F4DCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1F05F53-6909-4E7C-95F3-D949E44F4DCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

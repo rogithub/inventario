@@ -5,6 +5,7 @@ WORKDIR /app
 COPY Ro.Inventario.sln .
 COPY nuget.config .
 COPY Ro.Inventario.Web/*.csproj ./Ro.Inventario.Web/
+COPY Ro.SQLite.Data/*.csproj ./Ro.SQLite.Data/
 RUN dotnet restore
 
 # copy everything else and build app
