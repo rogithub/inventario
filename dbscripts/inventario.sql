@@ -112,7 +112,7 @@ DROP VIEW IF EXISTS v_productos;
 CREATE VIEW v_productos
 AS
 SELECT 
-	p.Id, p.Nombre, c.Nombre as Categoria, um.Nombre as UnidadMedida,
+	p.nid, p.Id, p.Nombre, c.Nombre as Categoria, um.Nombre as UnidadMedida,
 	(SELECT PrecioVenta FROM PreciosProductos pp WHERE p.Id = pp.ProductoId ORDER BY datetime(pp.FechaCreado) DESC LIMIT 1) as PrecioVenta,
 	p.CodigoBarrasItem,
 	p.CodigoBarrasCaja
