@@ -50,9 +50,9 @@ var Ventas = /** @class */ (function () {
     function Ventas() {
         var _this = this;
         this.url = "ventas/buscarProducto";
-        //$("#productSearch").val() as string;
         this.api = new api_1.Api();
         this.pattern = ko.observable("");
+        this.productos = ko.observableArray([]);
         var self = this;
         this.pattern.subscribe(function (newValue) { return __awaiter(_this, void 0, void 0, function () {
             var apiUrl, prods;
@@ -63,6 +63,11 @@ var Ventas = /** @class */ (function () {
                         return [4 /*yield*/, self.api.get(apiUrl)];
                     case 1:
                         prods = _a.sent();
+                        self.productos.removeAll();
+                        prods.forEach(function (element) {
+                            console.log(element);
+                            self.productos.push(element);
+                        });
                         console.log(prods);
                         return [2 /*return*/];
                 }

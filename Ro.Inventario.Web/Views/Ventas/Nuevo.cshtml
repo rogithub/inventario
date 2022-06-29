@@ -3,18 +3,45 @@
 }
 
 @section Scripts {
-    <script src="~/js/ventas.js"></script>
+  <script src="~/lib/autoComplete.js-10.2.7/autoComplete.min.js"></script>
+  <link rel="stylesheet" href="~/lib/autoComplete.js-10.2.7/css/autoComplete.css">
+  <script src="~/js/ventas.js"></script>
+
+  <script type="text/javascript">
+  //https://tarekraafat.github.io/autoComplete.js/#/playground
+  const autoCompleteJS = new autoComplete({ 
+    placeHolder: "Buscar productos...",    
+    resultItem: {
+        highlight: true,
+    },
+    data: {
+      src: async (query) => {
+        try {
+          console.log(query);
+          // Fetch Data from external Source
+          const source = await fetch(`${document.baseURI}ventas/buscarProducto?pattern=${query}`);
+          // Data should be an array of `Objects` or `Strings`
+          const data = await source.json();
+
+          return data;
+        } catch (error) {
+          return error;
+        }
+      },
+        // Data source 'Object' key to be searched
+        keys: ["id", "value"] 
+      }
+    });    
+  </script>
 }
 
 <div id="ventasPage">
-  <input type="hidden" id="productSearch" value="@Url.Action("BuscarProducto","Ventas")" />
+  <input id="autoComplete">
   <label for="autcomplete" class="form-label">Producto</label>
+  (<label data-bind="text: productos().length" class="form-label"></label>)
   <input class="form-control" list="datalistOptions" id="product-autcomplete" placeholder="Escriba para buscar..." data-bind="textInput: pattern">
-  <datalist id="datalistOptions">
-    <option value="San Francisco">uno</option>
-    <option value="New York">dos</option>
-    <option value="Seattle">tres</option>
-    <option value="Los Angeles">cuatro</option>
-    <option value="Chicago">cinco</option>
-  </datalist>
+  <datalist id="datalistOptions" data-bind="foreach: productos()">
+    <option data-bind="attr: { value: $data.id, text: $data.value }"></option>
+  </datalist>  
+
 </div>
