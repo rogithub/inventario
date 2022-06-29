@@ -8,6 +8,7 @@ namespace Ro.Inventario.Web.Repos;
 
 public interface IBusquedaProductosRepo
 {
+    Task<IEnumerable<ProductoEncontrado>> EnCategoria(string pattern, Guid categoriaId);
     Task<IEnumerable<ProductoEncontrado>> FulSearchText(string pattern);
 }
 
@@ -20,6 +21,25 @@ public class BusquedaProductosRepo : IBusquedaProductosRepo
         this.Db = db;
     }
 
+    public Task<IEnumerable<ProductoEncontrado>> EnCategoria(string pattern, Guid categoriaId)
+    {
+        if (string.IsNullOrWhiteSpace(pattern)) 
+        {
+            return Task.FromResult(Enumerable.Empty<ProductoEncontrado>());
+        }
+        var sql =
+            @"
+                SELECT p.* FROM v_productos p JOIN CategoriasProductos c 
+                WHERE c.CategoriaId in (@categoriaId) AND Nombre like '%@pattern%'
+            ";
+        var cmd = sql.ToCmd
+        (   
+            "@categoriaId".ToParam(DbType.String, categoriaId.ToString()),
+            "@pattern".ToParam(DbType.String, pattern)
+        );
+        return Db.GetRows(cmd, GetData);
+    }
+
     public Task<IEnumerable<ProductoEncontrado>> FulSearchText(string pattern)
     {
         if (string.IsNullOrWhiteSpace(pattern)) 
@@ -28,7 +48,7 @@ public class BusquedaProductosRepo : IBusquedaProductosRepo
         }
         var sql =
             @"
-                SELECT nid,Id,Nombre,Categoria,UnidadMedida,PrecioVenta,CodigoBarrasItem,CodigoBarrasCaja FROM v_productos p WHERE             
+                SELECT p.* FROM v_productos p WHERE             
                 nid IN (SELECT ROWID FROM Productos_fst WHERE Productos_fst MATCH @pattern ORDER BY rank)
                 LIMIT 100
             ";
