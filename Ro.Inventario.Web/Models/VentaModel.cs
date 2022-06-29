@@ -6,9 +6,9 @@ namespace Ro.Inventario.Web.Models;
 
 public class VentaProductoModel
 {     
-    [JsonProperty("productoId")]
+    [JsonProperty(PropertyName = "productoId")]
     public Guid ProductoId { get; set; }
-    [JsonProperty("cantidad")]
+    [JsonProperty(PropertyName = "cantidad")]
     public decimal Cantidad { get; set; }
 }
 
@@ -16,13 +16,12 @@ public class VentaModel
 {
     public VentaModel()
     {
-
         this.Items = new VentaProductoModel[] {};
     }
-    [JsonProperty("pago")]
+    [JsonProperty(PropertyName = "pago")]
     public decimal Pago { get; set; }
-    [JsonProperty("cambio")]
+    [JsonProperty(PropertyName = "cambio")]
     public decimal Cambio { get; set; }
-    [JsonProperty("items")]
+    [JsonProperty(PropertyName = "items")]
     public VentaProductoModel[] Items { get; set; }
 }

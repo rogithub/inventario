@@ -44,7 +44,7 @@ public class VentasController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Guardar(VentaModel model)
+    public async Task<IActionResult> Guardar([FromBody] VentaModel model)
     {
         var v = new Venta();
         v.Pago = model.Pago;
@@ -57,10 +57,10 @@ public class VentasController : Controller
             Cantidad = l.Cantidad
         }).ToArray();
 
-
-        _logger.LogInformation("venta pago {pago}",model.Pago); 
-        _logger.LogInformation("venta cambio {cambio}",model.Cambio); 
-        _logger.LogInformation("items {len}",model.Items.Length); 
+        _logger.LogInformation("Venta id {id}",model.Id);
+        _logger.LogInformation("Venta pago {pago}",model.Pago); 
+        _logger.LogInformation("Venta cambio {cambio}",model.Cambio); 
+        _logger.LogInformation("Items {len}",model.Items.Length); 
 
         var intVentaProducts = await _ventasProds.BulkSave(prods);
 
