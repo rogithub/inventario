@@ -13,6 +13,20 @@ export interface IProduct
     precioVenta: number
 }
 
+
+export interface VentaProductoModel
+{     
+    productoId: string,
+    cantidad: number
+}
+
+export interface VentaModel
+{
+  pago: number,
+  cambio: number,
+  items: VentaProductoModel[]
+}
+
 export class ProductLine {
     public producto: IProduct;
     public cantidad: KnockoutObservable<number>;
@@ -40,7 +54,7 @@ export class Venta {
     public isValid: KnockoutComputed<boolean>;
 
     constructor() {
-        this.url = "ventas/buscarProducto"
+        this.url = "ventas/Guardar"
         this.api = new Api();
         this.lines = ko.observableArray<ProductLine>([]);
         this.autocomplete = document.querySelector("#autoComplete");
@@ -74,19 +88,34 @@ export class Venta {
         self.lines.remove(line);
     }
 
-    public async load(): Promise<void> {
-        const self = this;
-    }
-
     public bind(): void {
         const self = this;
         BinderService.bind(self, "#ventasPage");
     }
 
 
-    public guardar(): void {
+    public async guardar(): Promise<void> {
         const self = this;
-        alert("Guardado!");        
+        let lines = new Array<VentaProductoModel>();
+        self.lines().forEach(l => {
+            let line: VentaProductoModel =
+            {
+                cantidad: l.cantidad(),
+                productoId: l.producto.id,            
+            };
+            lines.push(line);
+        });
+        let data: VentaModel = {
+            cambio: self.cambio() as number,
+            pago: self.pagoCliente() as number,
+            items: lines
+        };
+        let url = `${self.url}`;
+
+        let result = await self.api.post<number[]>(url, data);
+        console.log(`Ventas guardadas ${result[0]} productos en esa venta ${result[1]}`);
+
+        alert("Guardado!");
     }
 }
 

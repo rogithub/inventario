@@ -2,6 +2,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Ro.SQLite.Data\Ro.SQLite.Data.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>

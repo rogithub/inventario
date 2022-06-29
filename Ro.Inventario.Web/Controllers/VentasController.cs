@@ -57,6 +57,11 @@ public class VentasController : Controller
             Cantidad = l.Cantidad
         }).ToArray();
 
+
+        _logger.LogInformation("venta pago {pago}",model.Pago); 
+        _logger.LogInformation("venta cambio {cambio}",model.Cambio); 
+        _logger.LogInformation("items {len}",model.Items.Length); 
+
         var intVentaProducts = await _ventasProds.BulkSave(prods);
 
         return Json(new int[] { intVenta, intVentaProducts});

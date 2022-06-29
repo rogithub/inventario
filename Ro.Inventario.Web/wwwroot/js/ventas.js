@@ -60,7 +60,7 @@ var ProductLine = /** @class */ (function () {
 exports.ProductLine = ProductLine;
 var Venta = /** @class */ (function () {
     function Venta() {
-        this.url = "ventas/buscarProducto";
+        this.url = "ventas/Guardar";
         this.api = new api_1.Api();
         this.lines = ko.observableArray([]);
         this.autocomplete = document.querySelector("#autoComplete");
@@ -90,22 +90,40 @@ var Venta = /** @class */ (function () {
         var self = this;
         self.lines.remove(line);
     };
-    Venta.prototype.load = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var self;
-            return __generator(this, function (_a) {
-                self = this;
-                return [2 /*return*/];
-            });
-        });
-    };
     Venta.prototype.bind = function () {
         var self = this;
         binderService_1.BinderService.bind(self, "#ventasPage");
     };
     Venta.prototype.guardar = function () {
-        var self = this;
-        alert("Guardado!");
+        return __awaiter(this, void 0, void 0, function () {
+            var self, lines, data, url, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        self = this;
+                        lines = new Array();
+                        self.lines().forEach(function (l) {
+                            var line = {
+                                cantidad: l.cantidad(),
+                                productoId: l.producto.id,
+                            };
+                            lines.push(line);
+                        });
+                        data = {
+                            cambio: self.cambio(),
+                            pago: self.pagoCliente(),
+                            items: lines
+                        };
+                        url = "".concat(self.url);
+                        return [4 /*yield*/, self.api.post(url, data)];
+                    case 1:
+                        result = _a.sent();
+                        console.log("Ventas guardadas ".concat(result[0], " productos en esa venta ").concat(result[1]));
+                        alert("Guardado!");
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Venta;
 }());
