@@ -37,6 +37,7 @@ export class Venta {
     public total: KnockoutComputed<number>;
     public pagoCliente: KnockoutObservable<number>;
     public cambio: KnockoutComputed<number>;
+    public isValid: KnockoutComputed<boolean>;
 
     constructor() {
         this.url = "ventas/buscarProducto"
@@ -59,6 +60,12 @@ export class Venta {
         });        
         this.cambio = ko.computed<number>(function() {            
             return self.pagoCliente() - self.total();
+        });
+
+        this.isValid = ko.computed<boolean>(function() {            
+            return !(isNaN(self.total()) || self.total() == 0 || 
+                   isNaN(self.pagoCliente()) || self.pagoCliente() == 0 ||
+                   self.total() > self.pagoCliente());
         });
     }
 

@@ -80,6 +80,11 @@ var Venta = /** @class */ (function () {
         this.cambio = ko.computed(function () {
             return self.pagoCliente() - self.total();
         });
+        this.isValid = ko.computed(function () {
+            return !(isNaN(self.total()) || self.total() == 0 ||
+                isNaN(self.pagoCliente()) || self.pagoCliente() == 0 ||
+                self.total() > self.pagoCliente());
+        });
     }
     Venta.prototype.borrar = function (line) {
         var self = this;
