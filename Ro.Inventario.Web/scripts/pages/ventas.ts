@@ -3,28 +3,28 @@ import { Api } from '../services/api';
 
 export interface IProduct
 {
-    nid: number,
-    id: string,
-    nombre: string,
-    unidadMedida: string,
-    categoria: string,
-    codigoBarrasItem: string,
-    codigoBarrasCaja: string,
-    precioVenta: number
+    nid: number;
+    id: string;
+    nombre: string;
+    unidadMedida: string;
+    categoria: string;
+    codigoBarrasItem: string;
+    codigoBarrasCaja: string;
+    precioVenta: number;
 }
 
 
 export interface VentaProductoModel
 {     
-    productoId: string,
-    cantidad: number
+    productoId: string;
+    cantidad: number;
 }
 
 export interface VentaModel
 {
-  pago: number,
-  cambio: number,
-  items: VentaProductoModel[]
+  pago: number;
+  cambio: number;
+  items: VentaProductoModel[];
 }
 
 export class ProductLine {

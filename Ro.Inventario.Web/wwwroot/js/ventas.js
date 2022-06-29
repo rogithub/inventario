@@ -104,15 +104,15 @@ var Venta = /** @class */ (function () {
                         lines = new Array();
                         self.lines().forEach(function (l) {
                             var line = {
-                                cantidad: l.cantidad(),
-                                productoId: l.producto.id,
+                                Cantidad: l.cantidad(),
+                                ProductoId: l.producto.id,
                             };
                             lines.push(line);
                         });
                         data = {
-                            cambio: self.cambio(),
-                            pago: self.pagoCliente(),
-                            items: lines
+                            Cambio: self.cambio(),
+                            Pago: self.pagoCliente(),
+                            Items: lines
                         };
                         url = "".concat(self.url);
                         return [4 /*yield*/, self.api.post(url, data)];
