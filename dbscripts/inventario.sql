@@ -143,7 +143,7 @@ SELECT * FROM Ajustes WHERE TipoAjuste = 0 AND datetime(FechaAjuste) BETWEEN DAT
 DROP VIEW IF EXISTS v_ventas_productos_hoy;
 CREATE VIEW v_ventas_productos_hoy
 AS
-SELECT v.Id as VentaId, v.FechaAjuste as FechaVenta, p.* FROM v_ventas_hoy v JOIN AjustesProductos a on v.Id = a.AjusteId JOIN v_productos p on a.ProductoId = p.Id;
+SELECT v.Id as VentaId, v.FechaAjuste as FechaVenta, a.Cantidad, p.* FROM v_ventas_hoy v JOIN AjustesProductos a on v.Id = a.AjusteId JOIN v_productos p on a.ProductoId = p.Id;
 
 COMMIT;
 
