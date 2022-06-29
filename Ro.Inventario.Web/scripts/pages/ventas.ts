@@ -116,6 +116,7 @@ export class Venta {
         console.log(`Ventas guardadas ${result[0]} productos en esa venta ${result[1]}`);
 
         alert("Guardado!");
+        window.location.href = `${document.baseURI}`;
     }
 }
 

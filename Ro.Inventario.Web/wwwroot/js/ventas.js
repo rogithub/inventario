@@ -104,15 +104,15 @@ var Venta = /** @class */ (function () {
                         lines = new Array();
                         self.lines().forEach(function (l) {
                             var line = {
-                                Cantidad: l.cantidad(),
-                                ProductoId: l.producto.id,
+                                cantidad: l.cantidad(),
+                                productoId: l.producto.id,
                             };
                             lines.push(line);
                         });
                         data = {
-                            Cambio: self.cambio(),
-                            Pago: self.pagoCliente(),
-                            Items: lines
+                            cambio: self.cambio(),
+                            pago: self.pagoCliente(),
+                            items: lines
                         };
                         url = "".concat(self.url);
                         return [4 /*yield*/, self.api.post(url, data)];
@@ -120,6 +120,7 @@ var Venta = /** @class */ (function () {
                         result = _a.sent();
                         console.log("Ventas guardadas ".concat(result[0], " productos en esa venta ").concat(result[1]));
                         alert("Guardado!");
+                        window.location.href = "".concat(document.baseURI);
                         return [2 /*return*/];
                 }
             });
