@@ -103,6 +103,10 @@ var Venta = /** @class */ (function () {
         var self = this;
         binderService_1.BinderService.bind(self, "#ventasPage");
     };
+    Venta.prototype.guardar = function () {
+        var self = this;
+        alert("Guardado!");
+    };
     return Venta;
 }());
 exports.Venta = Venta;

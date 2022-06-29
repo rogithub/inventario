@@ -38,7 +38,8 @@
 </script>
 }
 
-<div id="ventasPage">
+
+<form id="ventasPage" data-bind="submit: guardar.bind($data)">
 
 <input id="autoComplete">
 
@@ -130,3 +131,4 @@
     <tr>
   </tfoot>
   </table>
+</form>

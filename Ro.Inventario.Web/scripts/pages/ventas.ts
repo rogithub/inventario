@@ -82,6 +82,12 @@ export class Venta {
         const self = this;
         BinderService.bind(self, "#ventasPage");
     }
+
+
+    public guardar(): void {
+        const self = this;
+        alert("Guardado!");        
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function () {
