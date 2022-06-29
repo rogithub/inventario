@@ -133,6 +133,12 @@ SELECT
 FROM 
 	v_productos p;
 	
+-- Ventas Hoy
+DROP VIEW IF EXISTS v_ventas_hoy;
+CREATE VIEW v_ventas_hoy
+AS
+SELECT * FROM Ajustes WHERE TipoAjuste = 0 AND datetime(FechaAjuste) BETWEEN DATETIME('now','start of day') AND DATETIME('now','start of day', '+1 day');
+
 
 COMMIT;
 
