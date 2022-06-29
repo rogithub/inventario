@@ -8,28 +8,27 @@ using Microsoft.Extensions.Configuration;
 
 namespace Ro.SQLite.Data
 {
-    internal abstract class DbTasks
+    public class DbTasks: IDbTasks
     {
-        private readonly IConfiguration _config;
-        public DbTasks(IConfiguration config)
+        private string _interopPath;
+        public DbTasks(string interopPath)
         {
-            this._config = config;
+            this._interopPath = interopPath;
         }
 
-        protected static IDbConnection OpenConnection(IDbConnection conn)
-        {
-            var path = _config.GetSection("InteropPath").Value;            
+        public IDbConnection OpenConnection(IDbConnection conn)
+        {                
             if (conn.State != System.Data.ConnectionState.Open)
             {                
                 conn.Open();
                 var c = conn as SQLiteConnection;
                 c.EnableExtensions(true);
-                c.LoadExtension(path, "sqlite3_fts5_init");
+                c.LoadExtension(_interopPath, "sqlite3_fts5_init");
             }
             return conn;
         }
 
-        protected static IDbConnection CloseConnection(IDbConnection conn)
+        public IDbConnection CloseConnection(IDbConnection conn)
         {            
             if (conn.State != System.Data.ConnectionState.Closed)
             {
@@ -38,7 +37,7 @@ namespace Ro.SQLite.Data
             return conn;
         }
 
-        public static async Task<object> ExecuteScalarAsync(DbCommand command, DbConnection connection)
+        public async Task<object> ExecuteScalarAsync(DbCommand command, DbConnection connection)
         {
             return await ExecuteAsync<object>(command, connection, async (cmd, conn) =>
             {
@@ -46,14 +45,14 @@ namespace Ro.SQLite.Data
             });
         }
 
-        public static async Task<IEnumerable<T>> GetRows<T>(DbCommand cmd, DbConnection conn, Func<IDataReader, T> mapper)
+        public async Task<IEnumerable<T>> GetRows<T>(DbCommand cmd, DbConnection conn, Func<IDataReader, T> mapper)
         {
             List<T> list = new List<T>();
             await ExecuteReaderAsync(cmd, conn, (dr) => list.Add(mapper(dr)), CommandBehavior.SingleResult);
             return list;
         }
 
-        public static async Task<IEnumerable<T>> GetRowsAsync<T>(DbCommand cmd, DbConnection conn, Func<IDataReader, Task<T>> mapper)
+        public async Task<IEnumerable<T>> GetRowsAsync<T>(DbCommand cmd, DbConnection conn, Func<IDataReader, Task<T>> mapper)
         {
             List<T> list = new List<T>();
             await ExecuteReaderAsync(cmd, conn, async (dr) =>
@@ -64,7 +63,7 @@ namespace Ro.SQLite.Data
         }
 
 
-        public static async Task ExecuteReaderAsync(DbCommand command, DbConnection connection, Action<IDataReader> action, CommandBehavior behavior = CommandBehavior.CloseConnection)
+        public async Task ExecuteReaderAsync(DbCommand command, DbConnection connection, Action<IDataReader> action, CommandBehavior behavior = CommandBehavior.CloseConnection)
         {
             await ExecuteAsync<Task>(command, connection, async (cmd, conn) =>
             {
@@ -79,7 +78,7 @@ namespace Ro.SQLite.Data
             });
         }
 
-        public static async Task<T> GetOneRow<T>(DbCommand command, DbConnection connection, Func<IDataReader, T> mapper)
+        public async Task<T> GetOneRow<T>(DbCommand command, DbConnection connection, Func<IDataReader, T> mapper)
         {
             return await ExecuteAsync<T>(command, connection, async (cmd, conn) =>
             {
@@ -90,7 +89,7 @@ namespace Ro.SQLite.Data
             });
         }
 
-        public static async Task<T> GetOneRowAsync<T>(DbCommand command, DbConnection connection, Func<IDataReader, Task<T>> mapper)
+        public async Task<T> GetOneRowAsync<T>(DbCommand command, DbConnection connection, Func<IDataReader, Task<T>> mapper)
         {
             return await ExecuteAsync<T>(command, connection, async (cmd, conn) =>
             {
@@ -101,7 +100,7 @@ namespace Ro.SQLite.Data
             });
         }
 
-        public static async Task<int> ExecuteNonQueryAsync(DbCommand command, DbConnection connection)
+        public async Task<int> ExecuteNonQueryAsync(DbCommand command, DbConnection connection)
         {
             return await ExecuteAsync<int>(command, connection, async (cmd, conn) =>
             {
@@ -109,7 +108,7 @@ namespace Ro.SQLite.Data
             });
         }
 
-        public async static Task<T> ExecuteAsync<T>(DbCommand cmd, DbConnection conn, Func<DbCommand, DbConnection, Task<T>> f)
+        public async Task<T> ExecuteAsync<T>(DbCommand cmd, DbConnection conn, Func<DbCommand, DbConnection, Task<T>> f)
         {
             try
             {

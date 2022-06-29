@@ -5,10 +5,11 @@ using Ro.SQLite.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 var connString = builder.Configuration.GetSection("DefaultConnection").Value;
-builder.Services.AddTransient<IDbAsync>(svc => {
-    return new Database(connString);
-});
+var interopPath = builder.Configuration.GetSection("InteropPath").Value;
 
+builder.Services.AddTransient<IDbAsync>(svc => {    
+    return new Database(connString, new DbTasks(interopPath));
+});
 builder.Services.AddScoped<IComprasProductosRepo, ComprasProductosRepo>();
 builder.Services.AddScoped<IComprasRepo, ComprasRepo>();
 builder.Services.AddScoped<IPreciosProductosRepo, PreciosProductosRepo>();
