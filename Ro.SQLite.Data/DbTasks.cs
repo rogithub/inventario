@@ -4,19 +4,21 @@ using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
 using System.Data.SQLite;
+using Microsoft.Extensions.Configuration;
 
 namespace Ro.SQLite.Data
 {
     internal abstract class DbTasks
     {
-        public DbTasks()
+        private readonly IConfiguration _config;
+        public DbTasks(IConfiguration config)
         {
-
+            this._config = config;
         }
 
         protected static IDbConnection OpenConnection(IDbConnection conn)
         {
-            string path = "/home/ro/Documents/code/inventario/Ro.Inventario.Web/bin/Debug/net6.0/runtimes/linux-x64/native/SQLite.Interop.dll";
+            var path = _config.GetSection("InteropPath").Value;            
             if (conn.State != System.Data.ConnectionState.Open)
             {                
                 conn.Open();
