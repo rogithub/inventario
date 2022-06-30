@@ -36,7 +36,7 @@ public class VentasController : Controller
     {
         return View();
     }
-    
+
     public async Task<IActionResult> BuscarProducto(string pattern)
     {
         var prods = await _productos.FulSearchText(pattern);
@@ -50,21 +50,22 @@ public class VentasController : Controller
         v.Pago = model.Pago;
         v.Cambio = model.Cambio;
         var intVenta = await _ventas.Save(v);
-        var prods = (from l in model.Items select new VentaProducto()
-        {
-            ProductoId = l.ProductoId,
-            VentaId = v.Id,
-            Cantidad = l.Cantidad
-        }).ToArray();
+        var prods = (from l in model.Items
+                     select new VentaProducto()
+                     {
+                         ProductoId = l.ProductoId,
+                         VentaId = v.Id,
+                         Cantidad = l.Cantidad
+                     }).ToArray();
 
         _logger.LogInformation("Venta id {id}", v.Id.ToString());
-        _logger.LogInformation("Venta pago {pago}",model.Pago); 
-        _logger.LogInformation("Venta cambio {cambio}",model.Cambio); 
-        _logger.LogInformation("Items {len}",model.Items.Length); 
+        _logger.LogInformation("Venta pago {pago}", model.Pago);
+        _logger.LogInformation("Venta cambio {cambio}", model.Cambio);
+        _logger.LogInformation("Items {len}", model.Items.Length);
 
         var intVentaProducts = await _ventasProds.BulkSave(prods);
 
-        return Json(new int[] { intVenta, intVentaProducts});
+        return Json(new int[] { intVenta, intVentaProducts });
     }
 
 
