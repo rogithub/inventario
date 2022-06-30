@@ -26,7 +26,14 @@ Now, you will have a freshly built library file called libSQLite.Interop.so in t
 chmod -x <source root>/bin/2013/Release/bin/libSQLite.Interop.so
 Copy libSQLite.Interop.so the directory where your application’s binaries reside (not the x64 or x86 subdirectories containing SQLite.Interop.dll), and you’re set to go.
 
-## podman
+# podman
+Existe un script que hace todo lo de podman automaticamente. Note que la base de datos
+se crea con un volumen compartido entre el repo y el container.
+``` bash
+./podman_deploy.sh
+```
+
+## podman detallado
 ``` bash
 podman build -f Containerfile -t inventario-img
 podman images
