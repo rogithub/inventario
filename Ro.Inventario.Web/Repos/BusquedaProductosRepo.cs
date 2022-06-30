@@ -23,7 +23,7 @@ public class BusquedaProductosRepo : IBusquedaProductosRepo
 
     public Task<IEnumerable<ProductoEncontrado>> EnCategoria(string pattern, Guid categoriaId)
     {
-        if (string.IsNullOrWhiteSpace(pattern)) 
+        if (string.IsNullOrWhiteSpace(pattern))
         {
             return Task.FromResult(Enumerable.Empty<ProductoEncontrado>());
         }
@@ -33,7 +33,7 @@ public class BusquedaProductosRepo : IBusquedaProductosRepo
                 WHERE c.CategoriaId in (@categoriaId) AND Nombre like '%@pattern%'
             ";
         var cmd = sql.ToCmd
-        (   
+        (
             "@categoriaId".ToParam(DbType.String, categoriaId.ToString()),
             "@pattern".ToParam(DbType.String, pattern)
         );
@@ -42,10 +42,16 @@ public class BusquedaProductosRepo : IBusquedaProductosRepo
 
     public Task<IEnumerable<ProductoEncontrado>> FulSearchText(string pattern)
     {
-        if (string.IsNullOrWhiteSpace(pattern)) 
+        if (string.IsNullOrWhiteSpace(pattern))
         {
             return Task.FromResult(Enumerable.Empty<ProductoEncontrado>());
         }
+
+        if (pattern.Split(" ").Length == 1)
+        {
+            pattern += "*";
+        }
+
         var sql =
             @"
                 SELECT p.* FROM v_productos p WHERE             
@@ -53,12 +59,12 @@ public class BusquedaProductosRepo : IBusquedaProductosRepo
                 LIMIT 100
             ";
         var cmd = sql.ToCmd
-        (            
+        (
             "@pattern".ToParam(DbType.String, pattern)
         );
         return Db.GetRows(cmd, GetData);
     }
-   
+
 
     private ProductoEncontrado GetData(IDataReader dr)
     {
@@ -69,9 +75,9 @@ public class BusquedaProductosRepo : IBusquedaProductosRepo
             Nombre = dr.GetString("Nombre"),
             Categoria = dr.GetString("Categoria"),
             UnidadMedida = dr.GetString("UnidadMedida"),
-            PrecioVenta =  dr.GetDecimal("PrecioVenta"),
+            PrecioVenta = dr.GetDecimal("PrecioVenta"),
             CodigoBarrasItem = dr.GetString("CodigoBarrasItem"),
             CodigoBarrasCaja = dr.GetString("CodigoBarrasCaja")
         };
-    }   
+    }
 }
