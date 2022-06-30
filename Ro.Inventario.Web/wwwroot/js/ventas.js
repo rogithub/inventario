@@ -81,8 +81,13 @@ var Venta = /** @class */ (function () {
             return self.pagoCliente() - self.total();
         });
         this.isValid = ko.computed(function () {
-            return !(isNaN(self.total()) || self.total() == 0 ||
-                isNaN(self.pagoCliente()) || self.pagoCliente() == 0 ||
+            for (var _i = 0, _a = self.lines(); _i < _a.length; _i++) {
+                var l = _a[_i];
+                if (l.cantidad() === 0 || isNaN(l.cantidad()))
+                    return false;
+            }
+            return !(isNaN(self.total()) || self.total() === 0 ||
+                isNaN(self.pagoCliente()) || self.pagoCliente() === 0 ||
                 self.total() > self.pagoCliente());
         });
     }

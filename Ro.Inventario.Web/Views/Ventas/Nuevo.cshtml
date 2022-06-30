@@ -41,7 +41,7 @@
 
 <form id="ventasPage" data-bind="submit: guardar.bind($data)">
 
-<input id="autoComplete">
+<input id="autoComplete" style="width: 800px;" />
 
 <h2>Artículos</h2>  
   <table class="table table-sm">
@@ -65,7 +65,7 @@
       <td data-bind="text: l.producto.unidadMedida"></td>
       <td data-bind="text: l.producto.precioVenta"></td>
       <td>
-        <input type="number" placeHolder="numérico" data-bind="value: l.cantidad" style="width: 90px;" />
+        <input type="number" step=".01" placeHolder="numérico" data-bind="value: l.cantidad" style="width: 90px;" />
       </td>
       <td data-bind="text: l.total">
         
@@ -113,7 +113,7 @@
         Pago Cliente
       </th>
       <td>
-        <input type="number" class="form-control" id="txtPago" placeholder="Pago cliente" data-bind="textInput: pagoCliente">
+        <input type="number" step=".01" class="form-control" id="txtPago" placeholder="Pago cliente" data-bind="textInput: pagoCliente">
       </td>
       <td>
         
