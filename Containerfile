@@ -16,7 +16,10 @@ RUN dotnet publish -c Release -o out
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
 WORKDIR /app
 COPY dep-raspi/* ./
-COPY Ro.Inventario.Web/Db/inventario.db ./
+# ===============Not Required=====================
+# no se required si usas podman_deploy.sh script 
+## COPY Ro.Inventario.Web/Db/inventario.db ./
+# ===============Not Required=====================
 
 # Change timezone to local time
 ENV TZ=America/Mexico_City

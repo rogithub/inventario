@@ -5,7 +5,7 @@ IMAGE_NAME="inventario-img"
 PROJ_DIR="Ro.Inventario.Web"
 CONTAINER_FILE="./Containerfile"
 DB_PATH="./$PROJ_DIR/Db"
-CONT_DB_PATH="/app/Db"
+CONT_DB_PATH="/app"
 PORT="5002:5002"
 
 # Get latest
