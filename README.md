@@ -30,7 +30,7 @@ Copy libSQLite.Interop.so the directory where your application’s binaries resi
 ``` bash
 podman build -f Containerfile -t inventario-img
 podman images
-podman run -d --name inventario -p 5002:5002 inventario-img
+podman run -v $(pwd)/Ro.Inventario.Web/Db:/app/Db -d --name inventario -p 5002:5002 inventario-img
 podman ps
 podman logs inventario
 podman exec -it inventario bash
