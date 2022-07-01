@@ -72,7 +72,7 @@ public class BusquedaProductosRepo : IBusquedaProductosRepo
         {
             Nid = dr.GetInt("nid"),
             Id = Guid.Parse(dr.GetString("Id")),
-            Nombre = string.Format("{0} [{1}]", dr.GetString("Nombre"), dr.GetString("Categoria")),
+            Nombre = dr.GetString("Nombre"),
             Categoria = dr.GetString("Categoria"),
             UnidadMedida = dr.GetString("UnidadMedida"),
             PrecioVenta = dr.GetDecimal("PrecioVenta"),
