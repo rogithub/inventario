@@ -18,10 +18,12 @@ public class VentaModel
     {
         this.Items = new VentaProductoModel[] {};
     }
+    [JsonProperty(PropertyName = "fecha")]
+    public DateTime Fecha { get; set; }
     [JsonProperty(PropertyName = "pago")]
     public decimal Pago { get; set; }
     [JsonProperty(PropertyName = "cambio")]
     public decimal Cambio { get; set; }
     [JsonProperty(PropertyName = "items")]
-    public VentaProductoModel[] Items { get; set; }
+    public VentaProductoModel[] Items { get; set; }    
 }

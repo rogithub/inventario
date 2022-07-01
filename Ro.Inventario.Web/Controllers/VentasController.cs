@@ -49,6 +49,7 @@ public class VentasController : Controller
         var v = new Venta();
         v.Pago = model.Pago;
         v.Cambio = model.Cambio;
+        v.FechaVenta = model.Fecha;
         var intVenta = await _ventas.Save(v);
         var prods = (from l in model.Items
                      select new VentaProducto()

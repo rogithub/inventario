@@ -19,6 +19,7 @@ export interface VentaProductoModel {
 }
 
 export interface VentaModel {
+    fecha: string;
     pago: number;
     cambio: number;
     items: VentaProductoModel[];
@@ -47,6 +48,7 @@ export class Venta {
     public total: KnockoutComputed<number>;
     public pagoCliente: KnockoutObservable<number>;
     public cambio: KnockoutComputed<number>;
+    public dateStr: KnockoutComputed<string>;
     public isValid: KnockoutComputed<boolean>;
     public date: KnockoutObservable<string>;
     public time: KnockoutObservable<string>;
@@ -95,6 +97,16 @@ export class Venta {
                 isNaN(self.pagoCliente()) || self.pagoCliente() === 0 ||
                 self.total() > self.pagoCliente());
         });
+
+        this.dateStr =  ko.computed<string>(function () {            
+            var options: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(self.parseDate()).toLocaleDateString("es-MX", options);
+        });
+    }
+
+    public parseDate(): string {
+        const self = this;        
+        return `${self.date()}T${self.time()}`;
     }
 
     public borrar(line: ProductLine): void {
@@ -120,6 +132,7 @@ export class Venta {
             lines.push(line);
         });
         let data: VentaModel = {
+            fecha: self.parseDate(),
             cambio: self.cambio() as number,
             pago: self.pagoCliente() as number,
             items: lines

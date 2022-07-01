@@ -101,7 +101,15 @@ var Venta = /** @class */ (function () {
                 isNaN(self.pagoCliente()) || self.pagoCliente() === 0 ||
                 self.total() > self.pagoCliente());
         });
+        this.dateStr = ko.computed(function () {
+            var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(self.parseDate()).toLocaleDateString("es-MX", options);
+        });
     }
+    Venta.prototype.parseDate = function () {
+        var self = this;
+        return "".concat(self.date(), "T").concat(self.time());
+    };
     Venta.prototype.borrar = function (line) {
         var self = this;
         self.lines.remove(line);
@@ -126,6 +134,7 @@ var Venta = /** @class */ (function () {
                             lines.push(line);
                         });
                         data = {
+                            fecha: self.parseDate(),
                             cambio: self.cambio(),
                             pago: self.pagoCliente(),
                             items: lines

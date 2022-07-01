@@ -44,10 +44,24 @@
     <input id="autoComplete" style="width: 800px;" />
 
     <h2>Artículos</h2>
-    <input type="date" class="form-control" data-bind="value: date" required />
-    <input type="time" class="form-control" data-bind="value: time" min="00:00" max="23:59" required />
     
-
+    <div class="row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="inputPassword6" class="col-form-label">Fecha de Venta</label>
+        </div>
+        <div class="col-auto">
+            <input type="date" class="form-control" data-bind="value: date" required />
+        </div>
+        <div class="col-auto">
+            <input type="time" class="form-control" data-bind="value: time" min="00:00" max="23:59" required />
+        </div>
+        <div class="col-auto">
+            <span class="form-text" data-bind="text: dateStr">
+                Fecha en letras aqui
+            </span>
+        </div>
+    </div>
+    
     <table class="table table-sm">
     <thead>
         <tr>
