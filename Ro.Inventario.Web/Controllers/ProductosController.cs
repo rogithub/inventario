@@ -27,9 +27,9 @@ public class ProductosController : Controller
         return View();
     }
 
-    public IActionResult Nuevo()
+    public IActionResult Editar(Guid id)
     {
-        return View(new CompraNuevosProductos());
+        return View();
     }        
 
     public IActionResult Nuevo()
