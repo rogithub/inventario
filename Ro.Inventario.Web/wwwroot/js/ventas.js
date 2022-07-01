@@ -60,11 +60,22 @@ var ProductLine = /** @class */ (function () {
 exports.ProductLine = ProductLine;
 var Venta = /** @class */ (function () {
     function Venta() {
+        this.fecha = new Date();
         this.url = "ventas/Guardar";
         this.api = new api_1.Api();
         this.lines = ko.observableArray([]);
         this.autocomplete = document.querySelector("#autoComplete");
         this.pagoCliente = ko.observable(0);
+        var mes = this.fecha.getMonth() + 1;
+        var dia = this.fecha.getDate();
+        var mesStr = mes < 10 ? '0' + mes.toString() : mes.toString();
+        var diaStr = dia < 10 ? '0' + dia.toString() : dia.toString();
+        var horas = this.fecha.getHours();
+        var minutos = this.fecha.getMinutes();
+        var horasStr = horas < 10 ? '0' + horas.toString() : horas.toString();
+        var minutosStr = minutos < 10 ? '0' + minutos.toString() : minutos.toString();
+        this.date = ko.observable("".concat(this.fecha.getFullYear(), "-").concat(mesStr, "-").concat(diaStr));
+        this.time = ko.observable("".concat(horasStr, ":").concat(minutosStr));
         var self = this;
         self.autocomplete.addEventListener("selection", function (e) {
             var p = e.detail.selection.value;

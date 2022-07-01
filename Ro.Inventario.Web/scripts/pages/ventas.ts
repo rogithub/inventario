@@ -1,8 +1,7 @@
 import { BinderService } from '../services/binderService';
 import { Api } from '../services/api';
 
-export interface IProduct
-{
+export interface IProduct {
     nid: number;
     id: string;
     nombre: string;
@@ -14,17 +13,15 @@ export interface IProduct
 }
 
 
-export interface VentaProductoModel
-{     
+export interface VentaProductoModel {
     productoId: string;
     cantidad: number;
 }
 
-export interface VentaModel
-{
-  pago: number;
-  cambio: number;
-  items: VentaProductoModel[];
+export interface VentaModel {
+    pago: number;
+    cambio: number;
+    items: VentaProductoModel[];
 }
 
 export class ProductLine {
@@ -32,18 +29,17 @@ export class ProductLine {
     public cantidad: KnockoutObservable<number>;
     public total: KnockoutComputed<number>;
 
-    constructor(product: IProduct)
-    {
+    constructor(product: IProduct) {
         this.producto = product;
         this.cantidad = ko.observable<number>(1);
         const self = this;
-        this.total = ko.computed<number>(function() {
+        this.total = ko.computed<number>(function () {
             return self.cantidad() * self.producto.precioVenta;
         });
     }
 }
 
-export class Venta {    
+export class Venta {
     public lines: KnockoutObservableArray<ProductLine>;
     public api: Api;
     public url: string;
@@ -52,39 +48,52 @@ export class Venta {
     public pagoCliente: KnockoutObservable<number>;
     public cambio: KnockoutComputed<number>;
     public isValid: KnockoutComputed<boolean>;
+    public date: KnockoutObservable<string>;
+    public time: KnockoutObservable<string>;
+    public fecha: Date;
 
     constructor() {
+        this.fecha = new Date();
         this.url = "ventas/Guardar"
         this.api = new Api();
         this.lines = ko.observableArray<ProductLine>([]);
         this.autocomplete = document.querySelector("#autoComplete");
         this.pagoCliente = ko.observable<number>(0);
-        const self = this;        
-        self.autocomplete.addEventListener("selection", function(e: any) {
+        let mes = this.fecha.getMonth() + 1;
+        let dia = this.fecha.getDate();
+        let mesStr = mes < 10 ? '0' + mes.toString() : mes.toString();
+        let diaStr = dia < 10 ? '0' + dia.toString() : dia.toString();
+        let horas = this.fecha.getHours();
+        let minutos = this.fecha.getMinutes();
+        let horasStr = horas < 10 ? '0' + horas.toString() : horas.toString();
+        let minutosStr = minutos < 10 ? '0' + minutos.toString() : minutos.toString();
+        this.date = ko.observable<string>(`${this.fecha.getFullYear()}-${mesStr}-${diaStr}`);
+        this.time = ko.observable<string>(`${horasStr}:${minutosStr}`);
+        const self = this;
+        self.autocomplete.addEventListener("selection", function (e: any) {
             let p = e.detail.selection.value as IProduct;
             self.lines.push(new ProductLine(p));
             $(self.autocomplete).val("");
             return false;
         });
 
-        this.total = ko.computed<number>(function() {
+        this.total = ko.computed<number>(function () {
             let lines = self.lines();
             var initialValue = 0;
             return lines.reduce((sum, prod) => sum + prod.total(), initialValue);
-        });        
-        this.cambio = ko.computed<number>(function() {            
+        });
+        this.cambio = ko.computed<number>(function () {
             return self.pagoCliente() - self.total();
         });
 
-        this.isValid = ko.computed<boolean>(function() {            
-            for (const l of self.lines())
-            {
+        this.isValid = ko.computed<boolean>(function () {
+            for (const l of self.lines()) {
                 if (l.cantidad() === 0 || isNaN(l.cantidad())) return false;
             }
-            
-            return !(isNaN(self.total()) || self.total() === 0 || 
-                   isNaN(self.pagoCliente()) || self.pagoCliente() === 0 ||
-                   self.total() > self.pagoCliente());
+
+            return !(isNaN(self.total()) || self.total() === 0 ||
+                isNaN(self.pagoCliente()) || self.pagoCliente() === 0 ||
+                self.total() > self.pagoCliente());
         });
     }
 
@@ -106,7 +115,7 @@ export class Venta {
             let line: VentaProductoModel =
             {
                 cantidad: l.cantidad(),
-                productoId: l.producto.id,            
+                productoId: l.producto.id,
             };
             lines.push(line);
         });
@@ -128,5 +137,5 @@ export class Venta {
 document.addEventListener('DOMContentLoaded', function () {
     var page = new Venta();
     page.bind();
-    console.log("binding ko");    
+    console.log("binding ko");
 }, false);
