@@ -8,21 +8,18 @@ using Ro.Inventario.Web.Repos;
 namespace Ro.Inventario.Web.Controllers;
 
 public class VentasController : Controller
-{
-    private readonly IBusquedaProductosRepo _productos;
+{    
     private readonly IVentasProductosRepo _ventasProds;
     private readonly IVentasRepo _ventas;
     private readonly ILogger<VentasController> _logger;
 
     public VentasController(
-        ILogger<VentasController> logger,
-        IBusquedaProductosRepo productos,
+        ILogger<VentasController> logger,        
         IVentasProductosRepo ventasProds,
         IVentasRepo ventas
         )
     {
-        _logger = logger;
-        _productos = productos;
+        _logger = logger;        
         _ventasProds = ventasProds;
         _ventas = ventas;
     }
@@ -36,13 +33,7 @@ public class VentasController : Controller
     {
         return View();
     }
-
-    public async Task<IActionResult> BuscarProducto(string pattern)
-    {
-        var prods = await _productos.FulSearchText(pattern);
-        return Json(prods.ToArray());
-    }
-
+  
     [HttpPost]
     public async Task<IActionResult> Guardar([FromBody] VentaModel model)
     {

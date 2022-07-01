@@ -32,6 +32,11 @@ public class ProductosController : Controller
         return View(new CompraNuevosProductos());
     }        
 
+    public IActionResult Nuevo()
+    {
+        return View(new CompraNuevosProductos());
+    }        
+
     [HttpPost]
     public async Task<IActionResult> Nuevo([FromForm]CompraNuevosProductos model)
     {

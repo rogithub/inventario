@@ -54,7 +54,7 @@ public class BusquedaProductosRepo : IBusquedaProductosRepo
 
         var sql =
             @"
-                SELECT p.* FROM v_productos p WHERE             
+                SELECT p.* FROM v_inventario p WHERE             
                 nid IN (SELECT ROWID FROM Productos_fst WHERE Productos_fst MATCH @pattern ORDER BY rank)
                 LIMIT 100
             ";
@@ -64,7 +64,6 @@ public class BusquedaProductosRepo : IBusquedaProductosRepo
         );
         return Db.GetRows(cmd, GetData);
     }
-
 
     private ProductoEncontrado GetData(IDataReader dr)
     {
@@ -77,7 +76,8 @@ public class BusquedaProductosRepo : IBusquedaProductosRepo
             UnidadMedida = dr.GetString("UnidadMedida"),
             PrecioVenta = dr.GetDecimal("PrecioVenta"),
             CodigoBarrasItem = dr.GetString("CodigoBarrasItem"),
-            CodigoBarrasCaja = dr.GetString("CodigoBarrasCaja")
+            CodigoBarrasCaja = dr.GetString("CodigoBarrasCaja"),
+            Stock = dr.GetDecimal("Stock")
         };
     }
 }

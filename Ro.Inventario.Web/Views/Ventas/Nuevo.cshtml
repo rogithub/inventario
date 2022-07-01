@@ -7,6 +7,7 @@
 @section Scripts {
 
 <script src="~/lib/autoComplete.js-10.2.7/autoComplete.min.js"></script>
+<script src="~/js/shared.js"></script>
 <script src="~/js/ventas.js"></script>
 <script type="text/javascript">
     //  document.addEventListener('DOMContentLoaded', function () {
@@ -22,7 +23,7 @@
                 try {
                     console.log(query);
                     // Fetch Data from external Source
-                    const source = await fetch(`${document.baseURI}ventas/buscarProducto?pattern=${query}`);
+                    const source = await fetch(`${document.baseURI}busquedas/productos?pattern=${query}`);
                     // Data should be an array of `Objects` or `Strings`
                     const data = await source.json();
 

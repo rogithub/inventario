@@ -9,7 +9,7 @@ public class ProductoEncontrado
         UnidadMedida = string.Empty;
         Categoria = string.Empty;
         CodigoBarrasItem = string.Empty;
-        CodigoBarrasCaja = string.Empty;            
+        CodigoBarrasCaja = string.Empty;        
     }
     public int Nid { get; set; }
     public Guid Id { get; set; }
@@ -19,4 +19,5 @@ public class ProductoEncontrado
     public string CodigoBarrasItem { get; set; }
     public string CodigoBarrasCaja { get; set; }
     public decimal PrecioVenta { get; set; }
+    public decimal Stock { get; set; }
 }
