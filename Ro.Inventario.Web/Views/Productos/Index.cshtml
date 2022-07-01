@@ -71,10 +71,7 @@
             <td data-bind="text: p.codigoBarrasCaja"></td>
             <td data-bind="text: p.stock"></td>
             <td>
-                <button type="button" class="btn btn-outline-warning btn-sm"
-                    data-bind="click: $parent.editar.bind($parent)">
-                    Editar
-                </button>
+                <a class="btn btn-outline-warning btn-sm" data-bind="attr: { href: 'Productos/Editar/?id='+p.id }">Editar</a>
             </td>
         </tr>
     </tbody>    
