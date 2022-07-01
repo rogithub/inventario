@@ -3,14 +3,15 @@
 DBFILE="inventario.db"
 SCRIPTFILE="inventario.sql"
 PROJ_DIR="Ro.Inventario.Web"
+DB_DIR="Db-dev"
 
 if [ ! -f "./$SCRIPTFILE" ]; then
     echo "./$SCRIPTFILE does not exist."
     exit 0
 fi
 
-if [ ! -d "../$PROJ_DIR/Db" ]; then
-    mkdir "../$PROJ_DIR/Db"
+if [ ! -d "../$PROJ_DIR/$DB_DIR" ]; then
+    mkdir "../$PROJ_DIR/$DB_DIR"
 fi
 
 remove_file_if_exists () {    
@@ -19,7 +20,7 @@ remove_file_if_exists () {
     fi
 }
 
-OLD="../$PROJ_DIR/Db/$DBFILE"
+OLD="../$PROJ_DIR/$DB_DIR/$DBFILE"
 remove_file_if_exists $OLD
 
 remove_file_if_exists "./$DBFILE"
