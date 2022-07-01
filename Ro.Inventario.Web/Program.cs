@@ -4,10 +4,11 @@ using Ro.SQLite.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connString = builder.Configuration.GetSection("DefaultConnection").Value;
+var dbPath = builder.Configuration.GetSection("DbPath").Value;
 var interopPath = builder.Configuration.GetSection("InteropPath").Value;
 
-builder.Services.AddTransient<IDbAsync>(svc => {    
+builder.Services.AddTransient<IDbAsync>(svc => {        
+    var connString = string.Format("Data Source={0}; Version=3;", dbPath);
     return new Database(connString, new DbTasks(interopPath));
 });
 builder.Services.AddScoped<IComprasProductosRepo, ComprasProductosRepo>();
