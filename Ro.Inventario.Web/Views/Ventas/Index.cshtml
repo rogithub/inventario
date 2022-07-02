@@ -5,7 +5,6 @@
 var localizacion = new CultureInfo("es-MX");
 }
 
-<h2>Ventas por día</h2>
 
 <form method="get">
     <div class="row g-3 align-items-center">
@@ -18,26 +17,26 @@ var localizacion = new CultureInfo("es-MX");
         <div class="col-auto">
             <button type="submit" class="btn btn-primary">Buscar</button>
         </div>
+        <div class="col-auto">
+            @Model.Fecha.ToString("D", localizacion)
+        </div>
     </div>
 </form>
 
-<h2>@Model.Fecha.ToString("D", localizacion);</h2>
+<h2>Ventas por día</h2>
 
 @foreach (var r in Model.Rows)
 {
     <table class="table">
     <thead>
         <tr class="table-primary">
-            <th colspan="2">
+            <th scope="col">Cantidad</th>
+            <th scope="col">
                 Venta @(Array.IndexOf(Model.Rows, r)+1)
                 a las @r.Venta.FechaVenta.ToShortTimeString()
-                pagó @r.Venta.Pago.ToString("C", localizacion)
+                | Pagó @r.Venta.Pago.ToString("C", localizacion)
                 cambio @r.Venta.Cambio.ToString("C", localizacion)
             </th>
-        </tr>
-        <tr class="table-primary">
-            <th scope="col">Cantidad</th>
-            <th scope="col">Producto</th>
         </tr>
     </thead>
     <tbody>
