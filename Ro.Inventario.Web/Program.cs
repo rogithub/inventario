@@ -7,7 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 var dbPath = builder.Configuration.GetSection("DbPath").Value;
 var interopPath = builder.Configuration.GetSection("InteropPath").Value;
 
-builder.Services.AddTransient<IDbAsync>(svc => {        
+builder.Services.AddTransient<IDbAsync>(svc =>
+{
     var connString = string.Format("Data Source={0}; Version=3;", dbPath);
     return new Database(connString, new DbTasks(interopPath));
 });
@@ -23,7 +24,7 @@ builder.Services.AddScoped<INuevosProductosValidatorService, NuevosProductosVali
 builder.Services.AddScoped<IBusquedaProductosRepo, BusquedaProductosRepo>();
 builder.Services.AddScoped<IVentasProductosRepo, VentasProductosRepo>();
 builder.Services.AddScoped<IVentasRepo, VentasRepo>();
-
+builder.Services.AddScoped<IProductosService, ProductosService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

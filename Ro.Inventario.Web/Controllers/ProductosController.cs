@@ -10,15 +10,18 @@ public class ProductosController : Controller
 {
     private readonly ILogger<ProductosController> _logger;
     private readonly IComprasService _comprasSvc;
+    private readonly IProductosService _productosSvc;
     private readonly INuevosProductosValidatorService _pValidator;
 
     public ProductosController(
         ILogger<ProductosController> logger,
         IComprasService comprasService,
+        IProductosService productosService,
         INuevosProductosValidatorService pValidator)
     {
         _logger = logger;
         _comprasSvc = comprasService;
+        _productosSvc = productosService;
         _pValidator = pValidator;
     }
 
@@ -29,7 +32,8 @@ public class ProductosController : Controller
 
     public IActionResult Editar(Guid id)
     {
-        return View();
+        var m = _productosSvc.LoadModel(id);
+        return View(m);
     }
 
     [HttpPost]

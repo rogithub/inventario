@@ -39,13 +39,14 @@
 </script>
 }
 
+<h2>Venta</h2>
 
 <form id="ventasPage" data-bind="submit: guardar.bind($data)">
 
     <input id="autoComplete" style="width: 800px;" />
 
     <h2>Artículos</h2>
-    
+
     <div class="row g-3 align-items-center">
         <div class="col-auto">
             <label for="inputPassword6" class="col-form-label">Fecha de Venta</label>
@@ -62,98 +63,98 @@
             </span>
         </div>
     </div>
-    
+
     <table class="table table-sm">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Producto</th>
-            <th scope="col">Categoria</th>
-            <th scope="col">Unidad de Medida</th>
-            <th scope="col">Precio de Venta</th>
-            <th scope="col">Cantidad</th>
-            <th scope="col">Total</th>
-            <th scope="col">Acciones</th>
-        </tr>
-    </thead>
-    <tbody data-bind="foreach: { data: lines, as: 'l' }">
-        <tr>
-            <th scope="row" data-bind="text: $index() + 1"></th>
-            <td data-bind="text: l.producto.nombre"></td>
-            <td data-bind="text: l.producto.categoria"></td>
-            <td data-bind="text: l.producto.unidadMedida"></td>
-            <td data-bind="text: l.producto.precioVenta"></td>
-            <td>
-                <input type="number" step=".01" placeHolder="numérico" data-bind="value: l.cantidad"
-                    style="width: 90px;" />
-            </td>
-            <td data-bind="text: l.total">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Producto</th>
+                <th scope="col">Categoria</th>
+                <th scope="col">Unidad de Medida</th>
+                <th scope="col">Precio de Venta</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Total</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: { data: lines, as: 'l' }">
+            <tr>
+                <th scope="row" data-bind="text: $index() + 1"></th>
+                <td data-bind="text: l.producto.nombre"></td>
+                <td data-bind="text: l.producto.categoria"></td>
+                <td data-bind="text: l.producto.unidadMedida"></td>
+                <td data-bind="text: l.producto.precioVenta"></td>
+                <td>
+                    <input type="number" step=".01" placeHolder="numérico" data-bind="value: l.cantidad"
+                        style="width: 90px;" />
+                </td>
+                <td data-bind="text: l.total">
 
-            </td>
-            <td>
-                <button type="button" class="btn btn-outline-danger btn-sm"
-                    data-bind="click: $parent.borrar.bind($parent)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-trash" viewBox="0 0 16 16">
-                        <path
-                            d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
-                        <path fill-rule="evenodd"
-                            d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
-                    </svg>
-                </button>
-            </td>
-        </tr>
-    </tbody>
-    <tfoot>
-        <tr>
-            <td>
-            </td>
-            <td>
-            </td>
-            <td>
-            </td>
-            <td>
-            </td>
-            <td>
-            </td>
-            <th>
-                Suma Total
-            </th>
-            <td data-bind="text: total">
-            </td>
-            <td>
-            </td>
-        <tr>
-        <tr>
-            <td colspan="8"></td>
-        </tr>
-        <tr class="table-primary">
-            <th>
-                Total
-            </th>
-            <td data-bind="text: total">
-            </td>
-            <th>
-                Pago Cliente
-            </th>
-            <td>
-                <input type="number" step=".01" class="form-control" id="txtPago" placeholder="Pago cliente"
-                    data-bind="textInput: pagoCliente">
-            </td>
-            <td>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-outline-danger btn-sm"
+                        data-bind="click: $parent.borrar.bind($parent)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-trash" viewBox="0 0 16 16">
+                            <path
+                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                            <path fill-rule="evenodd"
+                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                        </svg>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <th>
+                    Suma Total
+                </th>
+                <td data-bind="text: total">
+                </td>
+                <td>
+                </td>
+            <tr>
+            <tr>
+                <td colspan="8"></td>
+            </tr>
+            <tr class="table-primary">
+                <th>
+                    Total
+                </th>
+                <td data-bind="text: total">
+                </td>
+                <th>
+                    Pago Cliente
+                </th>
+                <td>
+                    <input type="number" step=".01" class="form-control" id="txtPago" placeholder="Pago cliente"
+                        data-bind="textInput: pagoCliente">
+                </td>
+                <td>
 
-            </td>
-            <th>
-                Cambio
-            </th>
-            <td data-bind="text: cambio">
-            </td>
-            <td>
-                <div>
-                    <button type="submit" data-bind="enable: isValid" class="btn btn-primary">Guardar Venta</button>
-                </div>
-            </td>
-        <tr>
-    </tfoot>
+                </td>
+                <th>
+                    Cambio
+                </th>
+                <td data-bind="text: cambio">
+                </td>
+                <td>
+                    <div>
+                        <button type="submit" data-bind="enable: isValid" class="btn btn-primary">Guardar Venta</button>
+                    </div>
+                </td>
+            <tr>
+        </tfoot>
     </table>
 </form>

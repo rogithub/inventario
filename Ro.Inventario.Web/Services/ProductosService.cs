@@ -39,8 +39,18 @@ public class ProductosService : IProductosService
         var entity = await _producto.GetOne(productoId);
         var uMedida = await _uMedida.GetOne(entity.UnidadMedidaId);
         var categorias = await _categoriasProds.GetForProduct(entity.Id);
+        var categoria = await _categorias.GetOne(categorias.FirstOrDefault().Id);
         var precio = await _precios.GetOneForProduct(entity.Id);
-
+        p.Id = entity.Id;
+        p.Nombre = entity.Nombre;
+        p.Categoria = categoria.Nombre;
+        p.CategoriaId = categoria.Id;
+        p.CodigoBarrasCaja = entity.CodigoBarrasCaja;
+        p.CodigoBarrasItem = entity.CodigoBarrasItem;
+        p.PrecioVenta = precio.PrecioVenta;
+        p.PrecioVentaId = precio.Id;
+        p.UnidadMedida = uMedida.Nombre;
+        p.UnidadMedidaId = uMedida.Id;
 
         return p;
     }
