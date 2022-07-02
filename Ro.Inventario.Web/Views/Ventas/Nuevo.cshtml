@@ -39,33 +39,19 @@
 </script>
 }
 
-<h2>Venta</h2>
+
 
 <form id="ventasPage" data-bind="submit: guardar.bind($data)">
 
+    <h2>Venta</h2>
+
     <input id="autoComplete" style="width: 800px;" />
-
-    <h2>Artículos</h2>
-
-    <div class="row g-3 align-items-center">
-        <div class="col-auto">
-            <label for="inputPassword6" class="col-form-label">Fecha de Venta</label>
-        </div>
-        <div class="col-auto">
-            <input type="date" class="form-control" data-bind="value: date" required />
-        </div>
-        <div class="col-auto">
-            <input type="time" class="form-control" data-bind="value: time" min="00:00" max="23:59" required />
-        </div>
-        <div class="col-auto">
-            <span data-bind="text: dateStr">
-                Fecha en letras aqui
-            </span>
-        </div>
-    </div>
 
     <table class="table table-sm">
         <thead>
+            <tr>
+                <th colspan="8">Artículos</th>
+            </tr>
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Producto</th>
@@ -125,10 +111,33 @@
                 <td>
                 </td>
             <tr>
-            <tr>
-                <td colspan="8"></td>
+            <tr class="table-primary" data-bind="visible: editandoFecha">
+                <td colspan="8">
+                    <div>
+                        Fecha
+                        <input type="date" class="form-control" data-bind="value: date" required />
+                        Hora
+                        <input type="time" class="form-control" data-bind="value: time" min="00:00" max="23:59"
+                            required />
+
+                        <button type="button" class="btn btn-sm btn-outline-primary"
+                            data-bind="click: () => editandoFecha(false)">Aceptar</button>
+                    </div>
+                </td>
             </tr>
-            <tr class="table-primary">
+            <tr class="table-primary" data-bind="visible: editandoFecha() === false">
+                <td colspan="8">
+                    <strong data-bind="text: dateStr">
+
+                    </strong>
+                    <span data-bind="text: time">
+
+                    </span>
+                    <button type="button" class="btn btn-sm btn-outline-primary"
+                        data-bind="click: () => editandoFecha(true)">Cambiar</button>
+                </td>
+            </tr>
+            <tr class="table-primary" data-bind="visible: editandoFecha() === false">
                 <th>
                     Total
                 </th>

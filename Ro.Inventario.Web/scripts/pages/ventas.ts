@@ -50,6 +50,7 @@ export class Venta {
     public cambio: KnockoutComputed<number>;
     public dateStr: KnockoutComputed<string>;
     public isValid: KnockoutComputed<boolean>;
+    public editandoFecha: KnockoutObservable<boolean>;
     public date: KnockoutObservable<string>;
     public time: KnockoutObservable<string>;
     public fecha: Date;
@@ -61,6 +62,7 @@ export class Venta {
         this.lines = ko.observableArray<ProductLine>([]);
         this.autocomplete = document.querySelector("#autoComplete");
         this.pagoCliente = ko.observable<number>(0);
+        this.editandoFecha = ko.observable<boolean>(false);
         let mes = this.fecha.getMonth() + 1;
         let dia = this.fecha.getDate();
         let mesStr = mes < 10 ? '0' + mes.toString() : mes.toString();
@@ -98,14 +100,14 @@ export class Venta {
                 self.total() > self.pagoCliente());
         });
 
-        this.dateStr =  ko.computed<string>(function () {            
+        this.dateStr = ko.computed<string>(function () {
             var options: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             return new Date(self.parseDate()).toLocaleDateString("es-MX", options);
         });
     }
 
     public parseDate(): string {
-        const self = this;        
+        const self = this;
         return `${self.date()}T${self.time()}`;
     }
 

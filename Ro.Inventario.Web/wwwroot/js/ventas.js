@@ -66,6 +66,7 @@ var Venta = /** @class */ (function () {
         this.lines = ko.observableArray([]);
         this.autocomplete = document.querySelector("#autoComplete");
         this.pagoCliente = ko.observable(0);
+        this.editandoFecha = ko.observable(false);
         var mes = this.fecha.getMonth() + 1;
         var dia = this.fecha.getDate();
         var mesStr = mes < 10 ? '0' + mes.toString() : mes.toString();
