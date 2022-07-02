@@ -4,43 +4,41 @@ using Microsoft.AspNetCore.Mvc;
 using Ro.Inventario.Web.Models;
 using Ro.Inventario.Web.Entities;
 using Ro.Inventario.Web.Repos;
+using Ro.Inventario.Web.Services;
 
 namespace Ro.Inventario.Web.Controllers;
 
 public class VentasController : Controller
 {
-    private readonly IBusquedaProductosRepo _productos;
     private readonly IVentasProductosRepo _ventasProds;
     private readonly IVentasRepo _ventas;
     private readonly ILogger<VentasController> _logger;
 
+    private readonly IVentasService _ventasService;
+
     public VentasController(
         ILogger<VentasController> logger,
-        IBusquedaProductosRepo productos,
         IVentasProductosRepo ventasProds,
-        IVentasRepo ventas
+        IVentasRepo ventas,
+        IVentasService ventasService
         )
     {
         _logger = logger;
-        _productos = productos;
         _ventasProds = ventasProds;
         _ventas = ventas;
+        _ventasService = ventasService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index(DateTime? fecha)
     {
-        return View();
+        var date = fecha.HasValue ? fecha.Value : DateTime.Now;
+        var model = await _ventasService.Load(date);
+        return View(model);
     }
 
     public IActionResult Nuevo()
     {
         return View();
-    }
-
-    public async Task<IActionResult> BuscarProducto(string pattern)
-    {
-        var prods = await _productos.FulSearchText(pattern);
-        return Json(prods.ToArray());
     }
 
     [HttpPost]

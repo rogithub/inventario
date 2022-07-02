@@ -10,6 +10,7 @@ public interface IVentasProductosRepo
     Task<int> Save(VentaProducto it);
     Task<VentaProducto> GetOne(Guid id);
     Task<int> BulkSave(VentaProducto[] list);
+    Task<IEnumerable<VentaProducto>> GetForAjuste(Guid ajusteId);
 }
 
 public class VentasProductosRepo : IVentasProductosRepo
@@ -22,12 +23,12 @@ public class VentasProductosRepo : IVentasProductosRepo
     }
 
     public Task<int> BulkSave(VentaProducto[] list)
-    {                
+    {
         var parameters = new List<IDbDataParameter>();
         var sqlLine = @"INSERT INTO AjustesProductos (Id,ProductoId,AjusteId,Cantidad) VALUES (@id{0},@productoId{0},@ajusteId{0},@cantidad{0});";
         var sb = new StringBuilder();
         for (int i = 0; i < list.Length; i++)
-        {   
+        {
             var it = list[i];
             sb.AppendLine(string.Format(sqlLine, i));
             parameters.Add(string.Format("@id{0}", i).ToParam(DbType.String, it.Id.ToString()));
@@ -38,7 +39,7 @@ public class VentasProductosRepo : IVentasProductosRepo
         var cmd = sb.ToString().ToCmd(parameters.ToArray());
         return Db.ExecuteNonQuery(cmd);
     }
-    
+
     public Task<int> Save(VentaProducto it)
     {
         var sql = @"INSERT INTO AjustesProductos (Id,ProductoId,AjusteId,Cantidad) VALUES 
@@ -57,12 +58,24 @@ public class VentasProductosRepo : IVentasProductosRepo
     {
         var sql = "SELECT Id,ProductoId,AjusteId,Cantidad FROM AjustesProductos WHERE Id = @id";
         var cmd = sql.ToCmd
-        (            
+        (
             "@id".ToParam(DbType.String, id.ToString())
         );
         return Db.GetOneRow(cmd, GetData);
     }
-   
+
+    public Task<IEnumerable<VentaProducto>> GetForAjuste(Guid ajusteId)
+    {
+        var sql = @"SELECT    Id,ProductoId,AjusteId,Cantidad
+                      FROM    AjustesProductos 
+                     WHERE    AjusteId = @ajusteId;";
+        var cmd = sql.ToCmd
+        (
+            "@ajusteId".ToParam(DbType.String, ajusteId.ToString())
+        );
+        return Db.GetRows(cmd, GetData);
+    }
+
 
     private VentaProducto GetData(IDataReader dr)
     {
@@ -73,5 +86,5 @@ public class VentasProductosRepo : IVentasProductosRepo
             VentaId = Guid.Parse(dr.GetString("AjusteId")),
             Cantidad = dr.GetDecimal("Cantidad")
         };
-    }   
+    }
 }

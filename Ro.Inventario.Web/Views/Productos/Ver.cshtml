@@ -1,0 +1,47 @@
+@{
+    ViewData["Title"] = "Productos Nuevos";
+    @model Ro.Inventario.Web.Models.ProductoModel;
+}
+
+<div>
+    <form asp-action="Nuevo" asp-controller="Productos" method="post" EncType="multipart/form-data">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        Producto Id: <span>@Model.Id.ToString()</span><br>
+        Unidad de Medida Id: <span>@Model.UnidadMedidaId.ToString()</span><br>
+        Categoria Id: <span>@Model.CategoriaId</span><br>
+        Precio Venta Id: <span>@Model.PrecioVentaId.ToString()</span><br>
+
+        <div class="mb-3">
+            <label for="txtNombre" class="form-label">Nombre</label>
+            <input asp-for="Nombre" type="text" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label for="txtUnidadMedida" class="form-label">Unidad de Medida</label>
+            <input asp-for="UnidadMedida" type="text" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label for="txtCategoria" class="form-label">Categoria</label>
+            <input asp-for="Categoria" type="text" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label for="txtBarrasItem" class="form-label">Codigo de barras en el producto</label>
+            <input asp-for="CodigoBarrasItem" type="text" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label for="txtBarrasCaja" class="form-label">Codigo de barras en la caja</label>
+            <input asp-for="CodigoBarrasCaja" type="text" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label for="txtPrecioVenta" class="form-label">Precio de Venta</label>
+            <input asp-for="PrecioVenta" type="text" class="form-control" />
+        </div>
+
+
+    </form>
+</div>

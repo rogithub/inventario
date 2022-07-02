@@ -10,15 +10,18 @@ public class ProductosController : Controller
 {
     private readonly ILogger<ProductosController> _logger;
     private readonly IComprasService _comprasSvc;
+    private readonly IProductosService _productosSvc;
     private readonly INuevosProductosValidatorService _pValidator;
 
     public ProductosController(
         ILogger<ProductosController> logger,
         IComprasService comprasService,
+        IProductosService productosService,
         INuevosProductosValidatorService pValidator)
     {
         _logger = logger;
         _comprasSvc = comprasService;
+        _productosSvc = productosService;
         _pValidator = pValidator;
     }
 
@@ -27,30 +30,36 @@ public class ProductosController : Controller
         return View();
     }
 
+    public async Task<IActionResult> Ver(Guid id)
+    {
+        var m = await _productosSvc.LoadModel(id);
+        return View(m);
+    }
+
     public IActionResult Nuevo()
     {
         return View(new CompraNuevosProductos());
-    }        
+    }
 
     [HttpPost]
-    public async Task<IActionResult> Nuevo([FromForm]CompraNuevosProductos model)
+    public async Task<IActionResult> Nuevo([FromForm] CompraNuevosProductos model)
     {
         if (ModelState.IsValid == false)
         {
-          return View(model);
+            return View(model);
         }
-        
+
         var lines = model.Archivo?.ReadLines();
         var areLinesValid = _pValidator.ValidateProducts(lines);
         if (!areLinesValid)
         {
-            ModelState.AddModelError("Archivo", 
+            ModelState.AddModelError("Archivo",
             "El archivo tiene datos incorrectos, quite comas y verifique no tener columnas extra.");
             return View(model);
         }
 
         await _comprasSvc.ProcessModel(model, lines);
-        
+
         return RedirectToAction("Index", "Home");
     }
 

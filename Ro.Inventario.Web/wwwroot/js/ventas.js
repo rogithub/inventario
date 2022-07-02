@@ -66,6 +66,7 @@ var Venta = /** @class */ (function () {
         this.lines = ko.observableArray([]);
         this.autocomplete = document.querySelector("#autoComplete");
         this.pagoCliente = ko.observable(0);
+        this.editandoFecha = ko.observable(false);
         var mes = this.fecha.getMonth() + 1;
         var dia = this.fecha.getDate();
         var mesStr = mes < 10 ? '0' + mes.toString() : mes.toString();
@@ -161,123 +162,6 @@ document.addEventListener('DOMContentLoaded', function () {
 }, false);
 
 
-/***/ }),
-
-/***/ 711:
-/***/ ((__unused_webpack_module, exports) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Api = void 0;
-/** Helper class to make http ajax requests */
-var Api = /** @class */ (function () {
-    function Api() {
-        this.baseURL = "".concat(document.baseURI);
-    }
-    Api.prototype.getAntiforgeryToken = function () {
-        var aftoken = $("input:hidden[name='__RequestVerificationToken']").val();
-        return aftoken;
-    };
-    Api.prototype.get = function (url) {
-        var self = this;
-        return $.ajax({
-            url: "".concat(self.baseURL).concat(url),
-            type: "GET",
-            dataType: "json",
-            contentType: "application/json; charset=utf-8"
-        });
-    };
-    Api.prototype.post = function (url, jsonData) {
-        var self = this;
-        return $.ajax({
-            url: "".concat(self.baseURL).concat(url),
-            type: "POST",
-            data: JSON.stringify(jsonData),
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            headers: {
-                'RequestVerificationToken': self.getAntiforgeryToken()
-            }
-        });
-    };
-    Api.prototype.put = function (url, jsonData) {
-        var self = this;
-        return $.ajax({
-            url: "".concat(self.baseURL).concat(url),
-            type: "PUT",
-            data: JSON.stringify(jsonData),
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            headers: {
-                'RequestVerificationToken': self.getAntiforgeryToken()
-            }
-        });
-    };
-    Api.prototype.patch = function (url, jsonData) {
-        var self = this;
-        return $.ajax({
-            url: "".concat(self.baseURL).concat(url),
-            type: "PATCH",
-            data: JSON.stringify(jsonData),
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            headers: {
-                'RequestVerificationToken': self.getAntiforgeryToken()
-            }
-        });
-    };
-    Api.prototype.del = function (url) {
-        var self = this;
-        return $.ajax({
-            url: "".concat(self.baseURL).concat(url),
-            type: "DELETE",
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            headers: {
-                'RequestVerificationToken': self.getAntiforgeryToken()
-            }
-        });
-    };
-    return Api;
-}());
-exports.Api = Api;
-
-
-/***/ }),
-
-/***/ 575:
-/***/ ((__unused_webpack_module, exports) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.BinderService = void 0;
-/** Helper class that binds one Knockout models to a DOM object */
-var BinderService = /** @class */ (function () {
-    function BinderService() {
-    }
-    /**
-     * Binds a Knockout model to a DOM object.
-     * @param model Knockout model object.
-     * @param selector Selector of the DOM to apply bindings.
-     */
-    BinderService.bind = function (model, selector) {
-        var jqObj = $(selector);
-        if (jqObj.length === 0) {
-            return;
-        }
-        var domObj = jqObj[0];
-        ko.cleanNode(domObj);
-        ko.applyBindings(model, domObj);
-    };
-    BinderService.isBound = function (selector) {
-        var jqObj = $(selector);
-        return !!ko.dataFor(jqObj[0]);
-    };
-    return BinderService;
-}());
-exports.BinderService = BinderService;
-
-
 /***/ })
 
 /******/ 	});
@@ -306,12 +190,107 @@ exports.BinderService = BinderService;
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = __webpack_modules__;
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/chunk loaded */
+/******/ 	(() => {
+/******/ 		var deferred = [];
+/******/ 		__webpack_require__.O = (result, chunkIds, fn, priority) => {
+/******/ 			if(chunkIds) {
+/******/ 				priority = priority || 0;
+/******/ 				for(var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
+/******/ 				deferred[i] = [chunkIds, fn, priority];
+/******/ 				return;
+/******/ 			}
+/******/ 			var notFulfilled = Infinity;
+/******/ 			for (var i = 0; i < deferred.length; i++) {
+/******/ 				var [chunkIds, fn, priority] = deferred[i];
+/******/ 				var fulfilled = true;
+/******/ 				for (var j = 0; j < chunkIds.length; j++) {
+/******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every((key) => (__webpack_require__.O[key](chunkIds[j])))) {
+/******/ 						chunkIds.splice(j--, 1);
+/******/ 					} else {
+/******/ 						fulfilled = false;
+/******/ 						if(priority < notFulfilled) notFulfilled = priority;
+/******/ 					}
+/******/ 				}
+/******/ 				if(fulfilled) {
+/******/ 					deferred.splice(i--, 1)
+/******/ 					var r = fn();
+/******/ 					if (r !== undefined) result = r;
+/******/ 				}
+/******/ 			}
+/******/ 			return result;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/jsonp chunk loading */
+/******/ 	(() => {
+/******/ 		// no baseURI
+/******/ 		
+/******/ 		// object to store loaded and loading chunks
+/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
+/******/ 		var installedChunks = {
+/******/ 			463: 0
+/******/ 		};
+/******/ 		
+/******/ 		// no chunk on demand loading
+/******/ 		
+/******/ 		// no prefetching
+/******/ 		
+/******/ 		// no preloaded
+/******/ 		
+/******/ 		// no HMR
+/******/ 		
+/******/ 		// no HMR manifest
+/******/ 		
+/******/ 		__webpack_require__.O.j = (chunkId) => (installedChunks[chunkId] === 0);
+/******/ 		
+/******/ 		// install a JSONP callback for chunk loading
+/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
+/******/ 			var [chunkIds, moreModules, runtime] = data;
+/******/ 			// add "moreModules" to the modules object,
+/******/ 			// then flag all "chunkIds" as loaded and fire callback
+/******/ 			var moduleId, chunkId, i = 0;
+/******/ 			if(chunkIds.some((id) => (installedChunks[id] !== 0))) {
+/******/ 				for(moduleId in moreModules) {
+/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
+/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
+/******/ 					}
+/******/ 				}
+/******/ 				if(runtime) var result = runtime(__webpack_require__);
+/******/ 			}
+/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
+/******/ 			for(;i < chunkIds.length; i++) {
+/******/ 				chunkId = chunkIds[i];
+/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 					installedChunks[chunkId][0]();
+/******/ 				}
+/******/ 				installedChunks[chunkId] = 0;
+/******/ 			}
+/******/ 			return __webpack_require__.O(result);
+/******/ 		}
+/******/ 		
+/******/ 		var chunkLoadingGlobal = self["webpackChunkro_inventario_web"] = self["webpackChunkro_inventario_web"] || [];
+/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
+/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
+/******/ 	})();
+/******/ 	
 /************************************************************************/
 /******/ 	
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __webpack_require__(826);
+/******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [712], () => (__webpack_require__(826)))
+/******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
 ;

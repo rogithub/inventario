@@ -2,7 +2,8 @@ const path = require('path');
 
 module.exports = {
     entry: {
-		ventas: './scripts/pages/ventas.ts'
+		ventas: './scripts/pages/ventas.ts',
+		productos: './scripts/pages/productos.ts'
     },
     mode: 'production',
     optimization: {

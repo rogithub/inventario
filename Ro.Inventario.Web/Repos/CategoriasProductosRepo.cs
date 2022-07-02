@@ -9,6 +9,7 @@ public interface ICategoriasProductosRepo
 {
     Task<int> Save(CategoriaProducto it);
     Task<CategoriaProducto> GetOne(Guid id);
+    Task<IEnumerable<CategoriaProducto>> GetForProduct(Guid productoId);
     Task<int> BulkSave(CategoriaProducto[] list);
 }
 
@@ -22,12 +23,12 @@ public class CategoriasProductosRepo : ICategoriasProductosRepo
     }
 
     public Task<int> BulkSave(CategoriaProducto[] list)
-    {                
+    {
         var parameters = new List<IDbDataParameter>();
         var sqlLine = @"INSERT INTO CategoriasProductos (Id,ProductoId,CategoriaId) VALUES (@id{0},@productoId{0},@categoriaId{0});";
         var sb = new StringBuilder();
         for (int i = 0; i < list.Length; i++)
-        {   
+        {
             var it = list[i];
             sb.AppendLine(string.Format(sqlLine, i));
             parameters.Add(string.Format("@id{0}", i).ToParam(DbType.String, it.Id.ToString()));
@@ -37,7 +38,7 @@ public class CategoriasProductosRepo : ICategoriasProductosRepo
         var cmd = sb.ToString().ToCmd(parameters.ToArray());
         return Db.ExecuteNonQuery(cmd);
     }
-    
+
     public Task<int> Save(CategoriaProducto it)
     {
         var sql = @"INSERT INTO CategoriasProductos (Id,ProductoId,CategoriaId) VALUES 
@@ -55,12 +56,22 @@ public class CategoriasProductosRepo : ICategoriasProductosRepo
     {
         var sql = "SELECT Id,ProductoId,CategoriaId FROM CategoriasProductos WHERE Id = @id";
         var cmd = sql.ToCmd
-        (            
+        (
             "@id".ToParam(DbType.String, id.ToString())
         );
         return Db.GetOneRow(cmd, GetData);
     }
-   
+
+    public Task<IEnumerable<CategoriaProducto>> GetForProduct(Guid productoId)
+    {
+        var sql = "SELECT Id,ProductoId,CategoriaId FROM CategoriasProductos WHERE ProductoId = @productoId";
+        var cmd = sql.ToCmd
+        (
+            "@productoId".ToParam(DbType.String, productoId.ToString())
+        );
+        return Db.GetRows(cmd, GetData);
+    }
+
 
     private CategoriaProducto GetData(IDataReader dr)
     {
@@ -70,5 +81,5 @@ public class CategoriasProductosRepo : ICategoriasProductosRepo
             ProductoId = Guid.Parse(dr.GetString("ProductoId")),
             CategoriaId = Guid.Parse(dr.GetString("CategoriaId"))
         };
-    }   
+    }
 }

@@ -1,4 +1,52 @@
-﻿@{
+﻿@using System.Globalization
+@{
     ViewData["Title"] = "Ventas";
+    @model Ro.Inventario.Web.Models.VentasDiaResponseModel;
+var localizacion = new CultureInfo("es-MX");
 }
 
+
+<form method="get">
+    <div class="row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="Fecha" class="col-form-label">Fecha</label>
+        </div>
+        <div class="col-auto">
+            <input type="date" class="form-control" name="Fecha" value='@Model.Fecha.ToString("yyyy-MM-dd")' required />
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+        <div class="col-auto">
+            @Model.Fecha.ToString("D", localizacion)
+        </div>
+    </div>
+</form>
+
+<h2>Ventas por día</h2>
+
+@foreach (var r in Model.Rows)
+{
+    <table class="table">
+    <thead>
+        <tr class="table-primary">
+            <th scope="col">Cantidad</th>
+            <th scope="col">
+                Venta @(Array.IndexOf(Model.Rows, r)+1)
+                a las @r.Venta.FechaVenta.ToShortTimeString()
+                | Pagó @r.Venta.Pago.ToString("C", localizacion)
+                cambio @r.Venta.Cambio.ToString("C", localizacion)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in r.Productos)
+            {
+                <tr>
+                    <td>@p.Cantidad</td>
+                    <td>@p.Nombre</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
