@@ -29,22 +29,19 @@
 
         <div class="mb-3">
             <label for="txtBarrasItem" class="form-label">Codigo de barras en el producto</label>
-            <input asp-for="CodigoBarrasItem" type="date" class="form-control" />
+            <input asp-for="CodigoBarrasItem" type="text" class="form-control" />
         </div>
 
         <div class="mb-3">
             <label for="txtBarrasCaja" class="form-label">Codigo de barras en la caja</label>
-            <input asp-for="CodigoBarrasCaja" type="date" class="form-control" />
+            <input asp-for="CodigoBarrasCaja" type="text" class="form-control" />
         </div>
 
         <div class="mb-3">
             <label for="txtPrecioVenta" class="form-label">Precio de Venta</label>
-            <input asp-for="PrecioVenta" type="date" class="form-control" />
+            <input asp-for="PrecioVenta" type="text" class="form-control" />
         </div>
 
-        <div>
-            <a class="btn btn-secondary" asp-action="Index" asp-controller="Productos">Cancelar</a>
-            <button type="submit" class="btn btn-primary">Guardar</button>
-        </div>
+
     </form>
 </div>

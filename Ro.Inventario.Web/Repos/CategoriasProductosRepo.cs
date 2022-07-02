@@ -67,7 +67,7 @@ public class CategoriasProductosRepo : ICategoriasProductosRepo
         var sql = "SELECT Id,ProductoId,CategoriaId FROM CategoriasProductos WHERE ProductoId = @productoId";
         var cmd = sql.ToCmd
         (
-            "@id".ToParam(DbType.String, productoId.ToString())
+            "@productoId".ToParam(DbType.String, productoId.ToString())
         );
         return Db.GetRows(cmd, GetData);
     }

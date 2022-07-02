@@ -30,16 +30,10 @@ public class ProductosController : Controller
         return View();
     }
 
-    public IActionResult Editar(Guid id)
+    public async Task<IActionResult> Ver(Guid id)
     {
-        var m = _productosSvc.LoadModel(id);
+        var m = await _productosSvc.LoadModel(id);
         return View(m);
-    }
-
-    [HttpPost]
-    public IActionResult Editar(ProductoModel m)
-    {
-        return RedirectToAction("Index", "Productos");
     }
 
     public IActionResult Nuevo()

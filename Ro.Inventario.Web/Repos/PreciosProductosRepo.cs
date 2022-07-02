@@ -73,7 +73,7 @@ public class PreciosProductosRepo : IPreciosProductosRepo
                      ORDER BY datetime(FechaCreado) DESC LIMIT 1;";
         var cmd = sql.ToCmd
         (
-            "@id".ToParam(DbType.String, productoId.ToString())
+            "@productoId".ToParam(DbType.String, productoId.ToString())
         );
         return Db.GetOneRow(cmd, GetData);
     }

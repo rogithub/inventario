@@ -39,7 +39,8 @@ public class ProductosService : IProductosService
         var entity = await _producto.GetOne(productoId);
         var uMedida = await _uMedida.GetOne(entity.UnidadMedidaId);
         var categorias = await _categoriasProds.GetForProduct(entity.Id);
-        var categoria = await _categorias.GetOne(categorias.FirstOrDefault().Id);
+        var categoriaId = categorias.FirstOrDefault().CategoriaId;
+        var categoria = await _categorias.GetOne(categoriaId);
         var precio = await _precios.GetOneForProduct(entity.Id);
         p.Id = entity.Id;
         p.Nombre = entity.Nombre;
