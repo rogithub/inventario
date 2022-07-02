@@ -30,32 +30,38 @@ public class ProductosController : Controller
     public IActionResult Editar(Guid id)
     {
         return View();
-    }        
+    }
+
+    [HttpPost]
+    public IActionResult Editar(ProductoModel m)
+    {
+        return RedirectToAction("Index", "Productos");
+    }
 
     public IActionResult Nuevo()
     {
         return View(new CompraNuevosProductos());
-    }        
+    }
 
     [HttpPost]
-    public async Task<IActionResult> Nuevo([FromForm]CompraNuevosProductos model)
+    public async Task<IActionResult> Nuevo([FromForm] CompraNuevosProductos model)
     {
         if (ModelState.IsValid == false)
         {
-          return View(model);
+            return View(model);
         }
-        
+
         var lines = model.Archivo?.ReadLines();
         var areLinesValid = _pValidator.ValidateProducts(lines);
         if (!areLinesValid)
         {
-            ModelState.AddModelError("Archivo", 
+            ModelState.AddModelError("Archivo",
             "El archivo tiene datos incorrectos, quite comas y verifique no tener columnas extra.");
             return View(model);
         }
 
         await _comprasSvc.ProcessModel(model, lines);
-        
+
         return RedirectToAction("Index", "Home");
     }
 

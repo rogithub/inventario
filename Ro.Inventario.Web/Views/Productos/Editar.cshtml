@@ -1,6 +1,6 @@
 @{
     ViewData["Title"] = "Productos Nuevos";
-    @model Ro.Inventario.Web.Models.Producto;
+    @model Ro.Inventario.Web.Models.ProductoModel;
 }
 
 <div>
@@ -8,42 +8,42 @@
         <div asp-validation-summary="All" class="text-danger"></div>
 
         <input asp-for="Id" type="hidden" />
-        <input asp-for="FechaCreado" type="hidden" />
+        <input asp-for="UnidadMedidaId" type="hidden" />
+        <input asp-for="CategoriaId" type="hidden" />
+        <input asp-for="PrecioVentaId" type="hidden" />
 
         <div class="mb-3">
-            <label for="totalFlete" class="form-label">Total Paquetería</label>
-            <input asp-for="CostoPaqueteria" type="text" class="form-control" />
+            <label for="txtNombre" class="form-label">Nombre</label>
+            <input asp-for="Nombre" type="text" class="form-control" />
         </div>
 
         <div class="mb-3">
-            <label for="ivaFactura" class="form-label">% de IVA en la factura</label>
-            <input asp-for="PorcentajeFacturaIVA" type="text" value="0.16" class="form-control" />
+            <label for="txtUnidadMedida" class="form-label">Unidad de Medida</label>
+            <input asp-for="UnidadMedida" type="text" value="0.16" class="form-control" />
         </div>
 
         <div class="mb-3">
-            <label for="totalFactura" class="form-label">Total de la factura</label>
-            <input asp-for="TotalFactura" type="text" class="form-control" />
+            <label for="txtCategoria" class="form-label">Categoria</label>
+            <input asp-for="Categoria" type="text" class="form-control" />
         </div>
 
         <div class="mb-3">
-            <label for="fechaFactura" class="form-label">Fecha factura</label>
-            <input asp-for="FechaFactura" type="date" class="form-control" />
+            <label for="txtBarrasItem" class="form-label">Codigo de barras en el producto</label>
+            <input asp-for="CodigoBarrasItem" type="date" class="form-control" />
         </div>
 
         <div class="mb-3">
-            <label for="txtProveedor" class="form-label">Proveedor</label>
-            <textarea asp-for="Proveedor" type="text" class="form-control"></textarea>
+            <label for="txtBarrasCaja" class="form-label">Codigo de barras en la caja</label>
+            <input asp-for="CodigoBarrasCaja" type="date" class="form-control" />
         </div>
 
         <div class="mb-3">
-            <label for="theFile" class="form-label">Archivo con productos</label>
-            <input id="theFile" type="file" name="Archivo" class="form-control form-control-lg" accept=".csv">
-        </div>        
+            <label for="txtPrecioVenta" class="form-label">Precio de Venta</label>
+            <input asp-for="PrecioVenta" type="date" class="form-control" />
+        </div>
 
         <div>
-            <a class="btn btn-secondary"
-                    asp-action="Index"
-                    asp-controller="Home">Cancelar</a>
+            <a class="btn btn-secondary" asp-action="Index" asp-controller="Productos">Cancelar</a>
             <button type="submit" class="btn btn-primary">Guardar</button>
         </div>
     </form>
