@@ -4,7 +4,7 @@ namespace Ro.Inventario.Web.Services;
 
 public interface IVentasService
 {
-    Task<VentasPorDiaRowModel[]> Load(DateTime fecha);
+    Task<VentasDiaResponseModel[]> Load(DateTime fecha);
 }
 
 public class VentasService : IVentasService
@@ -25,7 +25,7 @@ public class VentasService : IVentasService
         _ventasProductos = ventasProductos;
     }
 
-    public async Task<VentasPorDiaRowModel[]> Load(DateTime fecha)
+    public async Task<VentasDiaResponseModel> Load(DateTime fecha)
     {
         var lista = new List<VentasPorDiaRowModel>();
         var ventas = await _ventas.ForDate(fecha);
@@ -42,6 +42,6 @@ public class VentasService : IVentasService
             lista.Add(new VentasPorDiaRowModel(v, productos.ToArray()));
         }
 
-        return lista.ToArray();
+        return new VentasDiaResponseModel(fecha, lista.ToArray());
     }
 }

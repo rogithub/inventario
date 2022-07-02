@@ -1,18 +1,55 @@
 ﻿@{
     ViewData["Title"] = "Ventas";
-    @model Ro.Inventario.Web.Models.VentasPorDiaRowModel[];
+    @model Ro.Inventario.Web.Models.VentasDiaResponseModel;
 }
 
 <h2>Ventas por día</h2>
 
 <form method="get">
-    Fecha <input type="date" class="form-control" name="Fecha" required />
-    <div>
-        <button type="submit" class="btn btn-primary">Buscar</button>
+    <div class="row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="Fecha" class="col-form-label">Fecha</label>
+        </div>
+        <div class="col-auto">
+            <input type="date" class="form-control" name="Fecha" value='@Model.Fecha.ToString("yyyy-MM-dd")' required />
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
     </div>
 </form>
 
-@foreach (var item in Model)
-{
+<h2>@Model.Fecha.ToLongDateString()</h2>
 
+@foreach (var r in Model.Rows)
+{
+    <table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Hora</th>
+            <th scope="col">Pago</th>
+            <th scope="col">Cambio</th>
+        </tr>
+        <tr>
+            <td>@r.Venta.FechaVenta.ToShortTimeString()</td>
+            <td>@r.Venta.Pago</td>
+            <td>@r.Venta.Cambio</td>
+        </tr>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Producto</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in r.Productos)
+            {
+                <tr>
+                    <th scope="row">1</th>
+                    <td>@p.Cantidad</td>
+                    <td>@p.Nombre</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }

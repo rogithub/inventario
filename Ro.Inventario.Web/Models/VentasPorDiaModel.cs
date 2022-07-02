@@ -34,3 +34,15 @@ public class VentasPorDiaRowModel
     public ProductoCantidadModel[] Productos { get; set; }
 }
 
+public class VentasDiaResponseModel
+{
+    public VentasDiaResponseModel(DateTime fecha, VentasPorDiaRowModel[] ventas)
+    {
+        this.Fecha = fecha;
+        this.Rows = ventas;
+
+    }
+    public DateTime Fecha { get; set; }
+    public VentasPorDiaRowModel[] Rows { get; set; }
+}
+
