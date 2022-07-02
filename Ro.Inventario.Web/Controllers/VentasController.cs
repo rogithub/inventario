@@ -4,36 +4,43 @@ using Microsoft.AspNetCore.Mvc;
 using Ro.Inventario.Web.Models;
 using Ro.Inventario.Web.Entities;
 using Ro.Inventario.Web.Repos;
+using Ro.Inventario.Web.Services;
 
 namespace Ro.Inventario.Web.Controllers;
 
 public class VentasController : Controller
-{    
+{
     private readonly IVentasProductosRepo _ventasProds;
     private readonly IVentasRepo _ventas;
     private readonly ILogger<VentasController> _logger;
 
+    private readonly IVentasService _ventasService;
+
     public VentasController(
-        ILogger<VentasController> logger,        
+        ILogger<VentasController> logger,
         IVentasProductosRepo ventasProds,
-        IVentasRepo ventas
+        IVentasRepo ventas,
+        IVentasService ventasService
         )
     {
-        _logger = logger;        
+        _logger = logger;
         _ventasProds = ventasProds;
         _ventas = ventas;
+        _ventasService = ventasService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index(DateTime? fecha)
     {
-        return View();
+        var date = fecha.HasValue ? fecha.Value : DateTime.Now;
+        var model = await _ventasService.Load(date);
+        return View(model);
     }
 
     public IActionResult Nuevo()
     {
         return View();
     }
-  
+
     [HttpPost]
     public async Task<IActionResult> Guardar([FromBody] VentaModel model)
     {

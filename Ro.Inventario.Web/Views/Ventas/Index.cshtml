@@ -1,4 +1,18 @@
 ﻿@{
     ViewData["Title"] = "Ventas";
+    @model Ro.Inventario.Web.Models.VentasPorDiaRowModel[];
 }
 
+<h2>Ventas por día</h2>
+
+<form method="get">
+    Fecha <input type="date" class="form-control" name="Fecha" required />
+    <div>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </div>
+</form>
+
+@foreach (var item in Model)
+{
+
+}

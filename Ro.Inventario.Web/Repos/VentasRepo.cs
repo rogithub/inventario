@@ -8,6 +8,7 @@ public interface IVentasRepo
 {
     Task<int> Save(Venta it);
     Task<Venta> GetOne(Guid id);
+    Task<IEnumerable<Venta>> ForDate(DateTime date);
 }
 
 public class VentasRepo : IVentasRepo
@@ -18,13 +19,13 @@ public class VentasRepo : IVentasRepo
     {
         this.Db = db;
     }
-    
+
     public Task<int> Save(Venta it)
     {
         var sql = @"INSERT INTO Ajustes (Id,Pago,Cambio,FechaAjuste) VALUES 
                     (@id,@pago,@cambio,@fechaAjuste);";
         var cmd = sql.ToCmd
-        (            
+        (
             "@id".ToParam(DbType.String, it.Id.ToString()),
             "@pago".ToParam(DbType.Decimal, it.Pago),
             "@cambio".ToParam(DbType.Decimal, it.Cambio),
@@ -37,12 +38,25 @@ public class VentasRepo : IVentasRepo
     {
         var sql = "SELECT Id,Pago,Cambio,FechaAjuste FROM Ajustes WHERE Id = @id";
         var cmd = sql.ToCmd
-        (            
+        (
             "@id".ToParam(DbType.String, id.ToString())
         );
         return Db.GetOneRow(cmd, GetData);
     }
-   
+
+    public Task<IEnumerable<Venta>> ForDate(DateTime fecha)
+    {
+        var sql = @"SELECT * FROM Ajustes 
+                    WHERE    TipoAjuste = 0 AND FechaAjuste 
+                    BETWEEN  DATE(@fecha,'start of day') AND DATE(@fecha,'start of day', '+1 day') 
+                    ORDER BY FechaAjuste;";
+        var cmd = sql.ToCmd
+        (
+            "@fecha".ToParam(DbType.DateTime, fecha.ToString(DATE_FORMAT))
+        );
+        return Db.GetRows(cmd, GetData);
+    }
+
 
     private Venta GetData(IDataReader dr)
     {
@@ -53,5 +67,5 @@ public class VentasRepo : IVentasRepo
             Cambio = dr.GetDecimal("Cambio"),
             FechaVenta = DateTime.Parse(dr.GetString("FechaAjuste"))
         };
-    }   
+    }
 }

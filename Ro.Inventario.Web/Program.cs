@@ -25,6 +25,8 @@ builder.Services.AddScoped<IBusquedaProductosRepo, BusquedaProductosRepo>();
 builder.Services.AddScoped<IVentasProductosRepo, VentasProductosRepo>();
 builder.Services.AddScoped<IVentasRepo, VentasRepo>();
 builder.Services.AddScoped<IProductosService, ProductosService>();
+builder.Services.AddScoped<IVentasService, VentasService>();
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
