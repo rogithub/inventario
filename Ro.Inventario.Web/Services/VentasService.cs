@@ -4,7 +4,7 @@ namespace Ro.Inventario.Web.Services;
 
 public interface IVentasService
 {
-    Task<VentasDiaResponseModel[]> Load(DateTime fecha);
+    Task<VentasDiaResponseModel> Load(DateTime fecha);
 }
 
 public class VentasService : IVentasService

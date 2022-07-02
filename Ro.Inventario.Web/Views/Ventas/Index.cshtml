@@ -1,6 +1,8 @@
-﻿@{
+﻿@using System.Globalization
+@{
     ViewData["Title"] = "Ventas";
     @model Ro.Inventario.Web.Models.VentasDiaResponseModel;
+var localizacion = new CultureInfo("es-MX");
 }
 
 <h2>Ventas por día</h2>
@@ -19,24 +21,21 @@
     </div>
 </form>
 
-<h2>@Model.Fecha.ToLongDateString()</h2>
+<h2>@Model.Fecha.ToString("D", localizacion);</h2>
 
 @foreach (var r in Model.Rows)
 {
     <table class="table">
     <thead>
-        <tr>
-            <th scope="col">Hora</th>
-            <th scope="col">Pago</th>
-            <th scope="col">Cambio</th>
+        <tr class="table-primary">
+            <th colspan="2">
+                Venta @(Array.IndexOf(Model.Rows, r)+1)
+                a las @r.Venta.FechaVenta.ToShortTimeString()
+                pagó @r.Venta.Pago.ToString("C", localizacion)
+                cambio @r.Venta.Cambio.ToString("C", localizacion)
+            </th>
         </tr>
-        <tr>
-            <td>@r.Venta.FechaVenta.ToShortTimeString()</td>
-            <td>@r.Venta.Pago</td>
-            <td>@r.Venta.Cambio</td>
-        </tr>
-        <tr>
-            <th scope="col">#</th>
+        <tr class="table-primary">
             <th scope="col">Cantidad</th>
             <th scope="col">Producto</th>
         </tr>
@@ -45,7 +44,6 @@
         @foreach (var p in r.Productos)
             {
                 <tr>
-                    <th scope="row">1</th>
                     <td>@p.Cantidad</td>
                     <td>@p.Nombre</td>
                 </tr>
