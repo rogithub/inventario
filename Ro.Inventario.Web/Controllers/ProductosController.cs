@@ -2,7 +2,6 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Ro.Inventario.Web.Models;
 using Ro.Inventario.Web.Services;
-using Microsoft.AspNetCore.Hosting;
 
 namespace Ro.Inventario.Web.Controllers;
 
@@ -34,6 +33,17 @@ public class ProductosController : Controller
     {
         var m = await _productosSvc.LoadModel(id);
         return View(m);
+    }
+
+    [HttpPost]
+    public IActionResult Editar(ProductoDotnetModel m)
+    {
+        if (ModelState.IsValid == false)
+        {
+            return View(m);
+        }
+        _productosSvc.Actualizar(m);
+        return RedirectToAction("Index", "Home");
     }
 
     public IActionResult Nuevo()

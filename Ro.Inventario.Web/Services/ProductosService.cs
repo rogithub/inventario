@@ -9,6 +9,7 @@ namespace Ro.Inventario.Web.Services;
 public interface IProductosService
 {
     Task<ProductoDotnetModel> LoadModel(Guid productoId);
+    void Actualizar(ProductoDotnetModel model);
 }
 
 public class ProductosService : IProductosService
@@ -59,5 +60,16 @@ public class ProductosService : IProductosService
         p.Categorias.AddRange(from c in await _categorias.GetAll() select c);
 
         return p;
+    }
+
+    public void Actualizar(ProductoDotnetModel m)
+    {
+        _logger.LogInformation("Guardando producto {id}", m.Id);
+        _logger.LogInformation("Nombre {Nombre}", m.Nombre);
+        _logger.LogInformation("CategoriaID {CategoriaID}", m.CategoriaId);
+        _logger.LogInformation("CodigoBarrasCaja {CodigoBarrasCaja}", m.CodigoBarrasCaja);
+        _logger.LogInformation("CodigoBarrasItem {CodigoBarrasItem}", m.CodigoBarrasItem);
+        _logger.LogInformation("PrecioVenta {PrecioVenta}", m.PrecioVenta);
+        _logger.LogInformation("UnidadMedidaId {UnidadMedidaId}", m.UnidadMedidaId);
     }
 }
