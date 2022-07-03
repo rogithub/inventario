@@ -23,7 +23,7 @@ var localizacion = new CultureInfo("es-MX");
     </div>
 </form>
 
-<h2>Ventas por día</h2>
+<h2>Ventas por día @Model.Rows.Sum(r=>r.Venta.Pago-r.Venta.Cambio).ToString("C", localizacion)</h2>
 
 @foreach (var r in Model.Rows)
 {
@@ -36,6 +36,7 @@ var localizacion = new CultureInfo("es-MX");
                 a las @r.Venta.FechaVenta.ToShortTimeString()
                 | Pagó @r.Venta.Pago.ToString("C", localizacion)
                 cambio @r.Venta.Cambio.ToString("C", localizacion)
+                | Total @((r.Venta.Pago - r.Venta.Cambio).ToString("C", localizacion))
             </th>
         </tr>
     </thead>
