@@ -1,6 +1,6 @@
 @{
     ViewData["Title"] = "Productos Nuevos";
-    @model Ro.Inventario.Web.Models.ProductoModel;
+    @model Ro.Inventario.Web.Models.ProductoDotnetModel;
 }
 <h2>Editar Producto</h2>
 <div>
@@ -19,12 +19,12 @@
 
         <div class="mb-3">
             <label for="txtUnidadMedida" class="form-label">Unidad de Medida</label>
-            <input asp-for="UnidadMedida" type="text" class="form-control" />
+            <select asp-items="@Model.UnidadesMedida" asp-for="UnidadMedida" class="form-select"></select>
         </div>
 
         <div class="mb-3">
             <label for="txtCategoria" class="form-label">Categoria</label>
-            <input asp-for="Categoria" type="text" class="form-control" />
+            <select asp-items="@Model.Categorias" asp-for="Categoria" class="form-select"></select>
         </div>
 
         <div class="mb-3">

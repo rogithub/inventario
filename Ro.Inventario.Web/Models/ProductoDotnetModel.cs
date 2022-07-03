@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 namespace Ro.Inventario.Web.Models;
 
-public class ProductoModel
+public class ProductoDotnetModel
 {
-    public ProductoModel()
+    public ProductoDotnetModel()
     {
         Id = Guid.NewGuid();
         UnidadMedidaId = Guid.NewGuid();
@@ -25,4 +27,6 @@ public class ProductoModel
     public string CodigoBarrasItem { get; set; }
     public string CodigoBarrasCaja { get; set; }
     public decimal PrecioVenta { get; set; }
+    public List<SelectListItem> UnidadesMedida { get; } = new List<SelectListItem>();
+    public List<SelectListItem> Categorias { get; } = new List<SelectListItem>();
 }

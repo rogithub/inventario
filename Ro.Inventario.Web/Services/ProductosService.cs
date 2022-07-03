@@ -2,11 +2,13 @@ using Ro.Inventario.Web.Models;
 using Ro.Inventario.Web.Repos;
 using Ro.Inventario.Web.Entities;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 namespace Ro.Inventario.Web.Services;
 
 public interface IProductosService
 {
-    Task<ProductoModel> LoadModel(Guid productoId);
+    Task<ProductoDotnetModel> LoadModel(Guid productoId);
 }
 
 public class ProductosService : IProductosService
@@ -33,9 +35,9 @@ public class ProductosService : IProductosService
         _precios = preciosRepo;
     }
 
-    public async Task<ProductoModel> LoadModel(Guid productoId)
+    public async Task<ProductoDotnetModel> LoadModel(Guid productoId)
     {
-        var p = new ProductoModel();
+        var p = new ProductoDotnetModel();
         var entity = await _producto.GetOne(productoId);
         var uMedida = await _uMedida.GetOne(entity.UnidadMedidaId);
         var categorias = await _categoriasProds.GetForProduct(entity.Id);
@@ -52,6 +54,21 @@ public class ProductosService : IProductosService
         p.PrecioVentaId = precio.Id;
         p.UnidadMedida = uMedida.Nombre;
         p.UnidadMedidaId = uMedida.Id;
+
+        p.UnidadesMedida.AddRange(from u in await _uMedida.GetAll()
+                                  select new SelectListItem()
+                                  {
+                                      Value = u.Id.ToString(),
+                                      Text = u.Nombre,
+                                      Selected = u.Id == p.UnidadMedidaId
+                                  });
+        p.Categorias.AddRange(from c in await _categorias.GetAll()
+                              select new SelectListItem()
+                              {
+                                  Value = c.Id.ToString(),
+                                  Text = c.Nombre,
+                                  Selected = c.Id == p.UnidadMedidaId
+                              });
 
         return p;
     }
