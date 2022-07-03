@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Ro.Inventario.Web.Entities;
 
 namespace Ro.Inventario.Web.Models;
 
@@ -27,6 +28,6 @@ public class ProductoDotnetModel
     public string CodigoBarrasItem { get; set; }
     public string CodigoBarrasCaja { get; set; }
     public decimal PrecioVenta { get; set; }
-    public List<SelectListItem> UnidadesMedida { get; } = new List<SelectListItem>();
-    public List<SelectListItem> Categorias { get; } = new List<SelectListItem>();
+    public List<UnidadMedida> UnidadesMedida { get; } = new List<UnidadMedida>();
+    public List<Categoria> Categorias { get; } = new List<Categoria>();
 }

@@ -55,20 +55,8 @@ public class ProductosService : IProductosService
         p.UnidadMedida = uMedida.Nombre;
         p.UnidadMedidaId = uMedida.Id;
 
-        p.UnidadesMedida.AddRange(from u in await _uMedida.GetAll()
-                                  select new SelectListItem()
-                                  {
-                                      Value = u.Id.ToString(),
-                                      Text = u.Nombre,
-                                      Selected = u.Id == p.UnidadMedidaId
-                                  });
-        p.Categorias.AddRange(from c in await _categorias.GetAll()
-                              select new SelectListItem()
-                              {
-                                  Value = c.Id.ToString(),
-                                  Text = c.Nombre,
-                                  Selected = c.Id == p.UnidadMedidaId
-                              });
+        p.UnidadesMedida.AddRange(from u in await _uMedida.GetAll() select u);
+        p.Categorias.AddRange(from c in await _categorias.GetAll() select c);
 
         return p;
     }

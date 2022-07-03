@@ -19,12 +19,14 @@
 
         <div class="mb-3">
             <label for="txtUnidadMedida" class="form-label">Unidad de Medida</label>
-            <select asp-items="@Model.UnidadesMedida" asp-for="UnidadMedida" class="form-select"></select>
+            <select asp-items='@(new SelectList(Model.UnidadesMedida,"Id","Nombre"))' asp-for="UnidadMedidaId"
+                class="form-select"></select>
         </div>
 
         <div class="mb-3">
             <label for="txtCategoria" class="form-label">Categoria</label>
-            <select asp-items="@Model.Categorias" asp-for="Categoria" class="form-select"></select>
+            <select asp-items='@(new SelectList(Model.Categorias,"Id", "Nombre"))' asp-for="CategoriaId"
+                class="form-select"></select>
         </div>
 
         <div class="mb-3">
