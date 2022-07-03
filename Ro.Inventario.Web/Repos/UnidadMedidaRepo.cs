@@ -29,7 +29,7 @@ public class UnidadMedidaRepo : IUnidadMedidaRepo
         var sql = "SELECT ID, NOMBRE FROM UnidadesMedida WHERE NOMBRE = @nombre";
         var cmd = sql.ToCmd
         (
-            "@nombre".ToParam(DbType.String, nombre.ToString())
+            "@nombre".ToParam(DbType.String, nombre)
         );
         return Db.GetOneRow(cmd, GetData);
     }

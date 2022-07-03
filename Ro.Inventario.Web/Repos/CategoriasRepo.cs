@@ -8,11 +8,11 @@ namespace Ro.Inventario.Web.Repos;
 
 public interface ICategoriasRepo
 {
-    Task<int> Save(Categoria it);
+    Task<Categoria> GetOne(string nombre);
     Task<Categoria> GetOne(Guid id);
     Task<int> BulkSave(string[] list);
     Task<IEnumerable<Categoria>> GetAll();
-    Task<Dictionary<string,Guid>> GetDictionary();
+    Task<Dictionary<string, Guid>> GetDictionary();
 }
 
 public class CategoriasRepo : ICategoriasRepo
@@ -23,23 +23,22 @@ public class CategoriasRepo : ICategoriasRepo
     {
         this.Db = db;
     }
-    
-    public Task<int> Save(Categoria it)
+
+    public Task<Categoria> GetOne(string nombre)
     {
-        var sql = "INSERT INTO Categorias (ID, NOMBRE) VALUES (@id, @nombre)";
+        var sql = "SELECT ID, NOMBRE FROM Categorias WHERE nombre = @nombre";
         var cmd = sql.ToCmd
         (
-            "@id".ToParam(DbType.String, it.Id.ToString()),
-            "@nombre".ToParam(DbType.String, it.Id.ToString())
+            "@nombre".ToParam(DbType.String, nombre)
         );
-        return Db.ExecuteNonQuery(cmd);
+        return Db.GetOneRow(cmd, GetData);
     }
 
     public Task<Categoria> GetOne(Guid id)
     {
         var sql = "SELECT ID, NOMBRE FROM Categorias WHERE Id = @id";
         var cmd = sql.ToCmd
-        (            
+        (
             "@id".ToParam(DbType.String, id.ToString())
         );
         return Db.GetOneRow(cmd, GetData);
@@ -77,9 +76,9 @@ public class CategoriasRepo : ICategoriasRepo
         return Db.GetRows(cmd, GetData);
     }
 
-    public async Task<Dictionary<string,Guid>> GetDictionary()
+    public async Task<Dictionary<string, Guid>> GetDictionary()
     {
-        var d = new Dictionary<string,Guid>();
+        var d = new Dictionary<string, Guid>();
 
         var all = await GetAll();
         foreach (var it in all)
@@ -89,7 +88,7 @@ public class CategoriasRepo : ICategoriasRepo
                 d.Add(it.Nombre, it.Id);
             }
         }
-        
+
         return d;
     }
 }
