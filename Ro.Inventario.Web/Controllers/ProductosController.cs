@@ -36,13 +36,13 @@ public class ProductosController : Controller
     }
 
     [HttpPost]
-    public IActionResult Editar(ProductoDotnetModel m)
+    public async Task<IActionResult> Editar(ProductoDotnetModel m)
     {
         if (ModelState.IsValid == false)
         {
             return View(m);
         }
-        _productosSvc.Actualizar(m);
+        await _productosSvc.Actualizar(m);
         return RedirectToAction("Index", "Home");
     }
 

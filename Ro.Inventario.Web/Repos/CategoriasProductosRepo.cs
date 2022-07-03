@@ -8,6 +8,7 @@ namespace Ro.Inventario.Web.Repos;
 public interface ICategoriasProductosRepo
 {
     Task<int> Save(CategoriaProducto it);
+    Task<int> Update(CategoriaProducto it);
     Task<CategoriaProducto> GetOne(Guid id);
     Task<IEnumerable<CategoriaProducto>> GetForProduct(Guid productoId);
     Task<int> BulkSave(CategoriaProducto[] list);
@@ -43,6 +44,20 @@ public class CategoriasProductosRepo : ICategoriasProductosRepo
     {
         var sql = @"INSERT INTO CategoriasProductos (Id,ProductoId,CategoriaId) VALUES 
                     (@id,@productoId,@categoriaId);";
+        var cmd = sql.ToCmd
+        (
+            "@id".ToParam(DbType.String, it.Id.ToString()),
+            "@productoId".ToParam(DbType.String, it.ProductoId.ToString()),
+            "@categoriaId".ToParam(DbType.String, it.CategoriaId.ToString())
+        );
+        return Db.ExecuteNonQuery(cmd);
+    }
+
+    public Task<int> Update(CategoriaProducto it)
+    {
+        var sql = @"UPDATE CategoriasProductos SET 
+                    CategoriaId = @categoriaId 
+                    WHERE ProductoId=@productoId AND Id=@id;";
         var cmd = sql.ToCmd
         (
             "@id".ToParam(DbType.String, it.Id.ToString()),

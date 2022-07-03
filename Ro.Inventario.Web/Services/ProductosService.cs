@@ -9,7 +9,7 @@ namespace Ro.Inventario.Web.Services;
 public interface IProductosService
 {
     Task<ProductoDotnetModel> LoadModel(Guid productoId);
-    void Actualizar(ProductoDotnetModel model);
+    Task Actualizar(ProductoDotnetModel model);
 }
 
 public class ProductosService : IProductosService
@@ -42,7 +42,7 @@ public class ProductosService : IProductosService
         var entity = await _producto.GetOne(productoId);
         var uMedida = await _uMedida.GetOne(entity.UnidadMedidaId);
         var categorias = await _categoriasProds.GetForProduct(entity.Id);
-        var categoriaId = categorias.FirstOrDefault().CategoriaId;
+        var categoriaId = categorias.First().CategoriaId;
         var categoria = await _categorias.GetOne(categoriaId);
         var precio = await _precios.GetOneForProduct(entity.Id);
         p.Id = entity.Id;
@@ -62,14 +62,46 @@ public class ProductosService : IProductosService
         return p;
     }
 
-    public void Actualizar(ProductoDotnetModel m)
+    public async Task Actualizar(ProductoDotnetModel m)
     {
         _logger.LogInformation("Guardando producto {id}", m.Id);
         _logger.LogInformation("Nombre {Nombre}", m.Nombre);
         _logger.LogInformation("CategoriaID {CategoriaID}", m.CategoriaId);
-        _logger.LogInformation("CodigoBarrasCaja {CodigoBarrasCaja}", m.CodigoBarrasCaja);
         _logger.LogInformation("CodigoBarrasItem {CodigoBarrasItem}", m.CodigoBarrasItem);
+        _logger.LogInformation("CodigoBarrasCaja {CodigoBarrasCaja}", m.CodigoBarrasCaja);
         _logger.LogInformation("PrecioVenta {PrecioVenta}", m.PrecioVenta);
         _logger.LogInformation("UnidadMedidaId {UnidadMedidaId}", m.UnidadMedidaId);
+
+        var i = await _producto.GetOne(m.Id);
+        if (m.Nombre != i.Nombre ||
+            m.CodigoBarrasCaja != i.CodigoBarrasCaja ||
+            m.CodigoBarrasItem != i.CodigoBarrasItem ||
+            m.UnidadMedidaId != i.UnidadMedidaId)
+        {
+            i.Nombre = m.Nombre;
+            i.UnidadMedidaId = m.UnidadMedidaId;
+            i.CodigoBarrasItem = m.CodigoBarrasItem;
+            i.CodigoBarrasCaja = m.CodigoBarrasCaja;
+            await _producto.Update(i);
+        }
+
+        var cat = (await _categoriasProds.GetForProduct(m.Id)).First();
+        if (m.CategoriaId != cat.CategoriaId)
+        {
+            cat.CategoriaId = m.CategoriaId;
+            await _categoriasProds.Update(cat);
+        }
+
+        var precio = await _precios.GetOneForProduct(m.Id);
+        if (precio.PrecioVenta != m.PrecioVenta)
+        {
+            var precios = new PrecioProducto[] { new PrecioProducto {
+                FechaCreado = DateTime.Now,
+                Id = Guid.NewGuid(),
+                PrecioVenta = m.PrecioVenta,
+                ProductoId = m.Id
+            } };
+            await _precios.BulkSave(precios);
+        }
     }
 }
