@@ -2,15 +2,15 @@
     ViewData["Title"] = "Productos Nuevos";
     @model Ro.Inventario.Web.Models.ProductoModel;
 }
-
+<h2>Editar Producto</h2>
 <div>
-    <form asp-action="Nuevo" asp-controller="Productos" method="post" EncType="multipart/form-data">
+    <form asp-action="Editar" asp-controller="Productos" method="post">
         <div asp-validation-summary="All" class="text-danger"></div>
 
-        Producto Id: <span>@Model.Id.ToString()</span><br>
-        Unidad de Medida Id: <span>@Model.UnidadMedidaId.ToString()</span><br>
-        Categoria Id: <span>@Model.CategoriaId</span><br>
-        Precio Venta Id: <span>@Model.PrecioVentaId.ToString()</span><br>
+        <input asp-for="Id" type="hidden" />
+        <input asp-for="UnidadMedidaId" type="hidden" />
+        <input asp-for="CategoriaId" type="hidden" />
+        <input asp-for="PrecioVentaId" type="hidden" />
 
         <div class="mb-3">
             <label for="txtNombre" class="form-label">Nombre</label>
@@ -42,6 +42,10 @@
             <input asp-for="PrecioVenta" type="text" class="form-control" />
         </div>
 
+        <div>
+            <a class="btn btn-secondary" asp-action="Index" asp-controller="Productos">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
 
     </form>
 </div>

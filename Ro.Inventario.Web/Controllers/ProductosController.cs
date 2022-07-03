@@ -30,7 +30,7 @@ public class ProductosController : Controller
         return View();
     }
 
-    public async Task<IActionResult> Ver(Guid id)
+    public async Task<IActionResult> Editar(Guid id)
     {
         var m = await _productosSvc.LoadModel(id);
         return View(m);
