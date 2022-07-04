@@ -106,3 +106,5 @@ CREATE TABLE IF NOT EXISTS "AjustesProductos" (
        FOREIGN KEY("AjusteId") REFERENCES "Ajustes"("Id") ON DELETE CASCADE
 
 );
+
+COMMIT;
