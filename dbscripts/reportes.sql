@@ -1,14 +1,14 @@
 BEGIN TRANSACTION;
 
 
--- Vista Productos
+-- Vista Productos --PRECIOS CON FECHAS MAS RECIENTES
 DROP VIEW IF EXISTS v_productos;
 CREATE VIEW v_productos
 AS
 SELECT 
 	p.nid, p.Id, p.Nombre, c.Nombre as Categoria, um.Nombre as UnidadMedida,
 	(SELECT PrecioVenta FROM PreciosProductos pp WHERE p.Id = pp.ProductoId ORDER BY datetime(pp.FechaCreado) DESC LIMIT 1) as PrecioVenta,
-       (SELECT PrecioCompra FROM Compras c JOIN ComprasProductos cp ON c.Id = cp.CompraId WHERE cp.ProductoId = p.Id ORDER BY datetime(c.FechaCreado) DESC LIMIT 1) as PrecioCompra,
+    (SELECT PrecioCompra FROM Compras c JOIN ComprasProductos cp ON c.Id = cp.CompraId WHERE cp.ProductoId = p.Id ORDER BY datetime(c.FechaCreado) DESC LIMIT 1) as PrecioCompra,
 	p.CodigoBarrasItem,
 	p.CodigoBarrasCaja
 
@@ -43,6 +43,20 @@ FROM
 	Ajustes a JOIN AjustesProductos ap ON a.Id = ap.AjusteId JOIN v_productos p on ap.ProductoId = p.id
 WHERE TipoAjuste = 0 
 GROUP BY Date(a.FechaAjuste)
+
+-- REVISAR PRECIOS
+--SELECT 
+--	a.Id as AjusteId,
+--	p.Id as ProductoId,
+--	p.Nombre,	
+--	a.FechaAjuste, 
+--	CAST(ap.Cantidad AS FLOAT) as Cantidad,
+--	ifnull((SELECT PrecioCompra FROM Compras c JOIN ComprasProductos cp ON c.Id = cp.CompraId WHERE cp.ProductoId = p.Id AND datetime(c.FechaCreado) <= datetime(a.FechaAjuste) ORDER BY datetime(c.FechaCreado) DESC LIMIT 1),p.PrecioCompra) as PrecioCompra,
+--	ifnull((SELECT PrecioVenta FROM PreciosProductos pp WHERE p.Id = pp.ProductoId AND datetime(pp.FechaCreado) <= datetime(a.FechaAjuste) ORDER BY datetime(pp.FechaCreado) DESC LIMIT 1),p.PrecioVenta) as PrecioVenta    
+--FROM 
+--	AjustesProductos ap JOIN Ajustes a ON a.Id = ap.AjusteId JOIN v_productos p on ap.ProductoId = p.id
+--WHERE a.TipoAjuste = 0 
+--ORDER BY Date(a.FechaAjuste), a.Id
 	
 COMMIT;
 
