@@ -73,11 +73,13 @@ public class ProductosService : IProductosService
         _logger.LogInformation("UnidadMedidaId {UnidadMedidaId}", m.UnidadMedidaId);
 
         var i = await _producto.GetOne(m.Id);
+        _logger.LogInformation("U. medida, nueva {a} vieja {b}", m.UnidadMedidaId, i.UnidadMedidaId);
         if (m.Nombre != i.Nombre ||
             m.CodigoBarrasCaja != i.CodigoBarrasCaja ||
             m.CodigoBarrasItem != i.CodigoBarrasItem ||
             m.UnidadMedidaId != i.UnidadMedidaId)
         {
+            _logger.LogInformation("Editando valores de producto {id}", m.Id);
             i.Nombre = m.Nombre;
             i.UnidadMedidaId = m.UnidadMedidaId;
             i.CodigoBarrasItem = m.CodigoBarrasItem;
@@ -86,8 +88,10 @@ public class ProductosService : IProductosService
         }
 
         var cat = (await _categoriasProds.GetForProduct(m.Id)).First();
+        _logger.LogInformation("Categorias, nueva {a} vieja {b}", m.CategoriaId, cat.CategoriaId);
         if (m.CategoriaId != cat.CategoriaId)
         {
+            _logger.LogInformation("Editando categoria, nueva {id}", m.CategoriaId);
             cat.CategoriaId = m.CategoriaId;
             await _categoriasProds.Update(cat);
         }
@@ -95,6 +99,7 @@ public class ProductosService : IProductosService
         var precio = await _precios.GetOneForProduct(m.Id);
         if (precio.PrecioVenta != m.PrecioVenta)
         {
+            _logger.LogInformation("Editando precio, nuevo {precio}", m.PrecioVenta);
             var precios = new PrecioProducto[] { new PrecioProducto {
                 FechaCreado = DateTime.Now,
                 Id = Guid.NewGuid(),

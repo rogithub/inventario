@@ -43,7 +43,7 @@ public class ProductosController : Controller
             return View(m);
         }
         await _productosSvc.Actualizar(m);
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction("Index", "Productos");
     }
 
     public IActionResult Nuevo()

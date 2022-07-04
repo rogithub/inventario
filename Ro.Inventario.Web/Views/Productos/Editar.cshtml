@@ -1,6 +1,7 @@
 @{
     ViewData["Title"] = "Productos Nuevos";
     @model Ro.Inventario.Web.Models.ProductoDotnetModel;
+@using Ro.Inventario.Web.Entities;
 }
 <h2>Editar Producto</h2>
 <div>
@@ -8,8 +9,6 @@
         <div asp-validation-summary="All" class="text-danger"></div>
 
         <input asp-for="Id" type="hidden" />
-        <input asp-for="UnidadMedidaId" type="hidden" />
-        <input asp-for="CategoriaId" type="hidden" />
         <input asp-for="PrecioVentaId" type="hidden" />
 
         <div class="mb-3">
@@ -19,14 +18,19 @@
 
         <div class="mb-3">
             <label for="txtUnidadMedida" class="form-label">Unidad de Medida</label>
-            <select asp-items='@(new SelectList(Model.UnidadesMedida,"Id","Nombre"))' asp-for="UnidadMedidaId"
-                class="form-select"></select>
+            <select
+                asp-items="@(new SelectList(Model.UnidadesMedida, nameof(UnidadMedida.Id), nameof(UnidadMedida.Nombre)))"
+                asp-for="UnidadMedidaId" class="form-select"></select>
         </div>
+
+        <!--
+        https://stackoverflow.com/questions/34624034/select-tag-helper-in-asp-net-core-mvc#
+        -->
 
         <div class="mb-3">
             <label for="txtCategoria" class="form-label">Categoria</label>
-            <select asp-items='@(new SelectList(Model.Categorias,"Id", "Nombre"))' asp-for="CategoriaId"
-                class="form-select"></select>
+            <select asp-items="@(new SelectList(Model.Categorias, nameof(Categoria.Id), nameof(Categoria.Nombre)))"
+                asp-for="CategoriaId" class="form-select"></select>
         </div>
 
         <div class="mb-3">
