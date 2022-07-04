@@ -114,6 +114,7 @@ AS
 SELECT 
 	p.nid, p.Id, p.Nombre, c.Nombre as Categoria, um.Nombre as UnidadMedida,
 	(SELECT PrecioVenta FROM PreciosProductos pp WHERE p.Id = pp.ProductoId ORDER BY datetime(pp.FechaCreado) DESC LIMIT 1) as PrecioVenta,
+       (SELECT PrecioCompra FROM Compras c JOIN ComprasProductos cp ON c.Id = cp.CompraId WHERE cp.ProductoId = p.Id ORDER BY datetime(c.FechaCreado) DESC LIMIT 1) as PrecioCompra,
 	p.CodigoBarrasItem,
 	p.CodigoBarrasCaja
 
