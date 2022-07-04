@@ -37,7 +37,8 @@ SELECT
 	DATE(a.FechaAjuste) FechaVenta, 
 	SUM(ap.Cantidad) as ProductosVendidos,
 	SUM(CAST(p.PrecioCompra AS FLOAT)) as Inversion,
-	SUM(CAST(a.Pago AS FLOAT))-SUM(CAST(a.Cambio AS FLOAT)) as TotalVenta
+	SUM(CAST(a.Pago AS FLOAT))-SUM(CAST(a.Cambio AS FLOAT)) as TotalVenta,
+    SUM(CAST(a.Pago AS FLOAT))-SUM(CAST(a.Cambio AS FLOAT)) - SUM(CAST(p.PrecioCompra AS FLOAT)) as TotalGanancia
 FROM 
 	Ajustes a JOIN AjustesProductos ap ON a.Id = ap.AjusteId JOIN v_productos p on ap.ProductoId = p.id
 WHERE TipoAjuste = 0 
