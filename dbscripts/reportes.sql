@@ -29,7 +29,7 @@ FROM
 	v_productos p;
 
 
--- Reporte de Ventas
+-- Reporte de Ventas ESTA MAL NO TOMA EN CUENTA LA CANTIDAD DE LOS PRODUCTOS
 DROP VIEW IF EXISTS rpt_ventas;
 CREATE VIEW rpt_ventas
 AS
