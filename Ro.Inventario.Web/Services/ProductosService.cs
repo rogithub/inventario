@@ -82,8 +82,8 @@ public class ProductosService : IProductosService
             _logger.LogInformation("Editando valores de producto {id}", m.Id);
             i.Nombre = m.Nombre;
             i.UnidadMedidaId = m.UnidadMedidaId;
-            i.CodigoBarrasItem = m.CodigoBarrasItem;
-            i.CodigoBarrasCaja = m.CodigoBarrasCaja;
+            i.CodigoBarrasItem = string.IsNullOrWhiteSpace(m.CodigoBarrasItem) ? string.Empty : m.CodigoBarrasItem;
+            i.CodigoBarrasCaja = string.IsNullOrWhiteSpace(m.CodigoBarrasCaja) ? string.Empty : m.CodigoBarrasCaja;;
             await _producto.Update(i);
         }
 

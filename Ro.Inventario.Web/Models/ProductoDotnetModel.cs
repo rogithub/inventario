@@ -25,8 +25,8 @@ public class ProductoDotnetModel
     public string Nombre { get; set; }
     public string UnidadMedida { get; set; }
     public string Categoria { get; set; }
-    public string CodigoBarrasItem { get; set; }
-    public string CodigoBarrasCaja { get; set; }
+    public string? CodigoBarrasItem { get; set; }
+    public string? CodigoBarrasCaja { get; set; }
     public decimal PrecioVenta { get; set; }
     public List<UnidadMedida> UnidadesMedida { get; } = new List<UnidadMedida>();
     public List<Categoria> Categorias { get; } = new List<Categoria>();
