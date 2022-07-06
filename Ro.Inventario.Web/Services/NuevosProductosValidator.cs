@@ -24,7 +24,7 @@ public class NuevosProductosValidatorService : INuevosProductosValidatorService
         var length = 9;
         var arr = line.Split(",");
         var id = Guid.Empty; 
-        if (!string.IsNullOrWhiteSpace(arr[0]) && Guid.TryParse(arr[0], out id)) errors.Add("0 Guid no valido");
+        if (!string.IsNullOrWhiteSpace(arr[0]) && !Guid.TryParse(arr[0], out id)) errors.Add("0 Guid no valido");
         if (string.IsNullOrWhiteSpace(arr[1])) errors.Add("1 Nombre vacío");
         if (!decimal.TryParse(arr[2], out cantidad)) errors.Add("2 Cantidad no vália");
         if (!decimal.TryParse(arr[3], out compra)) errors.Add("3 P.Compra no válido");
