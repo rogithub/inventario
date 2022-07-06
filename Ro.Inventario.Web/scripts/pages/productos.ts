@@ -21,7 +21,7 @@ export class Productos {
     public autocomplete: Element;                
 
     constructor() {        
-        this.url = "productos/editar"
+        this.url = "productos/descargar"
         this.api = new Api();
         this.lines = ko.observableArray<IProduct>([]);
         this.autocomplete = document.querySelector("#autoComplete");
@@ -33,17 +33,36 @@ export class Productos {
             $(self.autocomplete).val("");
             return false;
         });        
-    }   
+    }    
 
-    public editar(line: IProduct): void {
+    public borrar(p: IProduct): void {
         const self = this;
-        alert("Editando!");
+        self.lines.remove(p);
+    }
+    
+    public download(): void {
+        const self = this;
+        let csv = 
+        "ID,NOMBRE,CANTIDAD,PRECIO COMPRA,PRECIO VENTA,CODIGO BARRAS ITEM,CODIGO BARRAS CAJA,UNIDAD MEDIDA,CATEGORIA\n";
+        for(let it of self.lines())
+        {
+            var row = `${it.id},${it.nombre},,,${it.precioVenta},${it.codigoBarrasItem},${it.codigoBarrasCaja},${it.unidadMedida},${it.categoria}\n`;
+            csv += row;
+        }
+       
+        var hiddenElement = document.createElement('a');  
+        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);  
+        hiddenElement.target = '_blank';  
+        
+        //provide the name for the CSV file to be downloaded  
+        hiddenElement.download = 'inventario_ProductosExistentes.csv';  
+        hiddenElement.click();  
     }
 
     public bind(): void {
         const self = this;
         BinderService.bind(self, "#productosPage");
-    }    
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function () {

@@ -13,7 +13,7 @@ var binderService_1 = __webpack_require__(575);
 var api_1 = __webpack_require__(711);
 var Productos = /** @class */ (function () {
     function Productos() {
-        this.url = "productos/editar";
+        this.url = "productos/descargar";
         this.api = new api_1.Api();
         this.lines = ko.observableArray([]);
         this.autocomplete = document.querySelector("#autoComplete");
@@ -25,9 +25,24 @@ var Productos = /** @class */ (function () {
             return false;
         });
     }
-    Productos.prototype.editar = function (line) {
+    Productos.prototype.borrar = function (p) {
         var self = this;
-        alert("Editando!");
+        self.lines.remove(p);
+    };
+    Productos.prototype.download = function () {
+        var self = this;
+        var csv = "ID,NOMBRE,CANTIDAD,PRECIO COMPRA,PRECIO VENTA,CODIGO BARRAS ITEM,CODIGO BARRAS CAJA,UNIDAD MEDIDA,CATEGORIA\n";
+        for (var _i = 0, _a = self.lines(); _i < _a.length; _i++) {
+            var it = _a[_i];
+            var row = "".concat(it.id, ",").concat(it.nombre, ",,,").concat(it.precioVenta, ",").concat(it.codigoBarrasItem, ",").concat(it.codigoBarrasCaja, ",").concat(it.unidadMedida, ",").concat(it.categoria, "\n");
+            csv += row;
+        }
+        var hiddenElement = document.createElement('a');
+        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+        hiddenElement.target = '_blank';
+        //provide the name for the CSV file to be downloaded  
+        hiddenElement.download = 'inventario_ProductosExistentes.csv';
+        hiddenElement.click();
     };
     Productos.prototype.bind = function () {
         var self = this;
