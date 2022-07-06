@@ -20,45 +20,49 @@ public class NuevosProductosValidatorService : INuevosProductosValidatorService
     private bool IsValid(string line)
     {
         decimal cantidad, compra, venta;
-        var errors = new List<int>();
-        var length = 8;
+        var errors = new List<string>();
+        var length = 9;
         var arr = line.Split(",");
-        if (string.IsNullOrWhiteSpace(arr[0])) errors.Add(0);
-        if (!decimal.TryParse(arr[1], out cantidad)) errors.Add(1);
-        if (!decimal.TryParse(arr[2], out compra)) errors.Add(2);
-        if (!decimal.TryParse(arr[3], out venta)) errors.Add(3);
-        if (string.IsNullOrWhiteSpace(arr[6])) errors.Add(6);
-        if (string.IsNullOrWhiteSpace(arr[7])) errors.Add(7);
+        var id = Guid.Empty; 
+        if (!string.IsNullOrWhiteSpace(arr[0]) && Guid.TryParse(arr[0], out id)) errors.Add("0 Guid no valido");
+        if (string.IsNullOrWhiteSpace(arr[1])) errors.Add("1 Nombre vacío");
+        if (!decimal.TryParse(arr[2], out cantidad)) errors.Add("2 Cantidad no vália");
+        if (!decimal.TryParse(arr[3], out compra)) errors.Add("3 P.Compra no válido");
+        if (!decimal.TryParse(arr[4], out venta)) errors.Add("4 P.Venta no válido");
+        if (string.IsNullOrWhiteSpace(arr[7])) errors.Add("7 Unidad de Medida no válida");
+        if (string.IsNullOrWhiteSpace(arr[8])) errors.Add("8 Categoría no válido");
 
         if (errors.Count > 0 || arr.Length != length)
         {
             _logger.LogInformation("Bad data length actual {l1} expected {l2}. Column errors: {errors}", 
             arr.Length, length, string.Join(",", errors.ToArray()).ToString());
-            _logger.LogInformation("values: {a},{b},{c},{d},{e},{f},{g},{h}",
-            arr[0],arr[1],arr[2],arr[3],arr[4],arr[5],arr[6],arr[7]);
+            _logger.LogInformation("values: {a},{b},{c},{d},{e},{f},{g},{h},{i}",
+            arr[0],arr[1],arr[2],arr[3],arr[4],arr[5],arr[6],arr[7],arr[8]);
         }
 
         return arr.Length == length && errors.Count == 0;
     }
 
     private ProductoNuevoLinea Parse(string line)
-    {
+    {        
+        var id = Guid.Empty; 
         var arr = line.Split(",");
-        decimal.TryParse(arr[1], out var cantidad);
-        decimal.TryParse(arr[2], out var compra);
-        decimal.TryParse(arr[3], out var venta);
+        Guid.TryParse(arr[0], out id);
+        decimal.TryParse(arr[2], out var cantidad);
+        decimal.TryParse(arr[3], out var compra);
+        decimal.TryParse(arr[4], out var venta);
 
-        return new ProductoNuevoLinea()
+        return new ProductoNuevoLinea(id)
         {
             // do not add id here
-            Nombre = arr[0],
+            Nombre = arr[1],
             Cantidad = cantidad,
             PrecioCompra = compra,
             PrecioVenta = venta,
-            CodigoBarrasItem = Convert.ToString(arr[4]),
-            CodigoBarrasCaja = Convert.ToString(arr[5]),
-            UnidadDeMedida = Convert.ToString(arr[6]),
-            Categoria = Convert.ToString(arr[7])
+            CodigoBarrasItem = Convert.ToString(arr[5]),
+            CodigoBarrasCaja = Convert.ToString(arr[6]),
+            UnidadDeMedida = Convert.ToString(arr[7]),
+            Categoria = Convert.ToString(arr[8])
         };
     }
 

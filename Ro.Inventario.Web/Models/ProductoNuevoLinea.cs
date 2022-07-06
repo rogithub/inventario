@@ -5,17 +5,19 @@ namespace Ro.Inventario.Web.Models;
 
 public class ProductoNuevoLinea
 {
-    public ProductoNuevoLinea()
+    public ProductoNuevoLinea(Guid id)
     {
-        Id = Guid.NewGuid();
+        EsNuevo = id == Guid.Empty;
+        Id = id == Guid.Empty ? Guid.NewGuid() : id;
         Nombre = string.Empty;
         CodigoBarrasItem = string.Empty;
         CodigoBarrasCaja = string.Empty;
         UnidadDeMedida = string.Empty;
         Categoria = string.Empty;
     }
-    public Guid Id { get; set; }
-    public string Nombre { get; set; }    
+    public bool EsNuevo { get; set; }
+    public Guid Id { get; }
+    public string Nombre { get; set; }
     public decimal Cantidad { get; set; }
     public decimal PrecioCompra { get; set; }
     public decimal PrecioVenta { get; set; }

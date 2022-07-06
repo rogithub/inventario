@@ -42,19 +42,8 @@ public class ComprasService: IComprasService
         _pValidator = pValidator;
     }    
 
-    public async Task ProcessModel(CompraNuevosProductos model, 
-        IEnumerable<string> lines)
-    {        
-        var productLines = _pValidator.ParseProducts(lines).ToArray();
-
-        var compra = new Compra();
-        compra.Proveedor = model.Proveedor;
-        compra.FechaFactura = model.FechaFactura;
-        compra.CostoPaqueteria = model.CostoPaqueteria;
-        compra.TotalFactura = model.TotalFactura;
-        await _compras.Save(compra);
-        _logger.LogInformation("Generando compra {id}", compra.Id);
-        
+    private async Task ProcesarProductosNuevos(ProductoNuevoLinea[] productLines, Compra compra)
+    {
         var unidadesMedida = (from p in productLines select p.UnidadDeMedida);
         var uMedidaCounter = await _uMedida.BulkSave(unidadesMedida.ToArray());
         _logger.LogInformation("{uMedidaCounter} Unidades de medida guardadas", uMedidaCounter);        
@@ -99,6 +88,62 @@ public class ComprasService: IComprasService
                 PrecioCompra = p.PrecioCompra
             });        
         var productosEnCompra = await _comprasProductos.BulkSave(productosComprados.ToArray());
-        _logger.LogInformation("{productosEnCompra} Produtos asociados a esta compra", productosEnCompra);
+        _logger.LogInformation("{productosEnCompra} Produtos NUEVOS asociados a esta compra", productosEnCompra);
+    }
+
+    private async Task ActualizarElPrecioVenta(Guid productoId, decimal precioVenta)
+    {
+        var precio = await _precios.GetOneForProduct(productoId);
+        if (precio.PrecioVenta != precioVenta)
+        {
+            _logger.LogInformation("Editando precio, nuevo {precio} para el producto {id}", precioVenta, productoId);
+            var precios = new PrecioProducto[] { new PrecioProducto {
+                FechaCreado = DateTime.Now,
+                Id = Guid.NewGuid(),
+                PrecioVenta = precioVenta,
+                ProductoId = productoId
+            } };
+            await _precios.BulkSave(precios);
+        }
+    }
+    
+
+    private async Task ProcesarProductosExistentes(ProductoNuevoLinea[] productLines, Compra compra)
+    {        
+        foreach (var p in productLines)
+        {
+            await ActualizarElPrecioVenta(p.Id, p.PrecioVenta);
+        }
+
+        var productosComprados = 
+            (from p in productLines
+            select new CompraProducto()
+            {
+                ProductoId = p.Id,
+                Cantidad = p.Cantidad,
+                CompraId = compra.Id,
+                PrecioCompra = p.PrecioCompra
+            });        
+        var productosEnCompra = await _comprasProductos.BulkSave(productosComprados.ToArray());
+        _logger.LogInformation("{productosEnCompra} Produtos EXISTENTES asociados a esta compra", productosEnCompra);
+    }
+
+    public async Task ProcessModel(CompraNuevosProductos model, 
+        IEnumerable<string> lines)
+    {        
+        var productLines = _pValidator.ParseProducts(lines).ToArray();
+
+        var compra = new Compra();
+        compra.Proveedor = model.Proveedor;
+        compra.FechaFactura = model.FechaFactura;
+        compra.CostoPaqueteria = model.CostoPaqueteria;
+        compra.TotalFactura = model.TotalFactura;
+        await _compras.Save(compra);
+        _logger.LogInformation("Generando compra {id}", compra.Id);
+        
+        var nuevos = (from p in productLines where p.EsNuevo select p).ToArray();
+        await ProcesarProductosNuevos(nuevos, compra);
+        var existentes = (from p in productLines where !p.EsNuevo select p).ToArray();
+        await ProcesarProductosExistentes(existentes, compra);
     }
 }
