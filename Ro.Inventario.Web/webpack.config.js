@@ -3,7 +3,8 @@ const path = require('path');
 module.exports = {
     entry: {
 		ventas: './scripts/pages/ventas.ts',
-		productos: './scripts/pages/productos.ts'
+		productos: './scripts/pages/productos.ts',
+		stock: './scripts/pages/stock.ts'
     },
     mode: 'production',
     optimization: {

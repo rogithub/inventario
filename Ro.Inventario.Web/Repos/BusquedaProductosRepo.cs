@@ -10,6 +10,7 @@ public interface IBusquedaProductosRepo
 {
     Task<IEnumerable<ProductoEncontrado>> EnCategoria(string pattern, Guid categoriaId);
     Task<IEnumerable<ProductoEncontrado>> FulSearchText(string pattern);
+    Task<ProductoEncontrado> GetOne(Guid id);
 }
 
 public class BusquedaProductosRepo : IBusquedaProductosRepo
@@ -63,6 +64,17 @@ public class BusquedaProductosRepo : IBusquedaProductosRepo
             "@pattern".ToParam(DbType.String, pattern)
         );
         return Db.GetRows(cmd, GetData);
+    }
+
+    public Task<ProductoEncontrado> GetOne(Guid id)
+    {        
+        var sql =
+            @"SELECT * FROM v_inventario WHERE id=@id;";
+        var cmd = sql.ToCmd
+        (
+            "@id".ToParam(DbType.String, id.ToString())
+        );
+        return Db.GetOneRow(cmd, GetData);
     }
 
     private ProductoEncontrado GetData(IDataReader dr)
