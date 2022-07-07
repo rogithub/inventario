@@ -28,7 +28,7 @@ FROM
 	v_productos p;
 
 
--- REVISAR (count debe ser AjustesProductos count)
+-- v_ventas_productos (count debe ser AjustesProductos count)
 DROP VIEW IF EXISTS v_ventas_productos;
 CREATE VIEW v_ventas_productos
 AS
@@ -61,27 +61,19 @@ FROM
 			ORDER BY datetime(c.FechaFactura) DESC LIMIT 1)
 WHERE TipoAjuste = 0;
 
--- PRUEBAS
--- 
--- SELECT 
--- 	FechaAjuste,
--- 	SUM(UltimoPrecioCompra * Cantidad) as Inversion,
--- 	SUM(UltimoPrecioVenta * Cantidad) as Venta,	
--- 	SUM(UltimoPrecioVenta * Cantidad) - SUM(UltimoPrecioCompra * Cantidad) as Ganancia
--- FROM v_ventas_productos
--- GROUP BY date(FechaAjuste)
--- ORDER BY FechaAjuste;
--- 
--- --                      inver   vta     vta re  ganancia
--- --2022-06-06 14:07:57	55.16	89.0	119.0	33.84
--- SELECT 
--- 	FechaAjuste,Pago,Cambio,Cantidad,UltimoPrecioCompra,UltimoPrecioVenta 
--- FROM 
--- 	v_ventas_productos
--- WHERE 
--- 	date(FechaAjuste) = date('2022-05-30')
---  ORDER BY FechaAjuste 
--- 
+-- rpt_estimado_ventas Estimado de ventas basado en precios estimados
+DROP VIEW IF EXISTS rpt_estimado_ventas;
+CREATE VIEW rpt_estimado_ventas
+AS
+SELECT 
+	FechaAjuste,
+	COUNT(DISTINCT(AjusteId)) as NumeroVentas,
+	SUM(UltimoPrecioCompra * Cantidad) as Inversion,
+	SUM(UltimoPrecioVenta * Cantidad) as Venta,	
+	SUM(UltimoPrecioVenta * Cantidad) - SUM(UltimoPrecioCompra * Cantidad) as Ganancia
+FROM v_ventas_productos
+GROUP BY date(FechaAjuste)
+ORDER BY FechaAjuste;
 
 	
 COMMIT;
