@@ -7,11 +7,10 @@ CREATE VIEW v_productos
 AS
 SELECT 
 	p.nid, p.Id, p.Nombre, c.Nombre as Categoria, um.Nombre as UnidadMedida,
-	(SELECT PrecioVenta FROM PreciosProductos pp WHERE p.Id = pp.ProductoId ORDER BY datetime(pp.FechaCreado) DESC LIMIT 1) as PrecioVenta,
-    (SELECT PrecioCompra FROM Compras c JOIN ComprasProductos cp ON c.Id = cp.CompraId WHERE cp.ProductoId = p.Id ORDER BY datetime(c.FechaCreado) DESC LIMIT 1) as PrecioCompra,
+	(SELECT PrecioVenta FROM PreciosProductos pp WHERE p.Id = pp.ProductoId ORDER BY datetime(pp.FechaCreado) DESC LIMIT 1) as UltimoPrecioVenta,
+    (SELECT AVG (PrecioCompra) FROM Compras c JOIN ComprasProductos cp ON c.Id = cp.CompraId WHERE cp.ProductoId = p.Id) as PrecioCompraPromedio,
 	p.CodigoBarrasItem,
 	p.CodigoBarrasCaja
-
 FROM Productos p 
 JOIN CategoriasProductos cp ON p.Id = cp.ProductoId
 JOIN Categorias c ON c.Id = cp.CategoriaId
@@ -24,25 +23,26 @@ AS
 SELECT 
 	p.*,	
 	((SELECT ifnull(SUM(cp.Cantidad), 0) FROM ComprasProductos cp WHERE cp.ProductoId = p.Id) 
-	- (SELECT ifnull(SUM(ap.Cantidad), 0) FROM AjustesProductos ap WHERE ap.ProductoId = p.Id)) AS Stock
+	- (SELECT ifnull(SUM(ap.Cantidad), 0) FROM AjustesProductos ap JOIN Ajustes a on a.Id = ap.AjusteId WHERE a.TipoAjuste=0 AND ap.ProductoId = p.Id)) AS Stock
 FROM 
 	v_productos p;
 
 
--- Reporte de Ventas ESTA MAL NO TOMA EN CUENTA LA CANTIDAD DE LOS PRODUCTOS
-DROP VIEW IF EXISTS rpt_ventas;
-CREATE VIEW rpt_ventas
+DROP VIEW IF EXISTS v_ventas_productos;
+CREATE VIEW v_ventas_productos
 AS
 SELECT 
-	DATE(a.FechaAjuste) FechaVenta, 
-	SUM(ap.Cantidad) as ProductosVendidos,
-	SUM(CAST(p.PrecioCompra AS FLOAT)) as Inversion,
-	SUM(CAST(a.Pago AS FLOAT))-SUM(CAST(a.Cambio AS FLOAT)) as TotalVenta,
-    SUM(CAST(a.Pago AS FLOAT))-SUM(CAST(a.Cambio AS FLOAT)) - SUM(CAST(p.PrecioCompra AS FLOAT)) as TotalGanancia
+	ap.Id as AjusteProductoId,
+	ap.ProductoId,
+	ap.AjusteId,
+	ap.Cantidad,
+	cast(pp.PrecioVenta AS FLOAT) as UltimoPrecioVenta,
+	cast(cp.PrecioCompra AS FLOAT) as UltimoPrecioCompra	
 FROM 
-	Ajustes a JOIN AjustesProductos ap ON a.Id = ap.AjusteId JOIN v_productos p on ap.ProductoId = p.id
+	Ajustes a JOIN AjustesProductos ap ON a.Id = ap.AjusteId JOIN productos p on ap.ProductoId = p.id
+	JOIN PreciosProductos pp ON pp.Id = (SELECT Id FROM PreciosProductos WHERE  datetime( FechaCreado ) <= datetime( a.FechaAjuste ) AND ProductoId = p.Id ORDER BY datetime(FechaCreado) DESC LIMIT 1)
+	JOIN ComprasProductos cp ON cp.Id = (SELECT cp.Id FROM ComprasProductos cp JOIN Compras c on cp.CompraId = c.Id WHERE datetime( c.FechaFactura ) <= datetime( a.FechaAjuste ) AND pp.ProductoId = p.Id ORDER BY datetime(c.FechaFactura) DESC LIMIT 1)
 WHERE TipoAjuste = 0 
-GROUP BY Date(a.FechaAjuste)
 
 -- REVISAR PRECIOS
 --SELECT 
