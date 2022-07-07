@@ -28,7 +28,7 @@ FROM
 	v_productos p;
 
 
--- REVISAR NO REGRESA TODOS LOS PRODUCTOS (solo los que se han vendido)
+-- REVISAR NO REGRESA TODOS LOS PRODUCTOS (solo los que se han vendido count debe ser ap count)
 DROP VIEW IF EXISTS v_ventas_productos;
 CREATE VIEW v_ventas_productos
 AS
