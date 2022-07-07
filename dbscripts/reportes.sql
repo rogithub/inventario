@@ -75,7 +75,11 @@ FROM v_ventas_productos
 GROUP BY date(FechaAjuste)
 ORDER BY FechaAjuste;
 
-	
+
+
+-- Experimental Productos mas vendidos
+SELECT p.Nombre, SUM(v.Cantidad) as Veces FROM Productos p JOIN v_ventas_productos v on p.Id = v.ProductoId GROUP BY p.Id ORDER BY Veces DESC;
+
 COMMIT;
 
 
