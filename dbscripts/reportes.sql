@@ -36,13 +36,13 @@ SELECT
 	ap.Id as AjusteProductoId,
 	ap.ProductoId,
 	ap.AjusteId,
-	ap.Cantidad,
-	cast(pp.PrecioVenta AS FLOAT) as UltimoPrecioVenta,
-	cast(cp.PrecioCompra AS FLOAT) as UltimoPrecioCompra	
+	ap.Cantidad
+	--, cast(pp.PrecioVenta AS FLOAT) as UltimoPrecioVenta,
+	--, cast(cp.PrecioCompra AS FLOAT) as UltimoPrecioCompra	
 FROM 
-	Ajustes a JOIN AjustesProductos ap ON a.Id = ap.AjusteId JOIN productos p on ap.ProductoId = p.id
-	JOIN PreciosProductos pp ON pp.Id = (SELECT Id FROM PreciosProductos WHERE  datetime( FechaCreado ) <= datetime( a.FechaAjuste ) AND ProductoId = p.Id ORDER BY datetime(FechaCreado) DESC LIMIT 1)
-	JOIN ComprasProductos cp ON cp.Id = (SELECT cp.Id FROM ComprasProductos cp JOIN Compras c on cp.CompraId = c.Id WHERE datetime( c.FechaFactura ) <= datetime( a.FechaAjuste ) AND pp.ProductoId = p.Id ORDER BY datetime(c.FechaFactura) DESC LIMIT 1)
+	AjustesProductos ap JOIN Ajustes a ON a.Id = ap.AjusteId JOIN productos p on ap.ProductoId = p.id
+	--JOIN PreciosProductos pp ON pp.Id = (SELECT Id FROM PreciosProductos WHERE  datetime( FechaCreado ) <= datetime( a.FechaAjuste ) AND ProductoId = p.Id ORDER BY datetime(FechaCreado) DESC LIMIT 1)
+	--JOIN ComprasProductos cp ON cp.Id = (SELECT cp.Id FROM ComprasProductos cp JOIN Compras c on cp.CompraId = c.Id WHERE datetime( c.FechaFactura ) <= datetime( a.FechaAjuste ) AND pp.ProductoId = p.Id ORDER BY datetime(c.FechaFactura) DESC LIMIT 1)
 WHERE TipoAjuste = 0 
 
 -- REVISAR PRECIOS
