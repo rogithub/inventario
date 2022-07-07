@@ -83,7 +83,12 @@ SELECT p.Nombre, SUM(v.Cantidad) as Veces FROM Productos p JOIN v_ventas_product
 -- Rendimiento
 SELECT p.Nombre, v.UltimoPrecioVenta - v.UltimoPrecioCompra as Rendimiento FROM Productos p JOIN v_ventas_productos v on p.Id = v.ProductoId GROUP BY p.Id ORDER BY Rendimiento DESC;
 
+-- Combinado
 
+SELECT 
+	p.Nombre, v.UltimoPrecioVenta - v.UltimoPrecioCompra as Rendimiento, 
+	SUM(v.Cantidad) as Veces 
+FROM Productos p JOIN v_ventas_productos v on p.Id = v.ProductoId GROUP BY p.Id ORDER BY Rendimiento,Veces DESC;
 
 COMMIT;
 
