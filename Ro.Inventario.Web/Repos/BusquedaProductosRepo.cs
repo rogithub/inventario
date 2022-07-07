@@ -74,7 +74,7 @@ public class BusquedaProductosRepo : IBusquedaProductosRepo
             Nombre = dr.GetString("Nombre"),
             Categoria = dr.GetString("Categoria"),
             UnidadMedida = dr.GetString("UnidadMedida"),
-            PrecioVenta = dr.GetDecimal("PrecioVenta"),
+            PrecioVenta = dr.GetDecimal("UltimoPrecioVenta"),
             CodigoBarrasItem = dr.GetString("CodigoBarrasItem"),
             CodigoBarrasCaja = dr.GetString("CodigoBarrasCaja"),
             Stock = dr.GetDecimal("Stock")
