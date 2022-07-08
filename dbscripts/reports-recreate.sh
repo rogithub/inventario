@@ -13,6 +13,7 @@ if [ ! -d "../$PROJ_DIR/$DEV_DB_DIR" ]; then
 fi
 
 echo "getting lates db from $DB_URL"
-curl -O "../$PROJ_DIR/$DEV_DB_DIR/$DBFILE" "$DB_URL"
+curl -O "$DB_URL"
+mv "./$DBFILE" "../$PROJ_DIR/$DEV_DB_DIR/$DBFILE"
 echo "executing ./reportes.sql"
 sqlite3 "../$PROJ_DIR/$DEV_DB_DIR/$DBFILE" ".read ./$SCRIPTFILE"
