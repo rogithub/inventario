@@ -52,6 +52,18 @@ CREATE TABLE IF NOT EXISTS "PreciosProductos" (
        FOREIGN KEY("ProductoId") REFERENCES "Productos"("Id") ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS "DevolucionesProductos" (
+       "Id"  	    	  TEXT NOT NULL UNIQUE,
+       "AjusteId"      TEXT NOT NULL,
+       "ProductoId"    TEXT NOT NULL,
+       "FechaCreado"	  TEXT NOT NULL,
+       "Motivo"	  TEXT,            -- Productos en buen estado vuelven al stock, en mal estado, se captura una merma, 
+                                        -- en ambos casos producto sale de la venta.
+       "ProductoEnBuenEstado"  INTEGER, -- 1 si está en buen estado, 0 no está en buen estado
+       PRIMARY KEY("Id"),
+       FOREIGN KEY("ProductoId") REFERENCES "Productos"("Id") ON DELETE CASCADE
+       FOREIGN KEY("AjusteId") REFERENCES "Ajustes"("Id") ON DELETE CASCADE
+);
 
 CREATE TABLE IF NOT EXISTS "CategoriasProductos" (
        "Id"  	    	    TEXT NOT NULL UNIQUE,
