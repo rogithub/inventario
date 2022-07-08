@@ -36,7 +36,7 @@ SELECT
 	ap.Id as AjusteProductoId,
 	ap.ProductoId,
 	ap.AjusteId,
-	datetime( a.FechaAjuste ) as FechaAjuste,
+	date( a.FechaAjuste ) as FechaAjuste,
 	cast(a.Pago AS FLOAT) as Pago,
 	cast(a.Cambio AS FLOAT) as Cambio,
 	cast(ap.Cantidad AS FLOAT) as Cantidad
@@ -72,23 +72,21 @@ SELECT
 	SUM(UltimoPrecioVenta * Cantidad) as Venta,	
 	SUM(UltimoPrecioVenta * Cantidad) - SUM(UltimoPrecioCompra * Cantidad) as Ganancia
 FROM v_ventas_productos
-GROUP BY date(FechaAjuste)
+GROUP BY FechaAjuste
 ORDER BY FechaAjuste;
 
 
-
--- Experimental Productos mas vendidos
-SELECT p.Nombre, SUM(v.Cantidad) as Veces FROM Productos p JOIN v_ventas_productos v on p.Id = v.ProductoId GROUP BY p.Id ORDER BY Veces DESC;
-
 -- Rendimiento
-SELECT p.Nombre, v.UltimoPrecioVenta - v.UltimoPrecioCompra as Rendimiento FROM Productos p JOIN v_ventas_productos v on p.Id = v.ProductoId GROUP BY p.Id ORDER BY Rendimiento DESC;
-
--- Combinado
-
+DROP VIEW IF EXISTS rpt_estimado_ventas;
+CREATE VIEW rpt_estimado_ventas
+AS
 SELECT 
-	p.Nombre, v.UltimoPrecioVenta - v.UltimoPrecioCompra as Rendimiento, 
-	SUM(v.Cantidad) as Veces 
-FROM Productos p JOIN v_ventas_productos v on p.Id = v.ProductoId GROUP BY p.Id ORDER BY Rendimiento,Veces DESC;
+	p.Nombre, 
+	v.UltimoPrecioVenta - v.UltimoPrecioCompra as Rendimiento, 
+	SUM(v.Cantidad) as VecesVendido
+FROM Productos p JOIN v_ventas_productos v on p.Id = v.ProductoId 
+GROUP BY p.Id 
+ORDER BY FechaAjuste DESC;
 
 COMMIT;
 
