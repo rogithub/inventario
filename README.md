@@ -56,10 +56,8 @@ podman build -f Containerfile -t inventario-img && podman run -v $(pwd)/Ro.Inven
 
 ## refresh reports
 ``` bash
-sqlite3 Ro.Inventario.Web/Db/inventario.db ".read ./dbscripts/reportes.sql"
+podman exec inventario sqlite3 /app/Db/inventario.db < ./dbscripts/reportes.sql
 ```
-
-
 
 ## user & groups
 ``` bash
