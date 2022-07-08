@@ -54,6 +54,13 @@ podman rmi inventario-img
 podman build -f Containerfile -t inventario-img && podman run -v $(pwd)/Ro.Inventario.Web/Db:/app/Db -d --name inventario -p 5002:5002 inventario-img
 ```
 
+## refresh reports
+``` bash
+sqlite3 Ro.Inventario.Web/Db/inventario.db ".read ./dbscripts/reportes.sql"
+```
+
+
+
 ## user & groups
 ``` bash
 id
