@@ -77,8 +77,8 @@ ORDER BY FechaAjuste;
 
 
 -- Rendimiento
-DROP VIEW IF EXISTS rpt_estimado_ventas;
-CREATE VIEW rpt_estimado_ventas
+DROP VIEW IF EXISTS rpt_rendimiento_productos;
+CREATE VIEW rpt_rendimiento_productos
 AS
 SELECT 
 	p.Nombre, 
