@@ -37,6 +37,9 @@
                 cambio @r.Venta.Cambio.ToString("C", localizacion)
                 | Total @((r.Venta.Pago - r.Venta.Cambio).ToString("C", localizacion))
             </th>
+            <th>
+                <a class="btn btn-warning" asp-route-ventaId="@r.Venta.Id" asp-action="Devoluciones" asp-controller="Ventas">Devoluciones</a>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -45,6 +48,7 @@
                 <tr>
                     <td>@p.Cantidad</td>
                     <td>@p.Nombre</td>
+                    <td></td>
                 </tr>
             }
         </tbody>
