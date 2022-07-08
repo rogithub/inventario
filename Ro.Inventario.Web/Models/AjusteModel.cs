@@ -9,7 +9,7 @@ public class AjusteModel
 {
     public AjusteModel()
     {
-        this.ProductoId = Guid.
+        this.ProductoId = Guid.NewGuid();
     }
     
     public Guid ProductoId { get; set; }
