@@ -26,11 +26,10 @@ remove_file_if_exists $OLD
 
 remove_file_if_exists "./$DBFILE"
 
-
 cat $SCRIPTFILE | sqlite3 $DBFILE
-mv $DBFILE $OLD
 
 if [ -f "./$EXTRASCRIPTFILE" ]; then
-    sqlite3 $OLD < "./$EXTRASCRIPTFILE"
+    sqlite3 $DBFILE < "./$EXTRASCRIPTFILE"
 fi
 
+mv $DBFILE $OLD
