@@ -1,4 +1,13 @@
 BEGIN TRANSACTION;
+
+CREATE TABLE IF NOT EXISTS "Settings" (
+       "Key"  	       TEXT NOT NULL UNIQUE,
+       "Value"         TEXT NULL,
+       PRIMARY KEY("Key")
+);
+
+INSERT INTO Settings (Key, Value) VALUES ("IVA", "0.16");
+
 CREATE TABLE IF NOT EXISTS "Categorias" (
        "Id"  	    	  TEXT NOT NULL UNIQUE,
        "Nombre"	  TEXT NOT NULL,

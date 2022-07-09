@@ -12,6 +12,7 @@ public class VentasController : Controller
 {
     private readonly IAjustesProductosRepo _ventasProds;
     private readonly IAjustesRepo _ventas;
+    private readonly ISettingsRepo _settings;
     private readonly ILogger<VentasController> _logger;
 
     private readonly IVentasService _ventasService;
@@ -20,6 +21,7 @@ public class VentasController : Controller
         ILogger<VentasController> logger,
         IAjustesProductosRepo ventasProds,
         IAjustesRepo ventas,
+        ISettingsRepo settings,
         IVentasService ventasService
         )
     {
@@ -27,6 +29,7 @@ public class VentasController : Controller
         _ventasProds = ventasProds;
         _ventas = ventas;
         _ventasService = ventasService;
+        _settings = settings;
     }
 
     public async Task<IActionResult> Index(DateTime? fecha)
@@ -53,6 +56,7 @@ public class VentasController : Controller
         v.Pago = model.Pago;
         v.Cambio = model.Cambio;
         v.FechaVenta = model.Fecha;
+        v.Iva = await _settings.GetValue("IVA", (iva) => decimal.Parse(iva));
         var intVenta = await _ventas.Save(v);
         var prods = (from l in model.Items
                      select new VentaProducto()
