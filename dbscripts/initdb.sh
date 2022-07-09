@@ -1,5 +1,6 @@
 #!/bin/bash
 
+EXTRASCRIPTFILE="reportes.sql"
 DBFILE="inventario.db"
 SCRIPTFILE="inventario.sql"
 PROJ_DIR="Ro.Inventario.Web"
@@ -28,3 +29,8 @@ remove_file_if_exists "./$DBFILE"
 
 cat $SCRIPTFILE | sqlite3 $DBFILE
 mv $DBFILE $OLD
+
+if [ ! -f "./$EXTRASCRIPTFILE" ]; then
+    sqlite3 $OLD < "./$EXTRASCRIPTFILE"
+fi
+
