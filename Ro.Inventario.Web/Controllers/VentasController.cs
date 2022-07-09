@@ -10,16 +10,16 @@ namespace Ro.Inventario.Web.Controllers;
 
 public class VentasController : Controller
 {
-    private readonly IVentasProductosRepo _ventasProds;
-    private readonly IVentasRepo _ventas;
+    private readonly IAjustesProductosRepo _ventasProds;
+    private readonly IAjustesRepo _ventas;
     private readonly ILogger<VentasController> _logger;
 
     private readonly IVentasService _ventasService;
 
     public VentasController(
         ILogger<VentasController> logger,
-        IVentasProductosRepo ventasProds,
-        IVentasRepo ventas,
+        IAjustesProductosRepo ventasProds,
+        IAjustesRepo ventas,
         IVentasService ventasService
         )
     {
@@ -62,7 +62,7 @@ public class VentasController : Controller
         _logger.LogInformation("Venta cambio {cambio}", model.Cambio);
         _logger.LogInformation("Items {len}", model.Items.Length);
 
-        var intVentaProducts = await _ventasProds.BulkSave(prods);
+        var intVentaProducts = await _ventasProds.BulkSave(prods.Cast<AjusteProducto>().ToArray());
 
         return Json(new int[] { intVenta, intVentaProducts });
     }

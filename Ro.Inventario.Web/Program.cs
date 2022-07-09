@@ -22,8 +22,8 @@ builder.Services.AddScoped<ICategoriasProductosRepo, CategoriasProductosRepo>();
 builder.Services.AddScoped<IComprasService, ComprasService>();
 builder.Services.AddScoped<INuevosProductosValidatorService, NuevosProductosValidatorService>();
 builder.Services.AddScoped<IBusquedaProductosRepo, BusquedaProductosRepo>();
-builder.Services.AddScoped<IVentasProductosRepo, VentasProductosRepo>();
-builder.Services.AddScoped<IVentasRepo, VentasRepo>();
+builder.Services.AddScoped<IAjustesProductosRepo, AjustesProductosRepo>();
+builder.Services.AddScoped<IAjustesRepo, AjustesRepo>();
 builder.Services.AddScoped<IProductosService, ProductosService>();
 builder.Services.AddScoped<IVentasService, VentasService>();
 

@@ -66,8 +66,9 @@ public class ProductosController : Controller
     [HttpPost]
     public async Task<IActionResult> Stock([FromForm] AjusteModel model)
     {
-        var p = await _pBuscar.GetOne(id);
-        return View(p);
+        //var p = await _pBuscar.GetOne(id);
+        //return View(p);
+        return View();
     }
 
     [HttpPost]

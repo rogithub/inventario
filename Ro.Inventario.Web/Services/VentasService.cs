@@ -10,14 +10,14 @@ public interface IVentasService
 public class VentasService : IVentasService
 {
     private IProductosRepo _productos;
-    private IVentasRepo _ventas;
-    private IVentasProductosRepo _ventasProductos;
+    private IAjustesRepo _ventas;
+    private IAjustesProductosRepo _ventasProductos;
     private readonly ILogger<VentasService> _logger;
     public VentasService(
         ILogger<VentasService> logger,
         IProductosRepo productRepo,
-        IVentasProductosRepo ventasProductos,
-        IVentasRepo ventas)
+        IAjustesProductosRepo ventasProductos,
+        IAjustesRepo ventas)
     {
         _logger = logger;
         _ventas = ventas;
@@ -28,7 +28,7 @@ public class VentasService : IVentasService
     public async Task<VentasDiaResponseModel> Load(DateTime fecha)
     {
         var lista = new List<VentasPorDiaRowModel>();
-        var ventas = await _ventas.ForDate(fecha);
+        var ventas = await _ventas.VentasPorFecha(fecha);
         foreach (var v in ventas)
         {
             var ajustesProductos = await _ventasProductos.GetForAjuste(v.Id);
