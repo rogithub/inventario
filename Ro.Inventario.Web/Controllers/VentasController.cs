@@ -52,13 +52,8 @@ public class VentasController : Controller
 
     public async Task<IActionResult> GetVentaData(Guid ventaId)
     {
-        var venta = await _ventas.GetOne(ventaId);
-        var items = await _ventasProds.GetForAjuste(ventaId);
-        return Json(new
-        {
-            venta = venta,
-            items = items
-        });
+        var data = await _ventasService.CargarDevolucion(ventaId);
+        return Json(data);
     }
 
     [HttpPost]
