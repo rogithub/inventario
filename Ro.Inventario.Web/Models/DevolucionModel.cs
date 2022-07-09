@@ -27,6 +27,8 @@ public class DevolucionProductoModel
     public decimal Cantidad { get; set; }
     [JsonProperty(PropertyName = "CantidadDevuelta")]
     public decimal CantidadDevuelta { get; set; }
+    [JsonProperty(PropertyName = "buenEstado")]
+    public bool BuenEstado { get; set; }
     [JsonProperty(PropertyName = "PrecioUnitario")]
     public decimal PrecioUnitario { get; set; }
 

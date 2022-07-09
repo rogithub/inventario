@@ -50,6 +50,7 @@ var ProductLine = /** @class */ (function () {
     function ProductLine(l) {
         this.producto = l.producto;
         this.cantidadDevuelta = ko.observable();
+        this.buenEstado = ko.observable();
         this.ajusteProductoId = l.ajusteProductoId;
         this.cantidad = l.cantidad;
         this.precioUnitario = l.precioUnitario;
