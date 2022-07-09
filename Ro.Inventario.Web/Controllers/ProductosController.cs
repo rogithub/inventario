@@ -11,6 +11,7 @@ public class ProductosController : Controller
 {
     private readonly ILogger<ProductosController> _logger;
     private readonly IComprasService _comprasSvc;
+    private readonly IVentasService _ventasSvc;
     private readonly IProductosService _productosSvc;
     private readonly INuevosProductosValidatorService _pValidator;
     private readonly IBusquedaProductosRepo _pBuscar;
@@ -19,6 +20,7 @@ public class ProductosController : Controller
     public ProductosController(
         ILogger<ProductosController> logger,
         IComprasService comprasService,
+        IVentasService ventasSvc,
         IProductosService productosService,
         IBusquedaProductosRepo pBuscar,
         INuevosProductosValidatorService pValidator)
@@ -26,6 +28,7 @@ public class ProductosController : Controller
         _logger = logger;
         _pBuscar = pBuscar;
         _comprasSvc = comprasService;
+        _ventasSvc = ventasSvc;
         _productosSvc = productosService;
         _pValidator = pValidator;
     }
@@ -64,11 +67,10 @@ public class ProductosController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Stock([FromForm] AjusteModel model)
+    public async Task<IActionResult> Stock([FromForm] StockAjusteModel model)
     {
-        //var p = await _pBuscar.GetOne(id);
-        //return View(p);
-        return View();
+        await _ventasSvc.GuardarAjusteStock(model);
+        return RedirectToAction("Index", "Productos");
     }
 
     [HttpPost]

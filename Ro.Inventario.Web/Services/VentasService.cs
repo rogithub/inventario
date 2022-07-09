@@ -1,3 +1,4 @@
+using Ro.Inventario.Web.Entities;
 using Ro.Inventario.Web.Models;
 using Ro.Inventario.Web.Repos;
 namespace Ro.Inventario.Web.Services;
@@ -5,6 +6,7 @@ namespace Ro.Inventario.Web.Services;
 public interface IVentasService
 {
     Task<VentasDiaResponseModel> Load(DateTime fecha);
+    Task GuardarAjusteStock(StockAjusteModel stock);
 }
 
 public class VentasService : IVentasService
@@ -23,6 +25,18 @@ public class VentasService : IVentasService
         _ventas = ventas;
         _productos = productRepo;
         _ventasProductos = ventasProductos;
+    }
+
+    public async Task GuardarAjusteStock(StockAjusteModel stock)
+    {
+        var a = new Ajuste();
+        await _ventas.Save(a);
+        var ap = new AjusteProducto();
+        ap.AjusteId = a.Id;
+        ap.Cantidad = stock.Cantidad;
+        ap.Notas = stock.Motivo;
+        ap.ProductoId = stock.ProductoId;
+        await _ventasProductos.Save(ap);
     }
 
     public async Task<VentasDiaResponseModel> Load(DateTime fecha)
