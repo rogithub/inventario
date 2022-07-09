@@ -30,6 +30,7 @@ public class VentasService : IVentasService
     public async Task GuardarAjusteStock(StockAjusteModel stock)
     {
         var a = new Ajuste();
+        a.TipoAjuste = stock.TipoAjuste;
         await _ventas.Save(a);
         var ap = new AjusteProducto();
         ap.AjusteId = a.Id;
