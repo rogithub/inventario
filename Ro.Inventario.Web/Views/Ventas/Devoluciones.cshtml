@@ -2,12 +2,50 @@
     ViewData["Title"] = "Devoluciones";
 }
 @section Scripts {
-
+<script src="~/js/shared.js"></script>
+<script src="~/js/devoluciones.js"></script>
 }
 
 <form id="devolucionesPage" data-bind="submit: guardar.bind($data)">
 
     <h2>Devoluciones</h2>
 
+    <input type="hidden" value='@ViewData["ventaId"]' id="hidVentaId" />
+
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th colspan="8">Artículos</th>
+            </tr>
+            <tr>
+                <th scope="col">Producto</th>
+                <th scope="col">Categoria</th>
+                <th scope="col">Unidad de Medida</th>
+                <th scope="col">Precio de Venta</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Total</th>
+                <th scope="col">Cantidad Devuelta</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: { data: lines, as: 'l' }">
+            <tr>
+                <td data-bind="text: l.producto.nombre"></td>
+                <td data-bind="text: l.producto.categoria"></td>
+                <td data-bind="text: l.producto.unidadMedida"></td>
+                <td data-bind="text: l.producto.precioUnitario"></td>
+                <td data-bind="text: l.producto.cantidad">
+
+                </td>
+                <td data-bind="text: (l.producto.cantidad * l.producto.precioUnitario)">
+
+                </td>
+                <td>
+                    <input type="number" step=".01" placeHolder="numérico" data-bind="value: l.cantidadDevuelta"
+                        style="width: 90px;" />
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
 
 </form>

@@ -46,7 +46,19 @@ public class VentasController : Controller
 
     public IActionResult Devoluciones(Guid ventaId)
     {
+        ViewData["ventaId"] = ventaId.ToString();
         return View();
+    }
+
+    public async Task<IActionResult> GetVentaData(Guid ventaId)
+    {
+        var venta = await _ventas.GetOne(ventaId);
+        var items = await _ventasProds.GetForAjuste(ventaId);
+        return Json(new
+        {
+            venta = venta,
+            items = items
+        });
     }
 
     [HttpPost]
