@@ -47,9 +47,14 @@ exports.Devolucion = void 0;
 var binderService_1 = __webpack_require__(575);
 var api_1 = __webpack_require__(711);
 var ProductLine = /** @class */ (function () {
-    function ProductLine(prod) {
-        this.producto = prod;
+    function ProductLine(l) {
+        this.producto = l.producto;
         this.cantidadDevuelta = ko.observable();
+        this.ajusteProductoId = l.ajusteProductoId;
+        this.cantidad = l.cantidad;
+        this.precioUnitario = l.precioUnitario;
+        this.categoria = l.categoria;
+        this.unidadMedida = l.unidadMedida;
     }
     return ProductLine;
 }());
@@ -71,8 +76,9 @@ var Devolucion = /** @class */ (function () {
                         return [4 /*yield*/, self.api.get("".concat(self.url, "?ventaId=").concat(ventaId))];
                     case 1:
                         data = _b.sent();
+                        console.dir(data);
                         self.venta(data.venta);
-                        for (_i = 0, _a = data.items; _i < _a.length; _i++) {
+                        for (_i = 0, _a = data.devueltos; _i < _a.length; _i++) {
                             it = _a[_i];
                             self.lines.push(new ProductLine(it));
                         }

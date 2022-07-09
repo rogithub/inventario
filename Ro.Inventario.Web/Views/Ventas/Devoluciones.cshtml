@@ -30,13 +30,13 @@
         <tbody data-bind="foreach: { data: lines, as: 'l' }">
             <tr>
                 <td data-bind="text: l.producto.nombre"></td>
-                <td data-bind="text: l.producto.categoria"></td>
-                <td data-bind="text: l.producto.unidadMedida"></td>
-                <td data-bind="text: l.producto.precioUnitario"></td>
-                <td data-bind="text: l.producto.cantidad">
+                <td data-bind="text: l.categoria"></td>
+                <td data-bind="text: l.unidadMedida"></td>
+                <td data-bind="text: l.precioUnitario"></td>
+                <td data-bind="text: l.cantidad">
 
                 </td>
-                <td data-bind="text: (l.producto.cantidad * l.producto.precioUnitario)">
+                <td data-bind="text: (l.cantidad * l.precioUnitario)">
 
                 </td>
                 <td>

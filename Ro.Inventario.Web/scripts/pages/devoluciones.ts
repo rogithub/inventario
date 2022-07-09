@@ -10,26 +10,44 @@ export interface IAjuste {
     iva: number;
 }
 
-export interface IAjusteProducto {
+export interface IProducto {
     id: string;
-    oroductoId: string;
-    ajusteId: string;
+    unidadMedidaId: string;
+    Nombre: string;
+    codigoBarrasCaja: number;
+    codigoBarrasItem: string;
+}
+
+interface IProductLine {
+    producto: IProducto;
+    ajusteProductoId: string;
     cantidad: number;
-    notas: string;
     precioUnitario: number;
+    categoria: string;
+    unidadMedida: string;
 }
 
 interface model {
     venta: IAjuste,
-    items: IAjusteProducto[]
+    devueltos: IProductLine[]
 }
 
 class ProductLine {
-    producto: IAjusteProducto;
+    producto: IProducto;
     cantidadDevuelta: KnockoutObservable<number>;
-    constructor(prod: IAjusteProducto) {
-        this.producto = prod;
+    ajusteProductoId: string;
+    cantidad: number;
+    precioUnitario: number;
+    categoria: string;
+    unidadMedida: string;
+    constructor(l: IProductLine) {
+        this.producto = l.producto;
         this.cantidadDevuelta = ko.observable<number>();
+        this.ajusteProductoId = l.ajusteProductoId;
+        this.cantidad = l.cantidad;
+        this.precioUnitario = l.precioUnitario;
+        this.categoria = l.categoria;
+        this.unidadMedida = l.unidadMedida;
     }
 }
 
@@ -50,8 +68,9 @@ export class Devolucion {
         const ventaId = $("#hidVentaId").val() as string;
         var data = await self.api.get<model>(`${self.url}?ventaId=${ventaId}`);
 
+        console.dir(data);
         self.venta(data.venta);
-        for (let it of data.items) {
+        for (let it of data.devueltos) {
             self.lines.push(new ProductLine(it));
         }
     }
