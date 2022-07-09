@@ -113,7 +113,6 @@ CREATE TABLE IF NOT EXISTS "AjustesProductos" (
        PRIMARY KEY("Id"),
        FOREIGN KEY("ProductoId") REFERENCES "Productos"("Id") ON DELETE CASCADE
        FOREIGN KEY("AjusteId") REFERENCES "Ajustes"("Id") ON DELETE CASCADE
-       FOREIGN KEY("PrecioProductoId") REFERENCES "PreciosProductos"("Id") ON DELETE CASCADE
 
 );
 
