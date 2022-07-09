@@ -117,18 +117,16 @@ CREATE TABLE IF NOT EXISTS "AjustesProductos" (
 );
 
 CREATE TABLE IF NOT EXISTS "DevolucionesProductos" (
-       "Id"  	       TEXT NOT NULL UNIQUE,
-       "AjusteId"      TEXT NOT NULL,
-       "ProductoId"    TEXT NOT NULL,
-       "Cantidad"      NUMERIC, -- decimal,
+       "Id"  	                         TEXT NOT NULL UNIQUE,
+       "AjusteProductoId"                TEXT NOT NULL,
+       "CantidadEnBuenasCondiciones"     NUMERIC, -- decimal,
+       "CantidadEnMalasCondiciones"      NUMERIC, -- decimal,
        "FechaCreado"   TEXT NOT NULL,
        "Motivo"	       TEXT,            -- Productos en buen estado vuelven al stock, por el hecho de reducir su cantidad en
-                                        -- la venta origina. Para productos en mal estado, se reduce la cantidad en la
+                                        -- la venta original. Para productos en mal estado, se reduce la cantidad en la
                                         -- venta y se captura una merma. 
-       "ProductoEnBuenEstado"  INTEGER, -- 1 si está en buen estado, 0 no está en buen estado
        PRIMARY KEY("Id"),
-       FOREIGN KEY("ProductoId") REFERENCES "Productos"("Id") ON DELETE CASCADE
-       FOREIGN KEY("AjusteId") REFERENCES "Ajustes"("Id") ON DELETE CASCADE
+       FOREIGN KEY("AjusteProductoId") REFERENCES "AjustesProductos"("Id") ON DELETE CASCADE
 );
 
 COMMIT;

@@ -49,8 +49,8 @@ var api_1 = __webpack_require__(711);
 var ProductLine = /** @class */ (function () {
     function ProductLine(l) {
         this.producto = l.producto;
-        this.cantidadDevuelta = ko.observable();
-        this.buenEstado = ko.observable();
+        this.cantidadEnBuenasCondiciones = ko.observable();
+        this.cantidadEnMalasCondiciones = ko.observable();
         this.ajusteProductoId = l.ajusteProductoId;
         this.cantidad = l.cantidad;
         this.precioUnitario = l.precioUnitario;

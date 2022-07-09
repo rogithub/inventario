@@ -25,8 +25,8 @@ interface IProductLine {
     precioUnitario: number;
     categoria: string;
     unidadMedida: string;
-    buenEstado: boolean;
-    cantidadDevuelta: number;
+    cantidadEnBuenasCondiciones: number;
+    cantidadEnMalasCondiciones: number;
 }
 
 interface model {
@@ -36,8 +36,8 @@ interface model {
 
 class ProductLine {
     producto: IProducto;
-    cantidadDevuelta: KnockoutObservable<number>;
-    buenEstado: KnockoutObservable<boolean>;
+    cantidadEnBuenasCondiciones: KnockoutObservable<number>;
+    cantidadEnMalasCondiciones: KnockoutObservable<number>;
     ajusteProductoId: string;
     cantidad: number;
     precioUnitario: number;
@@ -45,8 +45,8 @@ class ProductLine {
     unidadMedida: string;
     constructor(l: IProductLine) {
         this.producto = l.producto;
-        this.cantidadDevuelta = ko.observable<number>();
-        this.buenEstado = ko.observable<boolean>();
+        this.cantidadEnBuenasCondiciones = ko.observable<number>();
+        this.cantidadEnMalasCondiciones = ko.observable<number>();
         this.ajusteProductoId = l.ajusteProductoId;
         this.cantidad = l.cantidad;
         this.precioUnitario = l.precioUnitario;

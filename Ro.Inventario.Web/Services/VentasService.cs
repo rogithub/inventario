@@ -67,7 +67,6 @@ public class VentasService : IVentasService
             p.Cantidad = it.Cantidad;
             p.PrecioUnitario = it.PrecioUnitario;
 
-            p.CantidadDevuelta = 0;
             p.Categoria = (await _categorias.GetOne(catId)).Nombre;
             p.UnidadMedida = (await _uMedida.GetOne(producto.UnidadMedidaId)).Nombre;
 

@@ -25,10 +25,10 @@ public class DevolucionProductoModel
     public Guid AjusteProductoId { get; set; }
     [JsonProperty(PropertyName = "cantidad")]
     public decimal Cantidad { get; set; }
-    [JsonProperty(PropertyName = "CantidadDevuelta")]
-    public decimal CantidadDevuelta { get; set; }
-    [JsonProperty(PropertyName = "buenEstado")]
-    public bool BuenEstado { get; set; }
+    [JsonProperty(PropertyName = "cantidadEnMalasCondiciones")]
+    public decimal CantidadEnMalasCondiciones { get; set; }
+    [JsonProperty(PropertyName = "cantidadEnBuenasCondiciones")]
+    public decimal CantidadEnBuenasCondiciones { get; set; }
     [JsonProperty(PropertyName = "PrecioUnitario")]
     public decimal PrecioUnitario { get; set; }
 

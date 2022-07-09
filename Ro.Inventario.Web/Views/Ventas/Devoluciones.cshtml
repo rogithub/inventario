@@ -40,17 +40,11 @@
 
                 </td>
                 <td>
-                    <div class="form-check form-switch">
-                        <input data-bind="checked: buenEstado" class="form-check-input" type="checkbox" role="switch"
-                            id="flexSwitchCheckDefault">
-                        <label class="form-check-label" for="flexSwitchCheckDefault">
-                            ¿En buen estado?
-                        </label>
-                        <strong data-bind="text: buenEstado() ? 'Si': 'No'"></strong>
-                    </div>
+                    <input type="number" step=".01" placeHolder="Buenas Condiciones"
+                        data-bind="value: l.cantidadEnBuenasCondiciones" class="form-control" />
 
-                    <input type="number" step=".01" placeHolder="Cantidad devuelta"
-                        data-bind="value: l.cantidadDevuelta" class="form-control" />
+                    <input type="number" step=".01" placeHolder="Malas Condiciones"
+                        data-bind="value: l.cantidadEnMalasCondiciones" class="form-control" />
                 </td>
             </tr>
         </tbody>
