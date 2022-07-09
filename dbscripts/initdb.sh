@@ -30,7 +30,7 @@ remove_file_if_exists "./$DBFILE"
 cat $SCRIPTFILE | sqlite3 $DBFILE
 mv $DBFILE $OLD
 
-if [ ! -f "./$EXTRASCRIPTFILE" ]; then
+if [ -f "./$EXTRASCRIPTFILE" ]; then
     sqlite3 $OLD < "./$EXTRASCRIPTFILE"
 fi
 
