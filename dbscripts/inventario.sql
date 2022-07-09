@@ -45,25 +45,11 @@ END;
 
 CREATE TABLE IF NOT EXISTS "PreciosProductos" (
        "Id"  	    	  TEXT NOT NULL UNIQUE,
-       "ProductoId"    TEXT NOT NULL,
+       "ProductoId"       TEXT NOT NULL,
        "FechaCreado"	  TEXT NOT NULL, -- el ultimo creado es el bueno       
-       "PrecioVenta"	  NUMERIC,
+       "PrecioVenta"	  NUMERIC,       -- Precio unitario de venta al publico incluyendo impuestos aplicables
        PRIMARY KEY("Id"),
        FOREIGN KEY("ProductoId") REFERENCES "Productos"("Id") ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS "DevolucionesProductos" (
-       "Id"  	    	  TEXT NOT NULL UNIQUE,
-       "AjusteId"      TEXT NOT NULL,
-       "ProductoId"    TEXT NOT NULL,
-       "Cantidad"      NUMERIC, -- decimal,
-       "FechaCreado"	  TEXT NOT NULL,
-       "Motivo"	  TEXT,            -- Productos en buen estado vuelven al stock, en mal estado, se captura una merma, 
-                                        -- el producto no sale de la venta pero puede quedar en cero
-       "ProductoEnBuenEstado"  INTEGER, -- 1 si está en buen estado, 0 no está en buen estado
-       PRIMARY KEY("Id"),
-       FOREIGN KEY("ProductoId") REFERENCES "Productos"("Id") ON DELETE CASCADE
-       FOREIGN KEY("AjusteId") REFERENCES "Ajustes"("Id") ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "CategoriasProductos" (
@@ -99,25 +85,42 @@ CREATE TABLE IF NOT EXISTS "ComprasProductos" (
 
 
 CREATE TABLE IF NOT EXISTS "Ajustes" (
-       "Id"  	    	 TEXT NOT NULL UNIQUE,
+       "Id"  	      TEXT NOT NULL UNIQUE,
        "Pago"         NUMERIC, -- cantidad que pagó el cliente
        "Cambio"       NUMERIC, -- cambio que le dimos
        "FechaAjuste"  TEXT NOT NULL,
-       "TipoAjuste"   INTEGER DEFAULT 0, -- 0 es Venta
-       "Notas"        TEXT,
+       "TipoAjuste"   INTEGER DEFAULT 0, -- 0 es Venta       
+       "IvaVenta"     NUMERIC, --IVA solo ventas
        PRIMARY KEY("Id")
 );
 
 CREATE TABLE IF NOT EXISTS "AjustesProductos" (
-       "Id"  	        TEXT NOT NULL UNIQUE,
-       "ProductoId"   TEXT NOT NULL,
-       "AjusteId"     TEXT NOT NULL,
-       "Cantidad"     NUMERIC, -- decimal
-       "Notas"        TEXT,
+       "Id"  	                TEXT NOT NULL UNIQUE,
+       "ProductoId"             TEXT NOT NULL,
+       "AjusteId"               TEXT NOT NULL,
+       "Cantidad"               NUMERIC, -- decimal
+       "PrecioUnitarioVenta"    NUMERIC, -- Precio Unitario solo ventas
+       "Notas"                  TEXT,
        PRIMARY KEY("Id"),
        FOREIGN KEY("ProductoId") REFERENCES "Productos"("Id") ON DELETE CASCADE
        FOREIGN KEY("AjusteId") REFERENCES "Ajustes"("Id") ON DELETE CASCADE
+       FOREIGN KEY("PrecioProductoId") REFERENCES "PreciosProductos"("Id") ON DELETE CASCADE
 
+);
+
+CREATE TABLE IF NOT EXISTS "DevolucionesProductos" (
+       "Id"  	       TEXT NOT NULL UNIQUE,
+       "AjusteId"      TEXT NOT NULL,
+       "ProductoId"    TEXT NOT NULL,
+       "Cantidad"      NUMERIC, -- decimal,
+       "FechaCreado"   TEXT NOT NULL,
+       "Motivo"	       TEXT,            -- Productos en buen estado vuelven al stock, por el hecho de reducir su cantidad en
+                                        -- la venta origina. Para productos en mal estado, se reduce la cantidad en la
+                                        -- venta y se captura una merma. 
+       "ProductoEnBuenEstado"  INTEGER, -- 1 si está en buen estado, 0 no está en buen estado
+       PRIMARY KEY("Id"),
+       FOREIGN KEY("ProductoId") REFERENCES "Productos"("Id") ON DELETE CASCADE
+       FOREIGN KEY("AjusteId") REFERENCES "Ajustes"("Id") ON DELETE CASCADE
 );
 
 COMMIT;

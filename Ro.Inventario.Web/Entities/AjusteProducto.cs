@@ -13,6 +13,7 @@ public class AjusteProducto
     public Guid AjusteId { get; set; }
     public decimal Cantidad { get; set; }
     public string Notas { get; set; }
+    public decimal PrecioUnitario { get; set; }
 
     public static implicit operator VentaProducto(AjusteProducto a)
     {
@@ -21,7 +22,8 @@ public class AjusteProducto
             Id = a.Id,
             ProductoId = a.ProductoId,
             VentaId = a.AjusteId,
-            Cantidad = a.Cantidad
+            Cantidad = a.Cantidad,
+            PrecioUnitario = a.PrecioUnitario
         };
     }
 }

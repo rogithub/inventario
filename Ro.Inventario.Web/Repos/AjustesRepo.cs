@@ -1,5 +1,4 @@
 using Ro.SQLite.Data;
-using Ro.Inventario.Web.Entities;
 using System.Data;
 
 namespace Ro.Inventario.Web.Repos;
@@ -22,8 +21,8 @@ public class AjustesRepo : IAjustesRepo
 
     public Task<int> Save(Ajuste it)
     {
-        var sql = @"INSERT INTO Ajustes (Id,Pago,Cambio,FechaAjuste,TipoAjuste,Notas) VALUES 
-                    (@id,@pago,@cambio,@fechaAjuste,@tipoAjuste,@notas);";
+        var sql = @"INSERT INTO Ajustes (Id,Pago,Cambio,FechaAjuste,TipoAjuste,IvaVenta) VALUES 
+                    (@id,@pago,@cambio,@fechaAjuste,@tipoAjuste,@ivaVenta);";
         var cmd = sql.ToCmd
         (
             "@id".ToParam(DbType.String, it.Id.ToString()),
@@ -31,21 +30,20 @@ public class AjustesRepo : IAjustesRepo
             "@cambio".ToParam(DbType.Decimal, it.Cambio),
             "@fechaAjuste".ToParam(DbType.String, it.FechaAjuste.ToString(DATE_FORMAT)),
             "@tipoAjuste".ToParam(DbType.Int32, (int)it.TipoAjuste),
-            "@notas".ToParam(DbType.String, it.Notas)
+            "@ivaVenta".ToParam(DbType.Decimal, it.Iva)
         );
         return Db.ExecuteNonQuery(cmd);
     }
 
     public Task<Ajuste> GetOne(Guid id)
     {
-        var sql = "SELECT Id,Pago,Cambio,FechaAjuste,TipoAjuste,Notas FROM Ajustes WHERE Id = @id";
+        var sql = "SELECT Id,Pago,Cambio,FechaAjuste,TipoAjuste,IvaVenta FROM Ajustes WHERE Id = @id";
         var cmd = sql.ToCmd
         (
             "@id".ToParam(DbType.String, id.ToString())
         );
         return Db.GetOneRow(cmd, GetData);
     }
-
     public Task<IEnumerable<Ajuste>> VentasPorFecha(DateTime fecha)
     {
         var sql = @"SELECT * FROM Ajustes 
@@ -59,7 +57,6 @@ public class AjustesRepo : IAjustesRepo
         return Db.GetRows(cmd, GetData);
     }
 
-
     private Ajuste GetData(IDataReader dr)
     {
         return new Ajuste()
@@ -69,7 +66,7 @@ public class AjustesRepo : IAjustesRepo
             Cambio = dr.GetDecimal("Cambio"),
             FechaAjuste = DateTime.Parse(dr.GetString("FechaAjuste")),
             TipoAjuste = (TipoAjuste)(dr.GetInt("TipoAjuste")),
-            Notas = dr.GetString("Notas")
+            Iva = dr.GetDecimal("IvaVenta")
         };
     }
 }

@@ -25,8 +25,8 @@ public class AjustesProductosRepo : IAjustesProductosRepo
     public Task<int> BulkSave(AjusteProducto[] list)
     {
         var parameters = new List<IDbDataParameter>();
-        var sqlLine = @"INSERT INTO AjustesProductos (Id,ProductoId,AjusteId,Cantidad,Notas) 
-                        VALUES (@id{0},@productoId{0},@ajusteId{0},@cantidad{0},@notas{0});";
+        var sqlLine = @"INSERT INTO AjustesProductos (Id,ProductoId,AjusteId,Cantidad,Notas,PrecioUnitarioVenta) 
+                        VALUES (@id{0},@productoId{0},@ajusteId{0},@cantidad{0},@notas{0},@precioUnitarioVenta);";
         var sb = new StringBuilder();
         for (int i = 0; i < list.Length; i++)
         {
@@ -37,6 +37,7 @@ public class AjustesProductosRepo : IAjustesProductosRepo
             parameters.Add(string.Format("@ajusteId{0}", i).ToParam(DbType.String, it.AjusteId.ToString()));
             parameters.Add(string.Format("@cantidad{0}", i).ToParam(DbType.Decimal, it.Cantidad));
             parameters.Add(string.Format("@notas{0}", i).ToParam(DbType.String, it.Notas));
+            parameters.Add(string.Format("@precioUnitarioVenta{0}", i).ToParam(DbType.Decimal, it.PrecioUnitario));
         }
         var cmd = sb.ToString().ToCmd(parameters.ToArray());
         return Db.ExecuteNonQuery(cmd);
@@ -44,22 +45,23 @@ public class AjustesProductosRepo : IAjustesProductosRepo
 
     public Task<int> Save(AjusteProducto it)
     {
-        var sql = @"INSERT INTO AjustesProductos (Id,ProductoId,AjusteId,Cantidad,Notas) VALUES 
-                    (@id,@productoId,@ajusteId,@cantidad,@notas);";
+        var sql = @"INSERT INTO AjustesProductos (Id,ProductoId,AjusteId,Cantidad,Notas,PrecioUnitarioVenta) VALUES 
+                    (@id,@productoId,@ajusteId,@cantidad,@notas,@precioUnitarioVenta);";
         var cmd = sql.ToCmd
         (
             "@id".ToParam(DbType.String, it.Id.ToString()),
             "@productoId".ToParam(DbType.String, it.ProductoId.ToString()),
             "@ajusteId".ToParam(DbType.String, it.AjusteId.ToString()),
             "@cantidad".ToParam(DbType.Decimal, it.Cantidad),
-            "@notas".ToParam(DbType.String, it.Notas)
+            "@notas".ToParam(DbType.String, it.Notas),
+            "@precioUnitarioVenta".ToParam(DbType.Decimal, it.PrecioUnitario)
         );
         return Db.ExecuteNonQuery(cmd);
     }
 
     public Task<AjusteProducto> GetOne(Guid id)
     {
-        var sql = "SELECT Id,ProductoId,AjusteId,Cantidad,Notas FROM AjustesProductos WHERE Id = @id";
+        var sql = "SELECT Id,ProductoId,AjusteId,Cantidad,Notas,PrecioUnitarioVenta FROM AjustesProductos WHERE Id = @id";
         var cmd = sql.ToCmd
         (
             "@id".ToParam(DbType.String, id.ToString())
@@ -69,7 +71,7 @@ public class AjustesProductosRepo : IAjustesProductosRepo
 
     public Task<IEnumerable<AjusteProducto>> GetForAjuste(Guid ajusteId)
     {
-        var sql = @"SELECT    Id,ProductoId,AjusteId,Cantidad,Notas
+        var sql = @"SELECT    Id,ProductoId,AjusteId,Cantidad,Notas,PrecioUnitarioVenta
                       FROM    AjustesProductos 
                      WHERE    AjusteId = @ajusteId;";
         var cmd = sql.ToCmd
@@ -88,7 +90,8 @@ public class AjustesProductosRepo : IAjustesProductosRepo
             ProductoId = Guid.Parse(dr.GetString("ProductoId")),
             AjusteId = Guid.Parse(dr.GetString("AjusteId")),
             Cantidad = dr.GetDecimal("Cantidad"),
-            Notas = dr.GetString("Notas")
+            Notas = dr.GetString("Notas"),
+            PrecioUnitario = dr.GetDecimal("PrecioUnitarioVenta"),
         };
     }
 }

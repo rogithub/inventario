@@ -11,6 +11,8 @@ public class Venta
     public DateTime FechaVenta { get; set; }
     public decimal Pago { get; set; }
     public decimal Cambio { get; set; }
+    public decimal Iva { get; set; }
+
 
     public static implicit operator Ajuste(Venta v)
     {
@@ -21,7 +23,7 @@ public class Venta
             Pago = v.Pago,
             Cambio = v.Cambio,
             TipoAjuste = TipoAjuste.Venta,
-            Notas = string.Empty
+            Iva = v.Iva
         };
     }
 }

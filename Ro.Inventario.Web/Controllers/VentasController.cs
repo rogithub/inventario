@@ -41,6 +41,11 @@ public class VentasController : Controller
         return View();
     }
 
+    public IActionResult Devoluciones(Guid ventaId)
+    {
+        return View();
+    }
+
     [HttpPost]
     public async Task<IActionResult> Guardar([FromBody] VentaModel model)
     {
