@@ -23,7 +23,7 @@ public class SettingsRepo : ISettingsRepo
         var sql = "SELECT Key, Value FROM Settings WHERE key = @key";
         var cmd = sql.ToCmd
         (
-            "@nombre".ToParam(DbType.String, key)
+            "@key".ToParam(DbType.String, key)
         );
         var setting = await Db.GetOneRow(cmd, GetData);
 

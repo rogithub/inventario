@@ -26,7 +26,7 @@ public class AjustesProductosRepo : IAjustesProductosRepo
     {
         var parameters = new List<IDbDataParameter>();
         var sqlLine = @"INSERT INTO AjustesProductos (Id,ProductoId,AjusteId,Cantidad,Notas,PrecioUnitarioVenta) 
-                        VALUES (@id{0},@productoId{0},@ajusteId{0},@cantidad{0},@notas{0},@precioUnitarioVenta);";
+                        VALUES (@id{0},@productoId{0},@ajusteId{0},@cantidad{0},@notas{0},@precioUnitarioVenta{0});";
         var sb = new StringBuilder();
         for (int i = 0; i < list.Length; i++)
         {

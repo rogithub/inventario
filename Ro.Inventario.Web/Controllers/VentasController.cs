@@ -59,10 +59,10 @@ public class VentasController : Controller
         v.Iva = await _settings.GetValue("IVA", (iva) => decimal.Parse(iva));
         var intVenta = await _ventas.Save(v);
         var prods = (from l in model.Items
-                     select new VentaProducto()
+                     select new AjusteProducto()
                      {
                          ProductoId = l.ProductoId,
-                         VentaId = v.Id,
+                         AjusteId = v.Id,
                          Cantidad = l.Cantidad,
                          PrecioUnitario = l.PrecioUnitario
                      }).ToArray();
@@ -72,7 +72,7 @@ public class VentasController : Controller
         _logger.LogInformation("Venta cambio {cambio}", model.Cambio);
         _logger.LogInformation("Items {len}", model.Items.Length);
 
-        var intVentaProducts = await _ventasProds.BulkSave(prods.Cast<AjusteProducto>().ToArray());
+        var intVentaProducts = await _ventasProds.BulkSave(prods);
 
         return Json(new int[] { intVenta, intVentaProducts });
     }
