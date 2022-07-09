@@ -29,6 +29,10 @@ var Stock = /** @class */ (function () {
                 default: return 0;
             }
         });
+        // no se puede quitar a cero
+        if (parseFloat(self.stock.toString()) <= 0) {
+            self.operacion("agregar");
+        }
     }
     Stock.prototype.bind = function () {
         var self = this;

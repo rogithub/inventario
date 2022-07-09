@@ -14,7 +14,7 @@ public class ProductosController : Controller
     private readonly IProductosService _productosSvc;
     private readonly INuevosProductosValidatorService _pValidator;
     private readonly IBusquedaProductosRepo _pBuscar;
-    
+
 
     public ProductosController(
         ILogger<ProductosController> logger,
@@ -59,7 +59,14 @@ public class ProductosController : Controller
 
     public async Task<IActionResult> Stock(Guid id)
     {
-        var p = await _pBuscar.GetOne(id);        
+        var p = await _pBuscar.GetOne(id);
+        return View(p);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Stock([FromForm] AjusteModel model)
+    {
+        var p = await _pBuscar.GetOne(id);
         return View(p);
     }
 
