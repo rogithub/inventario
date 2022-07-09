@@ -14,7 +14,21 @@ var api_1 = __webpack_require__(711);
 var Stock = /** @class */ (function () {
     function Stock() {
         this.url = "productos/descargar";
+        this.stock = $("#hidStock").val();
+        this.operacion = ko.observable();
+        this.motivo = ko.observable();
+        this.cantidad = ko.observable();
         this.api = new api_1.Api();
+        var self = this;
+        this.stockFinal = ko.computed(function () {
+            switch (self.operacion()) {
+                case "agregar":
+                    return parseFloat(self.stock.toString()) + Math.abs(self.cantidad());
+                case "quitar":
+                    return parseFloat(self.stock.toString()) - Math.abs(self.cantidad());
+                default: return 0;
+            }
+        });
     }
     Stock.prototype.bind = function () {
         var self = this;
