@@ -16,6 +16,7 @@ export interface IProduct {
 export interface VentaProductoModel {
     productoId: string;
     cantidad: number;
+    precioUnitario: number;
 }
 
 export interface VentaModel {
@@ -130,6 +131,7 @@ export class Venta {
             {
                 cantidad: l.cantidad(),
                 productoId: l.producto.id,
+                precioUnitario: l.producto.precioVenta
             };
             lines.push(line);
         });

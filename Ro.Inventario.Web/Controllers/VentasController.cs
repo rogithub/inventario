@@ -59,7 +59,8 @@ public class VentasController : Controller
                      {
                          ProductoId = l.ProductoId,
                          VentaId = v.Id,
-                         Cantidad = l.Cantidad
+                         Cantidad = l.Cantidad,
+                         PrecioUnitario = l.PrecioUnitario
                      }).ToArray();
 
         _logger.LogInformation("Venta id {id}", v.Id.ToString());

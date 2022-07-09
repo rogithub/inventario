@@ -131,6 +131,7 @@ var Venta = /** @class */ (function () {
                             var line = {
                                 cantidad: l.cantidad(),
                                 productoId: l.producto.id,
+                                precioUnitario: l.producto.precioVenta
                             };
                             lines.push(line);
                         });
