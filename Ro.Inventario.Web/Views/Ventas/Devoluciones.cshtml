@@ -6,69 +6,61 @@
 <script src="~/js/devoluciones.js"></script>
 }
 
-<form id="devolucionesPage" data-bind="submit: guardar.bind($data)">
+<div id="devolucionesPage" data-bind="submit: guardar.bind($data)">
 
     <h2>Devoluciones</h2>
 
     <input type="hidden" value='@ViewData["ventaId"]' id="hidVentaId" />
-
+<!-- ko foreach: { data: lines, as: 'l' } -->
     <table class="table table-sm">
         <thead>
-            <tr>
-                <th colspan="8">Artículos</th>
-            </tr>
             <tr>
                 <th scope="col">Producto</th>
                 <th scope="col">Categoria</th>
                 <th scope="col">Unidad de Medida</th>
                 <th scope="col">Precio de Venta</th>
                 <th scope="col">Cantidad</th>
-                <th scope="col">Total</th>
-                <th scope="col">$ Devolucion al cliente</th>
+                <th scope="col">Total</th>                
             </tr>
         </thead>
-        <tbody data-bind="foreach: { data: lines, as: 'l' }">
+        <tbody>            
             <tr>
                 <td data-bind="text: l.producto.nombre"></td>
                 <td data-bind="text: l.categoria"></td>
                 <td data-bind="text: l.unidadMedida"></td>
-                <td data-bind="text: l.precioUnitario"></td>
+                <td data-bind="text: l.aMoneda(l.precioUnitario)"></td>
                 <td data-bind="text: l.cantidad">
 
                 </td>
-                <td data-bind="text: (l.cantidad * l.precioUnitario)">
+                <td data-bind="text: l.aMoneda(l.cantidad * l.precioUnitario)">
 
-                </td>
-                <td>
-                    
-                </td>
+                </td>                
             </tr>
             <tr>
-                <td colspan="6">
-                    FORM ABRE
-                    <form class="row g-3">
+                <td colspan="6">                    
+                    <form class="row g-3">                        
                         <div class="col-auto">
-                            <label>Cantidad Devuelta</label>                            
+                            <strong  class="col-form-label">Cantidad Devuelta</strong>
+                        </div>
+                        <div class="col-auto">
+                            <label  class="col-form-label">En buenas condiciones</label>
+                            <input type="text" inputmode="decimal" placeHolder="En buenas condiciones"
+                            data-bind="value: l.cantidadEnBuenasCondiciones, attr: { max: l.cantidad - l.cantidadEnMalasCondiciones() }" class="form-control" />
+                        </div> 
+                        <div class="col-auto">
+                            <label  class="col-form-label">En malas condiciones</label>
+                            <input type="text" inputmode="decimal" placeHolder="En malas condiciones"
+                            data-bind="value: l.cantidadEnMalasCondiciones" class="form-control" />
                         </div>
 
                         <div class="col-auto">
-                            <label class="visually-hidden">En buenas condiciones</label>
-                            <input type="number" step=".01" placeHolder="En buenas condiciones"
-                            data-bind="value: l.cantidadEnBuenasCondiciones" class="form-control" />
-
-                            <label class="visually-hidden">En malas condiciones</label>
-                            <input type="number" step=".01" placeHolder="En malas condiciones"
-                            data-bind="value: l.cantidadEnMalasCondiciones" class="form-control" />
-                        </div>                                                                    
-                    </form>
-                    FORM CIERRA
-                </td>
-                <td>
-
-                </td>
-            </tr>
+                            <label  class="col-form-label">Devolver al cliente:</label>
+                            <strong  class="col-form-label" data-bind="text: l.aMoneda(l.devolucionRowOp())"></strong>
+                        </div>
+                    </form>                    
+                </td>                
+            </tr>                         
         </tbody>
-
-    </table>
-
-</form>
+    </table>    
+<!-- /ko -->
+</div>

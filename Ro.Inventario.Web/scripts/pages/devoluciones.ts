@@ -1,5 +1,12 @@
 import { BinderService } from '../services/binderService';
 import { Api } from '../services/api';
+import { parse } from 'path';
+
+let getValueOrZero = (it: any) =>
+{
+    let n: number = isNaN(it) ? 0 : parseFloat(it) as number;
+    return n;
+}
 
 export interface IAjuste {
     id: string;
@@ -43,15 +50,31 @@ class ProductLine {
     precioUnitario: number;
     categoria: string;
     unidadMedida: string;
+    devolucionRowOp: KnockoutComputed<number>;
+    aMoneda: Function;
     constructor(l: IProductLine) {
         this.producto = l.producto;
-        this.cantidadEnBuenasCondiciones = ko.observable<number>();
-        this.cantidadEnMalasCondiciones = ko.observable<number>();
+        this.cantidadEnBuenasCondiciones = ko.observable<number>(0);
+        this.cantidadEnMalasCondiciones = ko.observable<number>(0);
         this.ajusteProductoId = l.ajusteProductoId;
         this.cantidad = l.cantidad;
         this.precioUnitario = l.precioUnitario;
         this.categoria = l.categoria;
         this.unidadMedida = l.unidadMedida;
+        const self = this;
+        this.devolucionRowOp = ko.computed<number>(() => {
+            let a = this.cantidadEnBuenasCondiciones();
+            let b = this.cantidadEnMalasCondiciones();  
+            let c = this.precioUnitario;
+            //return ((a+b) * c);
+            return (parseFloat(a.toString()) + parseFloat(b.toString())) * c;
+        }, self);
+
+        this.aMoneda = new Intl.NumberFormat('es-MX', {
+            style: "currency",
+            currency: "USD",
+            currencyDisplay: "narrowSymbol"
+        }).format;
     }
 }
 
@@ -71,8 +94,7 @@ export class Devolucion {
         const self = this;
         const ventaId = $("#hidVentaId").val() as string;
         var data = await self.api.get<model>(`${self.url}?ventaId=${ventaId}`);
-
-        console.dir(data);
+        
         self.venta(data.venta);
         for (let it of data.devueltos) {
             self.lines.push(new ProductLine(it));

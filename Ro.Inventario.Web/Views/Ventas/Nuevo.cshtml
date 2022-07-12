@@ -71,7 +71,7 @@
                 <td data-bind="text: l.producto.unidadMedida"></td>
                 <td data-bind="text: l.producto.precioVenta"></td>
                 <td>
-                    <input type="number" step=".01" placeHolder="numérico" data-bind="value: l.cantidad"
+                    <input type="text" inputmode="decimal" placeHolder="numérico" data-bind="value: l.cantidad"
                         style="width: 90px;" />
                 </td>
                 <td data-bind="text: l.total">
@@ -147,7 +147,7 @@
                     Pago Cliente
                 </th>
                 <td>
-                    <input type="number" step=".01" class="form-control" id="txtPago" placeholder="Pago cliente"
+                    <input type="text" inputmode="decimal" class="form-control" id="txtPago" placeholder="Pago cliente"
                         data-bind="textInput: pagoCliente">
                 </td>
                 <td>

@@ -46,16 +46,34 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Devolucion = void 0;
 var binderService_1 = __webpack_require__(575);
 var api_1 = __webpack_require__(711);
+var getValueOrZero = function (it) {
+    var n = isNaN(it) ? 0 : parseFloat(it);
+    return n;
+};
 var ProductLine = /** @class */ (function () {
     function ProductLine(l) {
+        var _this = this;
         this.producto = l.producto;
-        this.cantidadEnBuenasCondiciones = ko.observable();
-        this.cantidadEnMalasCondiciones = ko.observable();
+        this.cantidadEnBuenasCondiciones = ko.observable(0);
+        this.cantidadEnMalasCondiciones = ko.observable(0);
         this.ajusteProductoId = l.ajusteProductoId;
         this.cantidad = l.cantidad;
         this.precioUnitario = l.precioUnitario;
         this.categoria = l.categoria;
         this.unidadMedida = l.unidadMedida;
+        var self = this;
+        this.devolucionRowOp = ko.computed(function () {
+            var a = _this.cantidadEnBuenasCondiciones();
+            var b = _this.cantidadEnMalasCondiciones();
+            var c = _this.precioUnitario;
+            //return ((a+b) * c);
+            return (parseFloat(a.toString()) + parseFloat(b.toString())) * c;
+        }, self);
+        this.aMoneda = new Intl.NumberFormat('es-MX', {
+            style: "currency",
+            currency: "USD",
+            currencyDisplay: "narrowSymbol"
+        }).format;
     }
     return ProductLine;
 }());
@@ -77,7 +95,6 @@ var Devolucion = /** @class */ (function () {
                         return [4 /*yield*/, self.api.get("".concat(self.url, "?ventaId=").concat(ventaId))];
                     case 1:
                         data = _b.sent();
-                        console.dir(data);
                         self.venta(data.venta);
                         for (_i = 0, _a = data.devueltos; _i < _a.length; _i++) {
                             it = _a[_i];
