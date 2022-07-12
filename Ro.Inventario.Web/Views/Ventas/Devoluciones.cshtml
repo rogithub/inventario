@@ -24,7 +24,7 @@
                 <th scope="col">Precio de Venta</th>
                 <th scope="col">Cantidad</th>
                 <th scope="col">Total</th>
-                <th scope="col">Cantidad Devuelta</th>
+                <th scope="col">$ Devolucion al cliente</th>
             </tr>
         </thead>
         <tbody data-bind="foreach: { data: lines, as: 'l' }">
@@ -40,11 +40,31 @@
 
                 </td>
                 <td>
-                    <input type="number" step=".01" placeHolder="Buenas Condiciones"
-                        data-bind="value: l.cantidadEnBuenasCondiciones" class="form-control" />
+                    
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    FORM ABRE
+                    <form class="row g-3">
+                        <div class="col-auto">
+                            <label>Cantidad Devuelta</label>                            
+                        </div>
 
-                    <input type="number" step=".01" placeHolder="Malas Condiciones"
-                        data-bind="value: l.cantidadEnMalasCondiciones" class="form-control" />
+                        <div class="col-auto">
+                            <label class="visually-hidden">En buenas condiciones</label>
+                            <input type="number" step=".01" placeHolder="En buenas condiciones"
+                            data-bind="value: l.cantidadEnBuenasCondiciones" class="form-control" />
+
+                            <label class="visually-hidden">En malas condiciones</label>
+                            <input type="number" step=".01" placeHolder="En malas condiciones"
+                            data-bind="value: l.cantidadEnMalasCondiciones" class="form-control" />
+                        </div>                                                                    
+                    </form>
+                    FORM CIERRA
+                </td>
+                <td>
+
                 </td>
             </tr>
         </tbody>
