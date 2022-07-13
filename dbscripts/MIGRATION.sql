@@ -1591,5 +1591,4 @@ INSERT INTO AjustesProductos (Id,ProductoId,AjusteId,Cantidad,PrecioUnitarioVent
 INSERT INTO AjustesProductos (Id,ProductoId,AjusteId,Cantidad,PrecioUnitarioVenta) VALUES('f5866dfc-85bb-4645-ada7-dc30f3ba0ead','f0d0fe74-0dab-4e25-9650-af5418354ee4','3d1050da-9df9-47a4-84a9-deb95f90721b',2,0);
 INSERT INTO AjustesProductos (Id,ProductoId,AjusteId,Cantidad,PrecioUnitarioVenta) VALUES('8dc6fc29-a7e2-402a-811c-b0ab46d9d586','60cbeec6-b26f-4e5b-bd97-edb1fd0339bf','72e684d3-7cae-44fd-9aa2-f42372ce6cdf',1,0);
 
-
-UPDATE AjustesProductos SET PrecioUnitarioVenta = (SELECT PrecioVenta FROM PreciosProductos pp WHERE ProductoId = pp.ProductoId ORDER BY datetime(pp.FechaCreado) DESC LIMIT 1);
+UPDATE AjustesProductos SET PrecioUnitarioVenta = (SELECT PrecioVenta FROM PreciosProductos WHERE ProductoId = AjustesProductos.ProductoId ORDER BY datetime(FechaCreado) DESC LIMIT 1);
