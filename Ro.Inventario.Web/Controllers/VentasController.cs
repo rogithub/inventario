@@ -48,6 +48,17 @@ public class VentasController : Controller
     {
         ViewData["ventaId"] = ventaId.ToString();
         return View();
+    }
+
+    public async Task<IActionResult> DevolverProductos([FromBody]DevolucionProductoSaveModel[] model)
+    {        
+        var prods = (from it in model select new DevolucionProducto(){
+            AjusteProductoId = it.AjusteProductoId,
+            CantidadEnBuenasCondiciones = it.CantidadEnBuenasCondiciones,
+            CantidadEnMalasCondiciones = it.CantidadEnMalasCondiciones
+        }).ToArray();
+        var data = await _ventasService.DevolverProductos(prods);
+         return Json(data);
     }    
 
     public async Task<IActionResult> GetVentaData(Guid ventaId)

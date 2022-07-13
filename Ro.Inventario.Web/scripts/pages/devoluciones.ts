@@ -79,6 +79,12 @@ class ProductLine {
     }
 }
 
+export interface DevolucionProductoModel {
+    ajusteProductoId: string;
+    cantidadEnBuenasCondiciones: number;
+    cantidadEnMalasCondiciones: number;
+}
+
 export class Devolucion {
     public api: Api;
     public url: string;
@@ -123,7 +129,21 @@ export class Devolucion {
 
     public async guardar(): Promise<void> {
         const self = this;
-        alert("Falta funcionalidad para guardar");
+        let data = [];
+        for(const l of self.lines())
+        {
+            let item: DevolucionProductoModel = {
+                ajusteProductoId: l.ajusteProductoId,
+                cantidadEnBuenasCondiciones: l.cantidadEnBuenasCondiciones(),
+                cantidadEnMalasCondiciones: l.cantidadEnMalasCondiciones(),            
+            };        
+            data.push(item);
+        }                
+
+        await self.api.post(`Ventas/DevolverProductos`, data);        
+
+        alert("¡Guardado!");
+        window.location.href = `${document.baseURI}Ventas`;
     }
 }
 

@@ -124,11 +124,28 @@ var Devolucion = /** @class */ (function () {
     };
     Devolucion.prototype.guardar = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var self;
-            return __generator(this, function (_a) {
-                self = this;
-                alert("Falta funcionalidad para guardar");
-                return [2 /*return*/];
+            var self, data, _i, _a, l, item;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        self = this;
+                        data = [];
+                        for (_i = 0, _a = self.lines(); _i < _a.length; _i++) {
+                            l = _a[_i];
+                            item = {
+                                ajusteProductoId: l.ajusteProductoId,
+                                cantidadEnBuenasCondiciones: l.cantidadEnBuenasCondiciones(),
+                                cantidadEnMalasCondiciones: l.cantidadEnMalasCondiciones(),
+                            };
+                            data.push(item);
+                        }
+                        return [4 /*yield*/, self.api.post("Ventas/DevolverProductos", data)];
+                    case 1:
+                        _b.sent();
+                        alert("¡Guardado!");
+                        window.location.href = "".concat(document.baseURI, "Ventas");
+                        return [2 /*return*/];
+                }
             });
         });
     };
