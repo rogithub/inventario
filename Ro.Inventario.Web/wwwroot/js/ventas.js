@@ -46,13 +46,21 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Venta = exports.ProductLine = void 0;
 var binderService_1 = __webpack_require__(575);
 var api_1 = __webpack_require__(711);
+var toCurrency_1 = __webpack_require__(613);
 var ProductLine = /** @class */ (function () {
     function ProductLine(product) {
+        this.aMoneda = toCurrency_1.default;
         this.producto = product;
         this.cantidad = ko.observable(1);
         var self = this;
         this.total = ko.computed(function () {
             return self.cantidad() * self.producto.precioVenta;
+        });
+        this.totalPesos = ko.computed(function () {
+            return self.aMoneda(self.total());
+        });
+        this.precioVentaPesos = ko.computed(function () {
+            return self.aMoneda(self.producto.precioVenta);
         });
     }
     return ProductLine;
@@ -60,6 +68,7 @@ var ProductLine = /** @class */ (function () {
 exports.ProductLine = ProductLine;
 var Venta = /** @class */ (function () {
     function Venta() {
+        this.aMoneda = toCurrency_1.default;
         this.fecha = new Date();
         this.url = "ventas/Guardar";
         this.api = new api_1.Api();
@@ -89,8 +98,14 @@ var Venta = /** @class */ (function () {
             var initialValue = 0;
             return lines.reduce(function (sum, prod) { return sum + prod.total(); }, initialValue);
         });
+        this.totalPesos = ko.computed(function () {
+            return self.aMoneda(self.total());
+        });
         this.cambio = ko.computed(function () {
             return self.pagoCliente() - self.total();
+        });
+        this.cambioPesos = ko.computed(function () {
+            return self.aMoneda(self.cambio());
         });
         this.isValid = ko.computed(function () {
             for (var _i = 0, _a = self.lines(); _i < _a.length; _i++) {

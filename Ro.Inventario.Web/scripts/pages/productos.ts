@@ -1,5 +1,6 @@
 import { BinderService } from '../services/binderService';
 import { Api } from '../services/api';
+import toCurrency from '../shared/toCurrency';
 
 export interface IProduct {
     nid: number;
@@ -11,6 +12,7 @@ export interface IProduct {
     codigoBarrasCaja: string;
     precioVenta: number;
     stock: number;
+    precioVentaPesos: KnockoutComputed<string>;
 }
 
 
@@ -29,6 +31,7 @@ export class Productos {
         const self = this;
         self.autocomplete.addEventListener("selection", function (e: any) {
             let p = e.detail.selection.value as IProduct;
+            p.precioVentaPesos = ko.computed<string>(()=> toCurrency(p.precioVenta) , p);
             self.lines.push(p);
             $(self.autocomplete).val("");
             return false;

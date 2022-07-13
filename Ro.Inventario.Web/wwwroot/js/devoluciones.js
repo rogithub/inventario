@@ -46,10 +46,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Devolucion = void 0;
 var binderService_1 = __webpack_require__(575);
 var api_1 = __webpack_require__(711);
-var getValueOrZero = function (it) {
-    var n = isNaN(it) ? 0 : parseFloat(it);
-    return n;
-};
+var toCurrency_1 = __webpack_require__(613);
 var ProductLine = /** @class */ (function () {
     function ProductLine(l) {
         var _this = this;
@@ -77,11 +74,7 @@ var ProductLine = /** @class */ (function () {
             var c = _this.cantidad;
             return (parseFloat(a.toString()) + parseFloat(b.toString())) > c;
         }, self);
-        this.aMoneda = new Intl.NumberFormat('es-MX', {
-            style: "currency",
-            currency: "USD",
-            currencyDisplay: "narrowSymbol"
-        }).format;
+        this.aMoneda = toCurrency_1.default;
     }
     return ProductLine;
 }());

@@ -116,6 +116,23 @@ var BinderService = /** @class */ (function () {
 exports.BinderService = BinderService;
 
 
+/***/ }),
+
+/***/ 613:
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+var intl = new Intl.NumberFormat('es-MX', {
+    style: "currency",
+    currency: "USD",
+    currencyDisplay: "narrowSymbol"
+});
+exports["default"] = (function (val) {
+    return intl.format(val);
+});
+
+
 /***/ })
 
 }]);

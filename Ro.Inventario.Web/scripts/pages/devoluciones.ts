@@ -1,12 +1,6 @@
 import { BinderService } from '../services/binderService';
 import { Api } from '../services/api';
-import { parse } from 'path';
-
-let getValueOrZero = (it: any) =>
-{
-    let n: number = isNaN(it) ? 0 : parseFloat(it) as number;
-    return n;
-}
+import toCurrency from '../shared/toCurrency';
 
 export interface IAjuste {
     id: string;
@@ -81,11 +75,7 @@ class ProductLine {
 
         }, self);        
 
-        this.aMoneda = new Intl.NumberFormat('es-MX', {
-            style: "currency",
-            currency: "USD",
-            currencyDisplay: "narrowSymbol"
-        }).format;
+        this.aMoneda = toCurrency;
     }
 }
 
