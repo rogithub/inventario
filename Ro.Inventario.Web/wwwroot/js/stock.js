@@ -48,9 +48,9 @@ var binderService_1 = __webpack_require__(575);
 var api_1 = __webpack_require__(711);
 var TipoAjuste;
 (function (TipoAjuste) {
-    TipoAjuste[TipoAjuste["Venta"] = 1] = "Venta";
-    TipoAjuste[TipoAjuste["Merma"] = 2] = "Merma";
-    TipoAjuste[TipoAjuste["IngresoSinCompra"] = 3] = "IngresoSinCompra";
+    TipoAjuste[TipoAjuste["Venta"] = 0] = "Venta";
+    TipoAjuste[TipoAjuste["Merma"] = 1] = "Merma";
+    TipoAjuste[TipoAjuste["IngresoSinCompra"] = 2] = "IngresoSinCompra";
 })(TipoAjuste = exports.TipoAjuste || (exports.TipoAjuste = {}));
 var Stock = /** @class */ (function () {
     function Stock() {

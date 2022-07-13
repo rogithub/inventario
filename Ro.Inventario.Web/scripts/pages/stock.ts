@@ -4,9 +4,9 @@ import { Api } from '../services/api';
 
 export enum TipoAjuste
 {
-      Venta = 1,
-      Merma,
-      IngresoSinCompra
+      Venta = 0,
+      Merma = 1,
+      IngresoSinCompra = 2
 }
 export interface StockAjusteModel
 {
