@@ -8,6 +8,7 @@ public interface IVentasService
     Task<VentasDiaResponseModel> Load(DateTime fecha);
     Task<int> GuardarAjusteStock(StockAjusteModel stock);
     Task<DevolucionModel> CargarDevolucion(Guid ventaId);
+    Task<int> DevolverProductos(DevolucionProducto[] prods);
 }
 
 public class VentasService : IVentasService
@@ -15,6 +16,7 @@ public class VentasService : IVentasService
     private IProductosRepo _productos;
     private IAjustesRepo _ventas;
     private IAjustesProductosRepo _ventasProductos;
+    private IDevolucionesProductosRepo _devProds;
     private IUnidadMedidaRepo _uMedida;
     private ICategoriasRepo _categorias;
     private ICategoriasProductosRepo _categoriasProds;
@@ -26,8 +28,10 @@ public class VentasService : IVentasService
         IAjustesRepo ventas,
         IUnidadMedidaRepo umedida,
         ICategoriasRepo categorias,
-        ICategoriasProductosRepo categoriasProds)
+        ICategoriasProductosRepo categoriasProds,
+        IDevolucionesProductosRepo devProds)
     {
+        _devProds = devProds;
         _categoriasProds = categoriasProds;
         _uMedida = umedida;
         _categorias = categorias;
@@ -35,6 +39,11 @@ public class VentasService : IVentasService
         _ventas = ventas;
         _productos = productRepo;
         _ventasProductos = ventasProductos;
+    }
+
+    public Task<int> DevolverProductos(DevolucionProducto[] prods)
+    {        
+        return _devProds.BulkSave(prods);
     }
 
     public async Task<int> GuardarAjusteStock(StockAjusteModel stock)

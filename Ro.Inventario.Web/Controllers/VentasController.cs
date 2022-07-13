@@ -48,7 +48,7 @@ public class VentasController : Controller
     {
         ViewData["ventaId"] = ventaId.ToString();
         return View();
-    }
+    }    
 
     public async Task<IActionResult> GetVentaData(Guid ventaId)
     {

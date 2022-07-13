@@ -121,8 +121,8 @@ CREATE TABLE IF NOT EXISTS "DevolucionesProductos" (
        "AjusteProductoId"                TEXT NOT NULL,
        "CantidadEnBuenasCondiciones"     NUMERIC, -- decimal,
        "CantidadEnMalasCondiciones"      NUMERIC, -- decimal,
-       "FechaCreado"   TEXT NOT NULL,
-       "Motivo"	       TEXT,            -- Productos en buen estado vuelven al stock, por el hecho de reducir su cantidad en
+       "FechaCreado"                     TEXT NOT NULL,       
+                                        -- Productos en buen estado vuelven al stock, por el hecho de reducir su cantidad en
                                         -- la venta original. Para productos en mal estado, se reduce la cantidad en la
                                         -- venta y se captura una merma. 
        PRIMARY KEY("Id"),
