@@ -161,7 +161,7 @@ var Venta = /** @class */ (function () {
                     case 1:
                         result = _a.sent();
                         console.log("Ventas guardadas ".concat(result[0], " productos en esa venta ").concat(result[1]));
-                        alert("Guardado!");
+                        alert("¡Guardado!");
                         window.location.href = "".concat(document.baseURI);
                         return [2 /*return*/];
                 }

@@ -2,6 +2,20 @@ import { BinderService } from '../services/binderService';
 import { Api } from '../services/api';
 
 
+export enum TipoAjuste
+{
+      Venta = 1,
+      Merma,
+      IngresoSinCompra
+}
+export interface StockAjusteModel
+{
+    productoId: string;
+    tipoAjuste: TipoAjuste;
+    cantidad: number;
+    motivo: string;
+}
+
 export class Stock {
 
     public api: Api;
@@ -35,9 +49,22 @@ export class Stock {
         BinderService.bind(self, "#stockPage");
     }
 
-    public guardar(): void {
+    public async guardar(): Promise<void> {
         const self = this;
-        alert("Todavia no guarda, estamos trabajando...");
+        
+        let data: StockAjusteModel = {
+            productoId: $("#hidProductoId").val() as string,
+            cantidad: Math.abs(self.cantidad()),
+            motivo: self.motivo(),
+            tipoAjuste: self.operacion() === "agregar" ? 
+                        TipoAjuste.IngresoSinCompra : 
+                        TipoAjuste.Merma
+        };        
+
+        await self.api.post(`Productos/Stock`, data);        
+
+        alert("¡Guardado!");
+        window.location.href = `${document.baseURI}Productos`;
     }
 }
 

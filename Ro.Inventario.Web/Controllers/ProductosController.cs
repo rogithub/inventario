@@ -67,10 +67,10 @@ public class ProductosController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Stock([FromForm] StockAjusteModel model)
+    public async Task<IActionResult> Stock([FromBody] StockAjusteModel model)
     {
-        await _ventasSvc.GuardarAjusteStock(model);
-        return RedirectToAction("Index", "Productos");
+        var val = await _ventasSvc.GuardarAjusteStock(model);
+        return Json(new { updated = val });
     }
 
     [HttpPost]

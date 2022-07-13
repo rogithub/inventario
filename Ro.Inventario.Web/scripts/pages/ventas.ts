@@ -165,7 +165,7 @@ export class Venta {
         let result = await self.api.post<number[]>(url, data);
         console.log(`Ventas guardadas ${result[0]} productos en esa venta ${result[1]}`);
 
-        alert("Guardado!");
+        alert("¡Guardado!");
         window.location.href = `${document.baseURI}`;
     }
 }

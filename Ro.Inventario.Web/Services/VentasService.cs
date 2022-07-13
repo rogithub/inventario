@@ -6,7 +6,7 @@ namespace Ro.Inventario.Web.Services;
 public interface IVentasService
 {
     Task<VentasDiaResponseModel> Load(DateTime fecha);
-    Task GuardarAjusteStock(StockAjusteModel stock);
+    Task<int> GuardarAjusteStock(StockAjusteModel stock);
     Task<DevolucionModel> CargarDevolucion(Guid ventaId);
 }
 
@@ -37,7 +37,7 @@ public class VentasService : IVentasService
         _ventasProductos = ventasProductos;
     }
 
-    public async Task GuardarAjusteStock(StockAjusteModel stock)
+    public async Task<int> GuardarAjusteStock(StockAjusteModel stock)
     {
         var a = new Ajuste();
         a.TipoAjuste = stock.TipoAjuste;
@@ -47,7 +47,7 @@ public class VentasService : IVentasService
         ap.Cantidad = stock.Cantidad;
         ap.Notas = stock.Motivo;
         ap.ProductoId = stock.ProductoId;
-        await _ventasProductos.Save(ap);
+        return await _ventasProductos.Save(ap);
     }
 
     public async Task<DevolucionModel> CargarDevolucion(Guid ventaId)
