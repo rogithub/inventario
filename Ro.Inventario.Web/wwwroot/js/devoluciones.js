@@ -69,6 +69,14 @@ var ProductLine = /** @class */ (function () {
             //return ((a+b) * c);
             return (parseFloat(a.toString()) + parseFloat(b.toString())) * c;
         }, self);
+        this.hasError = ko.computed(function () {
+            var a = _this.cantidadEnBuenasCondiciones();
+            var b = _this.cantidadEnMalasCondiciones();
+            if (isNaN(a) || isNaN(b))
+                return true;
+            var c = _this.cantidad;
+            return (parseFloat(a.toString()) + parseFloat(b.toString())) > c;
+        }, self);
         this.aMoneda = new Intl.NumberFormat('es-MX', {
             style: "currency",
             currency: "USD",
@@ -83,6 +91,18 @@ var Devolucion = /** @class */ (function () {
         this.api = new api_1.Api();
         this.lines = ko.observableArray();
         this.venta = ko.observable();
+        var self = this;
+        this.isValid = ko.computed(function () {
+            var count = 0;
+            for (var _i = 0, _a = self.lines(); _i < _a.length; _i++) {
+                var it = _a[_i];
+                if (it.hasError())
+                    return false;
+                count += it.cantidadEnBuenasCondiciones();
+                count += it.cantidadEnMalasCondiciones();
+            }
+            return count > 0;
+        }, self);
     }
     Devolucion.prototype.load = function () {
         return __awaiter(this, void 0, void 0, function () {

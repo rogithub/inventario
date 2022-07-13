@@ -6,7 +6,7 @@
 <script src="~/js/devoluciones.js"></script>
 }
 
-<div id="devolucionesPage" data-bind="submit: guardar.bind($data)">
+<form id="devolucionesPage" data-bind="submit: guardar.bind($data)">
 
     <h2>Devoluciones</h2>
 
@@ -37,30 +37,42 @@
                 </td>                
             </tr>
             <tr>
-                <td colspan="6">                    
-                    <form class="row g-3">                        
+                <td colspan="4">                    
+                    <div class="row g-3 d-flex justify-content-end">                        
                         <div class="col-auto">
-                            <strong  class="col-form-label">Cantidad Devuelta</strong>
+                            <label  class="col-form-label fw-bold">Cantidad Devuelta</label>
                         </div>
                         <div class="col-auto">
                             <label  class="col-form-label">En buenas condiciones</label>
-                            <input type="text" inputmode="decimal" placeHolder="En buenas condiciones"
-                            data-bind="value: l.cantidadEnBuenasCondiciones, attr: { max: l.cantidad - l.cantidadEnMalasCondiciones() }" class="form-control" />
+                            <input type="text" inputmode="decimal" placeHolder="En buenas condiciones" id="cantidadDevuelta"
+                            data-bind="value: l.cantidadEnBuenasCondiciones, css: { 'is-invalid': l.hasError() }" class="form-control" />                                               
                         </div> 
                         <div class="col-auto">
                             <label  class="col-form-label">En malas condiciones</label>
                             <input type="text" inputmode="decimal" placeHolder="En malas condiciones"
-                            data-bind="value: l.cantidadEnMalasCondiciones" class="form-control" />
-                        </div>
-
+                            data-bind="value: l.cantidadEnMalasCondiciones, css: { 'is-invalid': l.hasError() }" class="form-control" />
+                        </div>                        
+                    </div>                     
+                    <div class="row float-end text-danger" data-bind="visible: l.hasError">
                         <div class="col-auto">
-                            <label  class="col-form-label">Devolver al cliente:</label>
-                            <strong  class="col-form-label" data-bind="text: l.aMoneda(l.devolucionRowOp())"></strong>
+                            La suma de la cantidad devuelta debe ser menor a la cantida comprada originalmente.
                         </div>
-                    </form>                    
-                </td>                
+                    </div>
+                </td>
+                <td>
+                    <label class="col-form-label">Devolver al cliente:</label>
+                </td>
+                <td>
+                    <label  class="col-form-label fw-bold" data-bind="text: l.aMoneda(l.devolucionRowOp())"></label>
+                </td>
             </tr>                         
         </tbody>
     </table>    
 <!-- /ko -->
-</div>
+    <div class="row g-3 d-flex justify-content-end">
+        <div class="col-auto">
+            <a class="btn btn-secondary" asp-action="Index" asp-controller="Ventas">Cancelar</a>
+            <button type="submit" class="btn btn-primary" data-bind="enable: isValid">Guardar</button>
+        </div>
+    </div>
+</form>

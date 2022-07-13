@@ -51,6 +51,7 @@ class ProductLine {
     categoria: string;
     unidadMedida: string;
     devolucionRowOp: KnockoutComputed<number>;
+    hasError: KnockoutComputed<boolean>;
     aMoneda: Function;
     constructor(l: IProductLine) {
         this.producto = l.producto;
@@ -70,6 +71,16 @@ class ProductLine {
             return (parseFloat(a.toString()) + parseFloat(b.toString())) * c;
         }, self);
 
+        this.hasError = ko.computed<boolean>(() => {
+            let a = this.cantidadEnBuenasCondiciones();
+            let b = this.cantidadEnMalasCondiciones();  
+            if (isNaN(a) || isNaN(b)) return true;
+
+            let c = this.cantidad;            
+            return (parseFloat(a.toString()) + parseFloat(b.toString())) > c;
+
+        }, self);        
+
         this.aMoneda = new Intl.NumberFormat('es-MX', {
             style: "currency",
             currency: "USD",
@@ -83,11 +94,24 @@ export class Devolucion {
     public url: string;
     public lines: KnockoutObservableArray<ProductLine>;
     public venta: KnockoutObservable<IAjuste>;
+    public isValid: KnockoutComputed<boolean>;
     constructor() {
         this.url = "ventas/GetVentaData"
         this.api = new Api();
         this.lines = ko.observableArray<ProductLine>();
         this.venta = ko.observable<IAjuste>();
+        const self = this;
+        
+        this.isValid = ko.computed<boolean>(() => {
+            let count = 0;
+            for(const it of self.lines())
+            {
+                if (it.hasError()) return false;
+                count += it.cantidadEnBuenasCondiciones();
+                count += it.cantidadEnMalasCondiciones();
+            }
+            return count > 0;
+        }, self);       
     }
 
     public async load(): Promise<void> {
