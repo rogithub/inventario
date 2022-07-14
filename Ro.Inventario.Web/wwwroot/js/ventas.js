@@ -174,7 +174,7 @@ var Venta = /** @class */ (function () {
     };
     Venta.prototype.onScanFailure = function (error) {
         //const self = this;
-        //console.log(error);
+        console.dir(error);
     };
     Venta.prototype.readQr = function () {
         var self = this;

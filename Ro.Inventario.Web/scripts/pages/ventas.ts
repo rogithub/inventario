@@ -194,7 +194,7 @@ export class Venta {
 
     public onScanFailure(error: any): void {
         //const self = this;
-        //console.log(error);
+        console.dir(error);
     }
 
     public readQr(): void {
