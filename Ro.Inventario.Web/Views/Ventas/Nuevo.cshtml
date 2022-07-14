@@ -9,8 +9,7 @@
 <script src="~/lib/autoComplete.js-10.2.7/autoComplete.min.js"></script>
 <script src="~/js/shared.js"></script>
 <script src="~/js/ventas.js"></script>
-<script type="text/javascript">
-    //  document.addEventListener('DOMContentLoaded', function () {
+<script type="text/javascript">    
 
     //https://tarekraafat.github.io/autoComplete.js/#/playground
     const autoCompleteJS = new autoComplete({
@@ -35,135 +34,141 @@
             keys: ["nombre"] // Data source 'Object' key to be searched
         }
     });
-//});
+
 </script>
 }
 
 
+<div id="ventasPage">
+    <div class="float-end">
+        <input type="button" data-bind="click: readQr" value="Buscar por QR"></button>        
+    </div>
+    <div style="width: 600px" id="reader" data-bind="visible: showQrScan"></div>
 
-<form id="ventasPage" data-bind="submit: guardar.bind($data)">
+    <form data-bind="submit: guardar.bind($data)">
 
-    <h2>Venta</h2>
+        <h2>Venta</h2>
 
-    <input id="autoComplete" style="width: 800px;" />
+        <input id="autoComplete" style="width: 800px;" />    
 
-    <table class="table table-sm">
-        <thead>
-            <tr>
-                <th colspan="8">Artículos</th>
-            </tr>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Producto</th>
-                <th scope="col">Categoria</th>
-                <th scope="col">Unidad de Medida</th>
-                <th scope="col">Precio de Venta</th>
-                <th scope="col">Cantidad</th>
-                <th scope="col">Total</th>
-                <th scope="col">Acciones</th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: { data: lines, as: 'l' }">
-            <tr>
-                <th scope="row" data-bind="text: $index() + 1"></th>
-                <td data-bind="text: l.producto.nombre"></td>
-                <td data-bind="text: l.producto.categoria"></td>
-                <td data-bind="text: l.producto.unidadMedida"></td>
-                <td data-bind="text: l.precioVentaPesos"></td>
-                <td>
-                    <input type="text" inputmode="decimal" placeHolder="numérico" data-bind="value: l.cantidad"
-                        style="width: 90px;" />
-                </td>
-                <td data-bind="text: l.totalPesos">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th colspan="8">Artículos</th>
+                </tr>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Categoria</th>
+                    <th scope="col">Unidad de Medida</th>
+                    <th scope="col">Precio de Venta</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: { data: lines, as: 'l' }">
+                <tr>
+                    <th scope="row" data-bind="text: $index() + 1"></th>
+                    <td data-bind="text: l.producto.nombre"></td>
+                    <td data-bind="text: l.producto.categoria"></td>
+                    <td data-bind="text: l.producto.unidadMedida"></td>
+                    <td data-bind="text: l.precioVentaPesos"></td>
+                    <td>
+                        <input type="text" inputmode="decimal" placeHolder="numérico" data-bind="value: l.cantidad"
+                            style="width: 90px;" />
+                    </td>
+                    <td data-bind="text: l.totalPesos">
 
-                </td>
-                <td>
-                    <button type="button" class="btn btn-outline-danger btn-sm"
-                        data-bind="click: $parent.borrar.bind($parent)">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-trash" viewBox="0 0 16 16">
-                            <path
-                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
-                            <path fill-rule="evenodd"
-                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
-                        </svg>
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td>
-                </td>
-                <td>
-                </td>
-                <td>
-                </td>
-                <td>
-                </td>
-                <td>
-                </td>
-                <th>
-                    Suma Total
-                </th>
-                <td data-bind="text: totalPesos">
-                </td>
-                <td>
-                </td>
-            <tr>
-            <tr class="table-primary" data-bind="visible: editandoFecha">
-                <td colspan="8">
-                    <div>
-                        Fecha
-                        <input type="date" class="form-control" data-bind="value: date" required />
-                        Hora
-                        <input type="time" class="form-control" data-bind="value: time" min="00:00" max="23:59"
-                            required />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-danger btn-sm"
+                            data-bind="click: $parent.borrar.bind($parent)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-trash" viewBox="0 0 16 16">
+                                <path
+                                    d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                <path fill-rule="evenodd"
+                                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <th>
+                        Suma Total
+                    </th>
+                    <td data-bind="text: totalPesos">
+                    </td>
+                    <td>
+                    </td>
+                <tr>
+                <tr class="table-primary" data-bind="visible: editandoFecha">
+                    <td colspan="8">
+                        <div>
+                            Fecha
+                            <input type="date" class="form-control" data-bind="value: date" required />
+                            Hora
+                            <input type="time" class="form-control" data-bind="value: time" min="00:00" max="23:59"
+                                required />
 
+                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                data-bind="click: () => editandoFecha(false)">Aceptar</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="table-primary" data-bind="visible: editandoFecha() === false">
+                    <td colspan="8">
+                        <strong data-bind="text: dateStr">
+
+                        </strong>
+                        <span data-bind="text: time">
+
+                        </span>
                         <button type="button" class="btn btn-sm btn-outline-primary"
-                            data-bind="click: () => editandoFecha(false)">Aceptar</button>
-                    </div>
-                </td>
-            </tr>
-            <tr class="table-primary" data-bind="visible: editandoFecha() === false">
-                <td colspan="8">
-                    <strong data-bind="text: dateStr">
+                            data-bind="click: () => editandoFecha(true)">Cambiar</button>
+                    </td>
+                </tr>
+                <tr class="table-primary" data-bind="visible: editandoFecha() === false">
+                    <th>
+                        Total
+                    </th>
+                    <td data-bind="text: totalPesos">
+                    </td>
+                    <th>
+                        Pago Cliente
+                    </th>
+                    <td>
+                        <input type="text" inputmode="decimal" class="form-control" id="txtPago" placeholder="Pago cliente"
+                            data-bind="textInput: pagoCliente">
+                    </td>
+                    <td>
 
-                    </strong>
-                    <span data-bind="text: time">
-
-                    </span>
-                    <button type="button" class="btn btn-sm btn-outline-primary"
-                        data-bind="click: () => editandoFecha(true)">Cambiar</button>
-                </td>
-            </tr>
-            <tr class="table-primary" data-bind="visible: editandoFecha() === false">
-                <th>
-                    Total
-                </th>
-                <td data-bind="text: totalPesos">
-                </td>
-                <th>
-                    Pago Cliente
-                </th>
-                <td>
-                    <input type="text" inputmode="decimal" class="form-control" id="txtPago" placeholder="Pago cliente"
-                        data-bind="textInput: pagoCliente">
-                </td>
-                <td>
-
-                </td>
-                <th>
-                    Cambio
-                </th>
-                <td data-bind="text: cambioPesos">
-                </td>
-                <td>
-                    <div>
-                        <button type="submit" data-bind="enable: isValid" class="btn btn-primary">Guardar Venta</button>
-                    </div>
-                </td>
-            <tr>
-        </tfoot>
-    </table>
-</form>
+                    </td>
+                    <th>
+                        Cambio
+                    </th>
+                    <td data-bind="text: cambioPesos">
+                    </td>
+                    <td>
+                        <div>
+                            <button type="submit" data-bind="enable: isValid" class="btn btn-primary">Guardar Venta</button>
+                        </div>
+                    </td>
+                <tr>
+            </tfoot>
+        </table>
+    </form>
+</div>

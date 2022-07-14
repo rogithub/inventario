@@ -27,6 +27,12 @@ public class BusquedasController : Controller
         return Json(prods.ToArray());
     }
 
+    public async Task<IActionResult> GetByQr(string qr)
+    {
+        var prods = await _productos.SearchByQr(qr);
+        return Json(prods.ToArray());
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

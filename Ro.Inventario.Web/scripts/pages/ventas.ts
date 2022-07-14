@@ -1,6 +1,8 @@
 import { BinderService } from '../services/binderService';
 import { Api } from '../services/api';
 import toCurrency from '../shared/toCurrency';
+import beep from '../shared/beep';
+import { Html5QrcodeScanner, Html5QrcodeScanType } from "html5-qrcode";
 
 export interface IProduct {
     nid: number;
@@ -68,6 +70,8 @@ export class Venta {
     public time: KnockoutObservable<string>;
     public fecha: Date;
     public aMoneda = toCurrency;
+    public showQrScan: KnockoutObservable<boolean>;    
+    public qrScanner: Html5QrcodeScanner;
 
     constructor() {
         this.fecha = new Date();
@@ -87,7 +91,25 @@ export class Venta {
         let minutosStr = minutos < 10 ? '0' + minutos.toString() : minutos.toString();
         this.date = ko.observable<string>(`${this.fecha.getFullYear()}-${mesStr}-${diaStr}`);
         this.time = ko.observable<string>(`${horasStr}:${minutosStr}`);
+        this.showQrScan = ko.observable<boolean>();        
         const self = this;
+
+        this.qrScanner =new Html5QrcodeScanner(
+            "reader",
+            { 
+                fps: 1, 
+                qrbox: {
+                    width: 250, 
+                    height: 250
+                } ,
+                supportedScanTypes: 
+                [
+                    Html5QrcodeScanType.SCAN_TYPE_CAMERA
+                ]
+            }, false);
+        self.qrScanner.render(self.onScanSuccess.bind(self), self.onScanFailure.bind(self));
+
+        
         self.autocomplete.addEventListener("selection", function (e: any) {
             let p = e.detail.selection.value as IProduct;
             self.lines.push(new ProductLine(p));
@@ -141,6 +163,45 @@ export class Venta {
         BinderService.bind(self, "#ventasPage");
     }
 
+    public onScanSuccess(decodedText: any, decodedResult: any): void {
+        const self = this;        
+        console.log(`buscando por código ${decodedText}`);  
+        self.api.get<IProduct[]>(`busquedas/GetByQr?qr=${decodedText}`).then(data => {
+            if (data.length > 1){
+                console.error(`Multiple products found ${decodedText}`);                
+                return;
+            }
+
+            if (data.length === 0){
+                alert(`Producto no encontrado para el código ${decodedText}`);                
+                return;
+            }
+
+            data.forEach(p => {
+                beep();
+                let found = self.lines().find(l=>l.producto.id === p.id);
+                if (found !== undefined && found !== null)
+                {
+                    let cantidad = parseFloat(found.cantidad().toString()) + parseFloat("1");
+                    found.cantidad(cantidad);                    
+                    return;
+                }
+
+                self.lines.push(new ProductLine(p));
+            });            
+        });
+    }
+
+    public onScanFailure(error: any): void {
+        //const self = this;
+        //console.log(error);
+    }
+
+    public readQr(): void {
+        const self = this;
+        let curr = self.showQrScan();
+        self.showQrScan(!curr);
+    }
 
     public async guardar(): Promise<void> {
         const self = this;

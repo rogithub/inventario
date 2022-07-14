@@ -10,6 +10,7 @@ public interface IBusquedaProductosRepo
 {
     Task<IEnumerable<ProductoEncontrado>> EnCategoria(string pattern, Guid categoriaId);
     Task<IEnumerable<ProductoEncontrado>> FulSearchText(string pattern);
+    Task<IEnumerable<ProductoEncontrado>> SearchByQr(string qr);    
     Task<ProductoEncontrado> GetOne(Guid id);
 }
 
@@ -62,6 +63,30 @@ public class BusquedaProductosRepo : IBusquedaProductosRepo
         var cmd = sql.ToCmd
         (
             "@pattern".ToParam(DbType.String, pattern)
+        );
+        return Db.GetRows(cmd, GetData);
+    }
+
+    public Task<IEnumerable<ProductoEncontrado>> SearchByQr(string qr)
+    {
+        if (string.IsNullOrWhiteSpace(qr))
+        {
+            return Task.FromResult(Enumerable.Empty<ProductoEncontrado>());
+        }
+        
+        var sql =
+            @"
+                SELECT p.* FROM v_inventario p WHERE 
+                    Id=@id or 
+                    CodigoBarrasItem=@codigoBarrasItem or 
+                    CodigoBarrasCaja=@codigoBarrasCaja
+                LIMIT 1
+            ";
+        var cmd = sql.ToCmd
+        (
+            "@id".ToParam(DbType.String, qr),
+            "@codigoBarrasItem".ToParam(DbType.String, qr),
+            "@codigoBarrasCaja".ToParam(DbType.String, qr)
         );
         return Db.GetRows(cmd, GetData);
     }
