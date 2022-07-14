@@ -1,6 +1,4 @@
 #!/bin/bash
-
-MIGRATIONSCRIPT="MIGRATION.sql"
 EXTRASCRIPTFILE="reportes.sql"
 DBFILE="inventario.db"
 SCRIPTFILE="inventario.sql"
@@ -24,7 +22,9 @@ remove_file_if_exists () {
 
 exec_script_if_exists () {    
     if [ -f "$1" ]; then
-	sqlite3 $DBFILE < "$1";
+	    sqlite3 $DBFILE < "$1";
+    else
+	    echo "./$1 does not exist."
     fi
 }
 
@@ -36,6 +36,5 @@ remove_file_if_exists "./$DBFILE"
 cat $SCRIPTFILE | sqlite3 $DBFILE
 
 exec_script_if_exists "./$EXTRASCRIPTFILE"
-exec_script_if_exists "./$MIGRATIONSCRIPT"
 
 mv $DBFILE $OLD
