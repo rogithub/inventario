@@ -15,7 +15,7 @@ RUN dotnet publish -c Release -o out
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
 WORKDIR /app
-COPY dep-raspi/* ./
+COPY Ro.Inventario.Web/bin/Debug/net6.0/runtimes/linux-x64/native/SQLite.Interop.dll ./
 
 # Change timezone to local time
 ENV TZ=America/Mexico_City
