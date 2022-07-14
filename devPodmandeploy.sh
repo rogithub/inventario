@@ -9,9 +9,9 @@ CONT_DB_PATH="/app/Db"
 PORT="5002:5002"
 
 echo "--> 🚀 Ro script deploying podman container DEVELOPMENT"
-### Get latest
-##  echo "--> Updating git repository"
-##  git pull
+# Get latest
+echo "--> Updating git repository"
+git pull
 
 echo "--> Stop container if running"
 ## Stop if running 
