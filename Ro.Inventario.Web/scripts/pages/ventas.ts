@@ -1,5 +1,6 @@
 import { BinderService } from '../services/binderService';
 import { Api } from '../services/api';
+import toCurrency from '../shared/toCurrency';
 
 export interface IProduct {
     nid: number;
@@ -16,6 +17,7 @@ export interface IProduct {
 export interface VentaProductoModel {
     productoId: string;
     cantidad: number;
+    precioUnitario: number;
 }
 
 export interface VentaModel {
@@ -29,6 +31,9 @@ export class ProductLine {
     public producto: IProduct;
     public cantidad: KnockoutObservable<number>;
     public total: KnockoutComputed<number>;
+    public totalPesos: KnockoutComputed<string>;
+    public precioVentaPesos: KnockoutComputed<string>;
+    public aMoneda = toCurrency;
 
     constructor(product: IProduct) {
         this.producto = product;
@@ -36,6 +41,12 @@ export class ProductLine {
         const self = this;
         this.total = ko.computed<number>(function () {
             return self.cantidad() * self.producto.precioVenta;
+        });
+        this.totalPesos = ko.computed<string>(function () {
+            return self.aMoneda(self.total());
+        });
+        this.precioVentaPesos = ko.computed<string>(function () {
+            return self.aMoneda(self.producto.precioVenta);
         });
     }
 }
@@ -46,14 +57,17 @@ export class Venta {
     public url: string;
     public autocomplete: Element;
     public total: KnockoutComputed<number>;
+    public totalPesos: KnockoutComputed<string>;
     public pagoCliente: KnockoutObservable<number>;
     public cambio: KnockoutComputed<number>;
+    public cambioPesos: KnockoutComputed<string>;
     public dateStr: KnockoutComputed<string>;
     public isValid: KnockoutComputed<boolean>;
     public editandoFecha: KnockoutObservable<boolean>;
     public date: KnockoutObservable<string>;
     public time: KnockoutObservable<string>;
     public fecha: Date;
+    public aMoneda = toCurrency;
 
     constructor() {
         this.fecha = new Date();
@@ -86,8 +100,14 @@ export class Venta {
             var initialValue = 0;
             return lines.reduce((sum, prod) => sum + prod.total(), initialValue);
         });
+        this.totalPesos = ko.computed<string>(function () {            
+            return self.aMoneda(self.total());
+        });
         this.cambio = ko.computed<number>(function () {
             return self.pagoCliente() - self.total();
+        });
+        this.cambioPesos = ko.computed<string>(function () {
+            return self.aMoneda(self.cambio());
         });
 
         this.isValid = ko.computed<boolean>(function () {
@@ -130,6 +150,7 @@ export class Venta {
             {
                 cantidad: l.cantidad(),
                 productoId: l.producto.id,
+                precioUnitario: l.producto.precioVenta
             };
             lines.push(line);
         });
@@ -144,7 +165,7 @@ export class Venta {
         let result = await self.api.post<number[]>(url, data);
         console.log(`Ventas guardadas ${result[0]} productos en esa venta ${result[1]}`);
 
-        alert("Guardado!");
+        alert("¡Guardado!");
         window.location.href = `${document.baseURI}`;
     }
 }

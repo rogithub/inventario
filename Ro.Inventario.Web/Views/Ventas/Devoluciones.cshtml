@@ -1,0 +1,78 @@
+@{
+    ViewData["Title"] = "Devoluciones";
+}
+@section Scripts {
+<script src="~/js/shared.js"></script>
+<script src="~/js/devoluciones.js"></script>
+}
+
+<form id="devolucionesPage" data-bind="submit: guardar.bind($data)">
+
+    <h2>Devoluciones</h2>
+
+    <input type="hidden" value='@ViewData["ventaId"]' id="hidVentaId" />
+<!-- ko foreach: { data: lines, as: 'l' } -->
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th scope="col">Producto</th>
+                <th scope="col">Categoria</th>
+                <th scope="col">Unidad de Medida</th>
+                <th scope="col">Precio de Venta</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Total</th>                
+            </tr>
+        </thead>
+        <tbody>            
+            <tr>
+                <td data-bind="text: l.producto.nombre"></td>
+                <td data-bind="text: l.categoria"></td>
+                <td data-bind="text: l.unidadMedida"></td>
+                <td data-bind="text: l.aMoneda(l.precioUnitario)"></td>
+                <td data-bind="text: l.cantidad">
+
+                </td>
+                <td data-bind="text: l.aMoneda(l.cantidad * l.precioUnitario)">
+
+                </td>                
+            </tr>
+            <tr>
+                <td colspan="4">                    
+                    <div class="row g-3 d-flex justify-content-end">                        
+                        <div class="col-auto">
+                            <label  class="col-form-label fw-bold">Cantidad Devuelta</label>
+                        </div>
+                        <div class="col-auto">
+                            <label  class="col-form-label">En buenas condiciones</label>
+                            <input type="text" inputmode="decimal" placeHolder="En buenas condiciones" id="cantidadDevuelta"
+                            data-bind="value: l.cantidadEnBuenasCondiciones, css: { 'is-invalid': l.hasError() }" class="form-control" />                                               
+                        </div> 
+                        <div class="col-auto">
+                            <label  class="col-form-label">En malas condiciones</label>
+                            <input type="text" inputmode="decimal" placeHolder="En malas condiciones"
+                            data-bind="value: l.cantidadEnMalasCondiciones, css: { 'is-invalid': l.hasError() }" class="form-control" />
+                        </div>                        
+                    </div>                     
+                    <div class="row float-end text-danger" data-bind="visible: l.hasError">
+                        <div class="col-auto">
+                            La suma de la cantidad devuelta debe ser menor a la cantida comprada originalmente.
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <label class="col-form-label">Devolver al cliente:</label>
+                </td>
+                <td>
+                    <label  class="col-form-label fw-bold" data-bind="text: l.aMoneda(l.devolucionRowOp())"></label>
+                </td>
+            </tr>                         
+        </tbody>
+    </table>    
+<!-- /ko -->
+    <div class="row g-3 d-flex justify-content-end">
+        <div class="col-auto">
+            <a class="btn btn-secondary" asp-action="Index" asp-controller="Ventas">Cancelar</a>
+            <button type="submit" class="btn btn-primary" data-bind="enable: isValid">Guardar</button>
+        </div>
+    </div>
+</form>

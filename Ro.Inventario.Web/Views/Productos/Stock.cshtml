@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "Productos";
+    @model Ro.Inventario.Web.Entities.ProductoEncontrado;
+var localizacion = new CultureInfo("es-MX");
+}
+
+@section Header {
+<link rel="stylesheet" href="~/lib/autoComplete.js-10.2.7/css/autoComplete.css">
+
+<script type="text/JavaScript">
+    let strProduct = '@ViewData["Product"]';
+</script>
+}
+@section Scripts {
+<script src="~/lib/qrcode.min.js"></script>
+<script src="~/js/shared.js"></script>
+<script src="~/js/stock.js"></script>
+
+<script type="text/javascript">
+
+    // https://davidshimjs.github.io/qrcodejs/
+    new QRCode(document.getElementById("qrcode"), "@Model.Id");
+
+</script>
+}
+
+<div id="stockPage">
+    <input type="hidden" id="hidStock" value="@Model.Stock" />
+    <input type="hidden" id="hidProductoId" value="@Model.Id.ToString()" />
+    <h2>Stock</h2>
+
+    <div class="card mb-3">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <div class="m-3">
+                    <h5 class="card-title">@Model.Nombre</h5>
+                    <h5 class="card-title">@Model.PrecioVenta.ToString("C", localizacion)</h5>
+                    <div class="center" id="qrcode"></div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <p class="card-text">Existencias <strong>@Model.Stock</strong>, unidad de medida
+                        <strong>@Model.UnidadMedida</strong>.
+                    </p>
+                    <form data-bind="submit: guardar.bind($data)">
+
+
+                        <input type="radio" class="btn-check" name="operacion" id="success-outlined" autocomplete="off"
+                            checked value="agregar" data-bind="checked: operacion" required>
+                        <label class="btn btn-outline-success" for="success-outlined">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z" />
+                            </svg>
+                            Agregar unidades
+                        </label>
+
+                        <input type="radio" class="btn-check" name="operacion" id="danger-outlined" autocomplete="off"
+                            value="quitar" data-bind="checked: operacion">
+                        <label class="btn btn-outline-danger" for="danger-outlined">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-dash-lg" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z" />
+                            </svg>
+                            Quitar unidades
+                        </label>
+
+                        <div class="mb-3">
+                            <label for="txtCantidad" class="form-label">Cantidad</label>
+                            <input class="form-control" data-bind="value: cantidad"
+                                placeholder="cantidad valor absoluto" type="number" step=".01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputPassword1" class="form-label">Motivo del cambio</label>
+                            <textarea data-bind="value: motivo" class="form-control" required></textarea>
+                        </div>
+
+                        <div class="mb-3" data-bind="if: operacion() !== undefined && cantidad() != undefined">
+                            <p class=" warning">
+                                Se van a <strong data-bind="text: operacion"></strong> <strong
+                                    data-bind="text: Math.abs(cantidad())"></strong>
+                                unidades del
+                                stock para quedar finalmente en <strong data-bind="text: stockFinal()"></strong>.
+                            </p>
+                        </div>
+
+                        <div>
+                            <a class="btn btn-secondary" asp-action="Index" asp-controller="Productos">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

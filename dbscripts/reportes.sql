@@ -1,6 +1,5 @@
 BEGIN TRANSACTION;
 
-
 -- Vista Productos --PRECIOS CON FECHAS MAS RECIENTES
 DROP VIEW IF EXISTS v_productos;
 CREATE VIEW v_productos
@@ -17,13 +16,28 @@ JOIN Categorias c ON c.Id = cp.CategoriaId
 JOIN UnidadesMedida um ON p.UnidadMedidaId = um.Id;
 
 -- Vista Inventario
+/*
+
+public enum TipoAjuste
+{
+    Venta = 0,
+    Merma = 1,
+    IngresoSinCompra = 2
+}
+*/
 DROP VIEW IF EXISTS v_inventario;
 CREATE VIEW v_inventario
 AS
 SELECT 
 	p.*,	
-	((SELECT ifnull(SUM(cp.Cantidad), 0) FROM ComprasProductos cp WHERE cp.ProductoId = p.Id) 
-	- (SELECT ifnull(SUM(ap.Cantidad), 0) FROM AjustesProductos ap JOIN Ajustes a on a.Id = ap.AjusteId WHERE a.TipoAjuste=0 AND ap.ProductoId = p.Id)) AS Stock
+	(
+		(
+			(SELECT ifnull(SUM(cp.Cantidad), 0) FROM ComprasProductos cp WHERE cp.ProductoId = p.Id) 
+			+
+			(SELECT ifnull(SUM(ap.Cantidad), 0) FROM AjustesProductos ap JOIN Ajustes a on a.Id = ap.AjusteId WHERE a.TipoAjuste IN (2) AND ap.ProductoId = p.Id)
+		)
+		- (SELECT ifnull(SUM(ap.Cantidad), 0) FROM AjustesProductos ap JOIN Ajustes a on a.Id = ap.AjusteId WHERE a.TipoAjuste IN (0, 1) AND ap.ProductoId = p.Id)
+	) AS Stock
 FROM 
 	v_productos p;
 
@@ -40,18 +54,10 @@ SELECT
 	cast(a.Pago AS FLOAT) as Pago,
 	cast(a.Cambio AS FLOAT) as Cambio,
 	cast(ap.Cantidad AS FLOAT) as Cantidad
-	, cast(pp.PrecioVenta AS FLOAT) as UltimoPrecioVenta
+	, cast(ap.PrecioUnitarioVenta AS FLOAT) as PrecioUnitarioVenta
 	, cast(cp.PrecioCompra AS FLOAT) as UltimoPrecioCompra	
 FROM 
-	AjustesProductos ap JOIN Ajustes a ON a.Id = ap.AjusteId JOIN productos p on ap.ProductoId = p.id
-	JOIN PreciosProductos pp ON pp.Id = 
-		(
-			SELECT Id FROM PreciosProductos 
-			WHERE 
-				ProductoId = p.Id
-				AND  (datetime(FechaCreado) <= datetime( a.FechaAjuste ) OR (SELECT COUNT(*) FROM PreciosProductos WHERE ProductoId = p.Id) = 1)
-			ORDER BY datetime(FechaCreado) DESC LIMIT 1
-		)
+	AjustesProductos ap JOIN Ajustes a ON a.Id = ap.AjusteId JOIN productos p on ap.ProductoId = p.id	
 	JOIN ComprasProductos cp ON cp.Id = 
 		(
 			SELECT cp.Id FROM ComprasProductos cp JOIN Compras c on cp.CompraId = c.Id 
@@ -69,8 +75,8 @@ SELECT
 	FechaAjuste,
 	COUNT(DISTINCT(AjusteId)) as NumeroVentas,
 	SUM(UltimoPrecioCompra * Cantidad) as Inversion,
-	SUM(UltimoPrecioVenta * Cantidad) as Venta,	
-	SUM(UltimoPrecioVenta * Cantidad) - SUM(UltimoPrecioCompra * Cantidad) as Ganancia
+	SUM(PrecioUnitarioVenta * Cantidad) as Venta,	
+	SUM(PrecioUnitarioVenta * Cantidad) - SUM(UltimoPrecioCompra * Cantidad) as Ganancia
 FROM v_ventas_productos
 GROUP BY FechaAjuste
 ORDER BY FechaAjuste;
@@ -82,7 +88,7 @@ CREATE VIEW rpt_rendimiento_productos
 AS
 SELECT 
 	p.Nombre, 
-	v.UltimoPrecioVenta - v.UltimoPrecioCompra as Rendimiento, 
+	v.PrecioUnitarioVenta - v.UltimoPrecioCompra as Rendimiento, 
 	SUM(v.Cantidad) as VecesVendido
 FROM Productos p JOIN v_ventas_productos v on p.Id = v.ProductoId 
 GROUP BY p.Id 

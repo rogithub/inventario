@@ -10,16 +10,18 @@ namespace Ro.Inventario.Web.Controllers;
 
 public class VentasController : Controller
 {
-    private readonly IVentasProductosRepo _ventasProds;
-    private readonly IVentasRepo _ventas;
+    private readonly IAjustesProductosRepo _ventasProds;
+    private readonly IAjustesRepo _ventas;
+    private readonly ISettingsRepo _settings;
     private readonly ILogger<VentasController> _logger;
 
     private readonly IVentasService _ventasService;
 
     public VentasController(
         ILogger<VentasController> logger,
-        IVentasProductosRepo ventasProds,
-        IVentasRepo ventas,
+        IAjustesProductosRepo ventasProds,
+        IAjustesRepo ventas,
+        ISettingsRepo settings,
         IVentasService ventasService
         )
     {
@@ -27,6 +29,7 @@ public class VentasController : Controller
         _ventasProds = ventasProds;
         _ventas = ventas;
         _ventasService = ventasService;
+        _settings = settings;
     }
 
     public async Task<IActionResult> Index(DateTime? fecha)
@@ -41,6 +44,29 @@ public class VentasController : Controller
         return View();
     }
 
+    public IActionResult Devoluciones(Guid ventaId)
+    {
+        ViewData["ventaId"] = ventaId.ToString();
+        return View();
+    }
+
+    public async Task<IActionResult> DevolverProductos([FromBody]DevolucionProductoSaveModel[] model)
+    {        
+        var prods = (from it in model select new DevolucionProducto(){
+            AjusteProductoId = it.AjusteProductoId,
+            CantidadEnBuenasCondiciones = it.CantidadEnBuenasCondiciones,
+            CantidadEnMalasCondiciones = it.CantidadEnMalasCondiciones
+        }).ToArray();
+        var data = await _ventasService.DevolverProductos(prods);
+         return Json(data);
+    }    
+
+    public async Task<IActionResult> GetVentaData(Guid ventaId)
+    {
+        var data = await _ventasService.CargarDevolucion(ventaId);
+        return Json(data);
+    }
+
     [HttpPost]
     public async Task<IActionResult> Guardar([FromBody] VentaModel model)
     {
@@ -48,13 +74,15 @@ public class VentasController : Controller
         v.Pago = model.Pago;
         v.Cambio = model.Cambio;
         v.FechaVenta = model.Fecha;
+        v.Iva = await _settings.GetValue("IVA", (iva) => decimal.Parse(iva));
         var intVenta = await _ventas.Save(v);
         var prods = (from l in model.Items
-                     select new VentaProducto()
+                     select new AjusteProducto()
                      {
                          ProductoId = l.ProductoId,
-                         VentaId = v.Id,
-                         Cantidad = l.Cantidad
+                         AjusteId = v.Id,
+                         Cantidad = l.Cantidad,
+                         PrecioUnitario = l.PrecioUnitario
                      }).ToArray();
 
         _logger.LogInformation("Venta id {id}", v.Id.ToString());

@@ -66,13 +66,15 @@
                 <td data-bind="text: p.nombre"></td>
                 <td data-bind="text: p.categoria"></td>
                 <td data-bind="text: p.unidadMedida"></td>
-                <td data-bind="text: p.precioVenta"></td>
+                <td data-bind="text: p.precioVentaPesos"></td>
                 <td data-bind="text: p.codigoBarrasItem"></td>
                 <td data-bind="text: p.codigoBarrasCaja"></td>
                 <td data-bind="text: p.stock"></td>
                 <td>
-                    <a class="btn btn-outline-warning btn-sm"
+                    <a class="btn btn-outline-secondary btn-sm"
                         data-bind="attr: { href: 'Productos/Editar/?id='+p.id }">Editar</a>
+                    <a class="btn btn-outline-dark btn-sm"
+                        data-bind="attr: { href: 'Productos/Stock/?id='+p.id }">Stock</a>
                     <button type="button" class="btn btn-outline-danger btn-sm"
                         data-bind="click: $parent.borrar.bind($parent)">Quitar</button>
                 </td>

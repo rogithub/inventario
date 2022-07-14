@@ -11,6 +11,7 @@ __webpack_unused_export__ = ({ value: true });
 __webpack_unused_export__ = void 0;
 var binderService_1 = __webpack_require__(575);
 var api_1 = __webpack_require__(711);
+var toCurrency_1 = __webpack_require__(613);
 var Productos = /** @class */ (function () {
     function Productos() {
         this.url = "productos/descargar";
@@ -20,6 +21,7 @@ var Productos = /** @class */ (function () {
         var self = this;
         self.autocomplete.addEventListener("selection", function (e) {
             var p = e.detail.selection.value;
+            p.precioVentaPesos = ko.computed(function () { return (0, toCurrency_1.default)(p.precioVenta); }, p);
             self.lines.push(p);
             $(self.autocomplete).val("");
             return false;

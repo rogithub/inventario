@@ -1,50 +1,50 @@
 using Ro.SQLite.Data;
-using Ro.Inventario.Web.Entities;
 using System.Data;
 
 namespace Ro.Inventario.Web.Repos;
 
-public interface IVentasRepo
+public interface IAjustesRepo
 {
-    Task<int> Save(Venta it);
-    Task<Venta> GetOne(Guid id);
-    Task<IEnumerable<Venta>> ForDate(DateTime date);
+    Task<int> Save(Ajuste it);
+    Task<Ajuste> GetOne(Guid id);
+    Task<IEnumerable<Ajuste>> VentasPorFecha(DateTime date);
 }
 
-public class VentasRepo : IVentasRepo
+public class AjustesRepo : IAjustesRepo
 {
     private const string DATE_FORMAT = "yyy-MM-dd HH:mm:ss.fff";
     private IDbAsync Db;
-    public VentasRepo(IDbAsync db)
+    public AjustesRepo(IDbAsync db)
     {
         this.Db = db;
     }
 
-    public Task<int> Save(Venta it)
+    public Task<int> Save(Ajuste it)
     {
-        var sql = @"INSERT INTO Ajustes (Id,Pago,Cambio,FechaAjuste) VALUES 
-                    (@id,@pago,@cambio,@fechaAjuste);";
+        var sql = @"INSERT INTO Ajustes (Id,Pago,Cambio,FechaAjuste,TipoAjuste,IvaVenta) VALUES 
+                    (@id,@pago,@cambio,@fechaAjuste,@tipoAjuste,@ivaVenta);";
         var cmd = sql.ToCmd
         (
             "@id".ToParam(DbType.String, it.Id.ToString()),
             "@pago".ToParam(DbType.Decimal, it.Pago),
             "@cambio".ToParam(DbType.Decimal, it.Cambio),
-            "@fechaAjuste".ToParam(DbType.String, it.FechaVenta.ToString(DATE_FORMAT))
+            "@fechaAjuste".ToParam(DbType.String, it.FechaAjuste.ToString(DATE_FORMAT)),
+            "@tipoAjuste".ToParam(DbType.Int32, (int)it.TipoAjuste),
+            "@ivaVenta".ToParam(DbType.Decimal, it.Iva)
         );
         return Db.ExecuteNonQuery(cmd);
     }
 
-    public Task<Venta> GetOne(Guid id)
+    public Task<Ajuste> GetOne(Guid id)
     {
-        var sql = "SELECT Id,Pago,Cambio,FechaAjuste FROM Ajustes WHERE Id = @id";
+        var sql = "SELECT Id,Pago,Cambio,FechaAjuste,TipoAjuste,IvaVenta FROM Ajustes WHERE Id = @id";
         var cmd = sql.ToCmd
         (
             "@id".ToParam(DbType.String, id.ToString())
         );
         return Db.GetOneRow(cmd, GetData);
     }
-
-    public Task<IEnumerable<Venta>> ForDate(DateTime fecha)
+    public Task<IEnumerable<Ajuste>> VentasPorFecha(DateTime fecha)
     {
         var sql = @"SELECT * FROM Ajustes 
                     WHERE    TipoAjuste = 0 AND FechaAjuste 
@@ -57,15 +57,16 @@ public class VentasRepo : IVentasRepo
         return Db.GetRows(cmd, GetData);
     }
 
-
-    private Venta GetData(IDataReader dr)
+    private Ajuste GetData(IDataReader dr)
     {
-        return new Venta()
+        return new Ajuste()
         {
             Id = Guid.Parse(dr.GetString("Id")),
             Pago = dr.GetDecimal("Pago"),
             Cambio = dr.GetDecimal("Cambio"),
-            FechaVenta = DateTime.Parse(dr.GetString("FechaAjuste"))
+            FechaAjuste = DateTime.Parse(dr.GetString("FechaAjuste")),
+            TipoAjuste = (TipoAjuste)(dr.GetInt("TipoAjuste")),
+            Iva = dr.GetDecimal("IvaVenta")
         };
     }
 }

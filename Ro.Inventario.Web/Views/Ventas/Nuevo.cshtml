@@ -69,12 +69,12 @@
                 <td data-bind="text: l.producto.nombre"></td>
                 <td data-bind="text: l.producto.categoria"></td>
                 <td data-bind="text: l.producto.unidadMedida"></td>
-                <td data-bind="text: l.producto.precioVenta"></td>
+                <td data-bind="text: l.precioVentaPesos"></td>
                 <td>
-                    <input type="number" step=".01" placeHolder="numérico" data-bind="value: l.cantidad"
+                    <input type="text" inputmode="decimal" placeHolder="numérico" data-bind="value: l.cantidad"
                         style="width: 90px;" />
                 </td>
-                <td data-bind="text: l.total">
+                <td data-bind="text: l.totalPesos">
 
                 </td>
                 <td>
@@ -106,7 +106,7 @@
                 <th>
                     Suma Total
                 </th>
-                <td data-bind="text: total">
+                <td data-bind="text: totalPesos">
                 </td>
                 <td>
                 </td>
@@ -141,13 +141,13 @@
                 <th>
                     Total
                 </th>
-                <td data-bind="text: total">
+                <td data-bind="text: totalPesos">
                 </td>
                 <th>
                     Pago Cliente
                 </th>
                 <td>
-                    <input type="number" step=".01" class="form-control" id="txtPago" placeholder="Pago cliente"
+                    <input type="text" inputmode="decimal" class="form-control" id="txtPago" placeholder="Pago cliente"
                         data-bind="textInput: pagoCliente">
                 </td>
                 <td>
@@ -156,7 +156,7 @@
                 <th>
                     Cambio
                 </th>
-                <td data-bind="text: cambio">
+                <td data-bind="text: cambioPesos">
                 </td>
                 <td>
                     <div>

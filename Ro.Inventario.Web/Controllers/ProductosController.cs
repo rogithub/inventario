@@ -2,6 +2,8 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Ro.Inventario.Web.Models;
 using Ro.Inventario.Web.Services;
+using Ro.Inventario.Web.Repos;
+using Newtonsoft.Json;
 
 namespace Ro.Inventario.Web.Controllers;
 
@@ -9,17 +11,24 @@ public class ProductosController : Controller
 {
     private readonly ILogger<ProductosController> _logger;
     private readonly IComprasService _comprasSvc;
+    private readonly IVentasService _ventasSvc;
     private readonly IProductosService _productosSvc;
     private readonly INuevosProductosValidatorService _pValidator;
+    private readonly IBusquedaProductosRepo _pBuscar;
+
 
     public ProductosController(
         ILogger<ProductosController> logger,
         IComprasService comprasService,
+        IVentasService ventasSvc,
         IProductosService productosService,
+        IBusquedaProductosRepo pBuscar,
         INuevosProductosValidatorService pValidator)
     {
         _logger = logger;
+        _pBuscar = pBuscar;
         _comprasSvc = comprasService;
+        _ventasSvc = ventasSvc;
         _productosSvc = productosService;
         _pValidator = pValidator;
     }
@@ -49,6 +58,19 @@ public class ProductosController : Controller
     public IActionResult Nuevo()
     {
         return View(new CompraNuevosProductos());
+    }
+
+    public async Task<IActionResult> Stock(Guid id)
+    {
+        var p = await _pBuscar.GetOne(id);
+        return View(p);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Stock([FromBody] StockAjusteModel model)
+    {
+        var val = await _ventasSvc.GuardarAjusteStock(model);
+        return Json(new { updated = val });
     }
 
     [HttpPost]

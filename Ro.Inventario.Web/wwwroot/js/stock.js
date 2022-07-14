@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 826:
+/***/ 315:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -43,136 +43,68 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Venta = exports.ProductLine = void 0;
+exports.Stock = exports.TipoAjuste = void 0;
 var binderService_1 = __webpack_require__(575);
 var api_1 = __webpack_require__(711);
-var toCurrency_1 = __webpack_require__(613);
-var ProductLine = /** @class */ (function () {
-    function ProductLine(product) {
-        this.aMoneda = toCurrency_1.default;
-        this.producto = product;
-        this.cantidad = ko.observable(1);
-        var self = this;
-        this.total = ko.computed(function () {
-            return self.cantidad() * self.producto.precioVenta;
-        });
-        this.totalPesos = ko.computed(function () {
-            return self.aMoneda(self.total());
-        });
-        this.precioVentaPesos = ko.computed(function () {
-            return self.aMoneda(self.producto.precioVenta);
-        });
-    }
-    return ProductLine;
-}());
-exports.ProductLine = ProductLine;
-var Venta = /** @class */ (function () {
-    function Venta() {
-        this.aMoneda = toCurrency_1.default;
-        this.fecha = new Date();
-        this.url = "ventas/Guardar";
+var TipoAjuste;
+(function (TipoAjuste) {
+    TipoAjuste[TipoAjuste["Venta"] = 0] = "Venta";
+    TipoAjuste[TipoAjuste["Merma"] = 1] = "Merma";
+    TipoAjuste[TipoAjuste["IngresoSinCompra"] = 2] = "IngresoSinCompra";
+})(TipoAjuste = exports.TipoAjuste || (exports.TipoAjuste = {}));
+var Stock = /** @class */ (function () {
+    function Stock() {
+        this.url = "productos/descargar";
+        this.stock = $("#hidStock").val();
+        this.operacion = ko.observable();
+        this.motivo = ko.observable();
+        this.cantidad = ko.observable();
         this.api = new api_1.Api();
-        this.lines = ko.observableArray([]);
-        this.autocomplete = document.querySelector("#autoComplete");
-        this.pagoCliente = ko.observable(0);
-        this.editandoFecha = ko.observable(false);
-        var mes = this.fecha.getMonth() + 1;
-        var dia = this.fecha.getDate();
-        var mesStr = mes < 10 ? '0' + mes.toString() : mes.toString();
-        var diaStr = dia < 10 ? '0' + dia.toString() : dia.toString();
-        var horas = this.fecha.getHours();
-        var minutos = this.fecha.getMinutes();
-        var horasStr = horas < 10 ? '0' + horas.toString() : horas.toString();
-        var minutosStr = minutos < 10 ? '0' + minutos.toString() : minutos.toString();
-        this.date = ko.observable("".concat(this.fecha.getFullYear(), "-").concat(mesStr, "-").concat(diaStr));
-        this.time = ko.observable("".concat(horasStr, ":").concat(minutosStr));
         var self = this;
-        self.autocomplete.addEventListener("selection", function (e) {
-            var p = e.detail.selection.value;
-            self.lines.push(new ProductLine(p));
-            $(self.autocomplete).val("");
-            return false;
-        });
-        this.total = ko.computed(function () {
-            var lines = self.lines();
-            var initialValue = 0;
-            return lines.reduce(function (sum, prod) { return sum + prod.total(); }, initialValue);
-        });
-        this.totalPesos = ko.computed(function () {
-            return self.aMoneda(self.total());
-        });
-        this.cambio = ko.computed(function () {
-            return self.pagoCliente() - self.total();
-        });
-        this.cambioPesos = ko.computed(function () {
-            return self.aMoneda(self.cambio());
-        });
-        this.isValid = ko.computed(function () {
-            for (var _i = 0, _a = self.lines(); _i < _a.length; _i++) {
-                var l = _a[_i];
-                if (l.cantidad() === 0 || isNaN(l.cantidad()))
-                    return false;
+        this.stockFinal = ko.computed(function () {
+            switch (self.operacion()) {
+                case "agregar":
+                    return parseFloat(self.stock.toString()) + Math.abs(self.cantidad());
+                case "quitar":
+                    return parseFloat(self.stock.toString()) - Math.abs(self.cantidad());
+                default: return 0;
             }
-            return !(isNaN(self.total()) || self.total() === 0 ||
-                isNaN(self.pagoCliente()) || self.pagoCliente() === 0 ||
-                self.total() > self.pagoCliente());
-        });
-        this.dateStr = ko.computed(function () {
-            var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            return new Date(self.parseDate()).toLocaleDateString("es-MX", options);
         });
     }
-    Venta.prototype.parseDate = function () {
+    Stock.prototype.bind = function () {
         var self = this;
-        return "".concat(self.date(), "T").concat(self.time());
+        binderService_1.BinderService.bind(self, "#stockPage");
     };
-    Venta.prototype.borrar = function (line) {
-        var self = this;
-        self.lines.remove(line);
-    };
-    Venta.prototype.bind = function () {
-        var self = this;
-        binderService_1.BinderService.bind(self, "#ventasPage");
-    };
-    Venta.prototype.guardar = function () {
+    Stock.prototype.guardar = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var self, lines, data, url, result;
+            var self, data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         self = this;
-                        lines = new Array();
-                        self.lines().forEach(function (l) {
-                            var line = {
-                                cantidad: l.cantidad(),
-                                productoId: l.producto.id,
-                                precioUnitario: l.producto.precioVenta
-                            };
-                            lines.push(line);
-                        });
                         data = {
-                            fecha: self.parseDate(),
-                            cambio: self.cambio(),
-                            pago: self.pagoCliente(),
-                            items: lines
+                            productoId: $("#hidProductoId").val(),
+                            cantidad: Math.abs(self.cantidad()),
+                            motivo: self.motivo(),
+                            tipoAjuste: self.operacion() === "agregar" ?
+                                TipoAjuste.IngresoSinCompra :
+                                TipoAjuste.Merma
                         };
-                        url = "".concat(self.url);
-                        return [4 /*yield*/, self.api.post(url, data)];
+                        return [4 /*yield*/, self.api.post("Productos/Stock", data)];
                     case 1:
-                        result = _a.sent();
-                        console.log("Ventas guardadas ".concat(result[0], " productos en esa venta ").concat(result[1]));
+                        _a.sent();
                         alert("¡Guardado!");
-                        window.location.href = "".concat(document.baseURI);
+                        window.location.href = "".concat(document.baseURI, "Productos");
                         return [2 /*return*/];
                 }
             });
         });
     };
-    return Venta;
+    return Stock;
 }());
-exports.Venta = Venta;
+exports.Stock = Stock;
 document.addEventListener('DOMContentLoaded', function () {
-    var page = new Venta();
+    var page = new Stock();
     page.bind();
     console.log("binding ko");
 }, false);
@@ -255,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function () {
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			463: 0
+/******/ 			131: 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -305,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function () {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [712], () => (__webpack_require__(826)))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [712], () => (__webpack_require__(315)))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
