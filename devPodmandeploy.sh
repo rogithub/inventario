@@ -39,3 +39,4 @@ echo "--> Should be listed bellow"
 podman ps
 
 echo "--> End of Ro podman deployment script"
+echo "--> Listening on http://127.0.0.1:5002/"
