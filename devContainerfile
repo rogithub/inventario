@@ -15,7 +15,6 @@ RUN dotnet publish -c Release -o out
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
 WORKDIR /app
-COPY Ro.Inventario.Web/bin/Debug/net6.0/runtimes/linux-x64/native/SQLite.Interop.dll ./
 
 # Change timezone to local time
 ENV TZ=America/Mexico_City
@@ -27,4 +26,5 @@ RUN apt-get update && apt-get -y upgrade \
     sqlite3 
 
 COPY --from=build /app/Ro.Inventario.Web/out ./
+COPY --from=build /app/Ro.Inventario.Web/out/runtimes/linux-x64/native/SQLite.Interop.dll ./
 ENTRYPOINT ["dotnet", "Ro.Inventario.Web.dll", "--urls", "http://0.0.0.0:5002;http://0.0.0.0:5003"]
