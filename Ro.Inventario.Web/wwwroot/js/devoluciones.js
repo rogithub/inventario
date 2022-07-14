@@ -66,6 +66,15 @@ var ProductLine = /** @class */ (function () {
             //return ((a+b) * c);
             return (parseFloat(a.toString()) + parseFloat(b.toString())) * c;
         }, self);
+        this.devolucionRowOpPesos = ko.computed(function () {
+            return (0, toCurrency_1.default)(self.devolucionRowOp());
+        }, self);
+        this.precioUnitarioPesos = ko.computed(function () {
+            return (0, toCurrency_1.default)(self.precioUnitario);
+        }, self);
+        this.totalPesos = ko.computed(function () {
+            return (0, toCurrency_1.default)((self.precioUnitario * l.cantidad));
+        }, self);
         this.hasError = ko.computed(function () {
             var a = _this.cantidadEnBuenasCondiciones();
             var b = _this.cantidadEnMalasCondiciones();
@@ -96,7 +105,14 @@ var Devolucion = /** @class */ (function () {
             }
             return count > 0;
         }, self);
+        this.totalDevolucion = ko.computed(function () {
+            var suma = self.lines().reduce(function (acc, line, i) {
+                return acc + line.devolucionRowOp();
+            }, 0);
+            return (0, toCurrency_1.default)(suma);
+        }, self);
     }
+    ;
     Devolucion.prototype.load = function () {
         return __awaiter(this, void 0, void 0, function () {
             var self, ventaId, data, _i, _a, it;

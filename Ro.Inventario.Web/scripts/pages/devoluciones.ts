@@ -45,6 +45,9 @@ class ProductLine {
     categoria: string;
     unidadMedida: string;
     devolucionRowOp: KnockoutComputed<number>;
+    devolucionRowOpPesos: KnockoutComputed<string>;
+    precioUnitarioPesos: KnockoutComputed<string>;
+    totalPesos: KnockoutComputed<string>;
     hasError: KnockoutComputed<boolean>;
     aMoneda: Function;
     constructor(l: IProductLine) {
@@ -63,6 +66,17 @@ class ProductLine {
             let c = this.precioUnitario;
             //return ((a+b) * c);
             return (parseFloat(a.toString()) + parseFloat(b.toString())) * c;
+        }, self);
+
+        this.devolucionRowOpPesos = ko.computed<string>(() => {
+            return toCurrency(self.devolucionRowOp());
+        }, self);
+
+        this.precioUnitarioPesos = ko.computed<string>(() => {
+            return toCurrency(self.precioUnitario);
+        }, self);
+        this.totalPesos = ko.computed<string>(() => {
+            return toCurrency((self.precioUnitario * l.cantidad));
         }, self);
 
         this.hasError = ko.computed<boolean>(() => {
@@ -91,6 +105,7 @@ export class Devolucion {
     public lines: KnockoutObservableArray<ProductLine>;
     public venta: KnockoutObservable<IAjuste>;
     public isValid: KnockoutComputed<boolean>;
+    public totalDevolucion: KnockoutComputed<string>;;
     constructor() {
         this.url = "ventas/GetVentaData"
         this.api = new Api();
@@ -107,6 +122,15 @@ export class Devolucion {
                 count += it.cantidadEnMalasCondiciones();
             }
             return count > 0;
+        }, self);       
+
+        this.totalDevolucion = ko.computed<string>(() => {
+            let suma = self.lines().reduce((acc, line, i)=>{
+                return acc + line.devolucionRowOp();
+            }, 0);
+
+            return toCurrency(suma);
+
         }, self);       
     }
 
