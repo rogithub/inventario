@@ -7,7 +7,6 @@ CONTAINER_FILE="./devContainerfile"
 DB_PATH="./$PROJ_DIR/Db-dev"
 CONT_DB_PATH="/app/Db"
 PORT="5002"
-CERTS_PATH="./ssl-dev-certs"
 CONTAINER_CERTS_PATH="/root/.aspnet/DataProtection-Keys"
 SSL_CERT="inventario_gordopechocho.pfx"
 SSL_CERT_PWD="gordopechocho"
@@ -40,7 +39,7 @@ echo "--> Running container"
 podman run -v $DB_PATH:$CONT_DB_PATH -e ASPNETCORE_HTTPS_PORT=$PORT \
 -e ASPNETCORE_Kestrel__Certificates__Default__Password=$SSL_CERT_PWD \
 -e ASPNETCORE_Kestrel__Certificates__Default__Path=$CONTAINER_CERTS_PATH/$SSL_CERT \
--v $CERTS_PATH:$CONTAINER_CERTS_PATH/ -d --name $CONTAINER_NAME -p $PORT:$PORT $IMAGE_NAME
+-d --name $CONTAINER_NAME -p $PORT:$PORT $IMAGE_NAME
 
 echo "--> Should be listed bellow"
 podman ps
