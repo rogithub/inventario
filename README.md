@@ -71,3 +71,5 @@ id -g $USER
 lsns -t user
 ```
 
+## ssl certs for development
+https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-6.0
