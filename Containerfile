@@ -33,5 +33,5 @@ RUN apt-get update && apt-get -y upgrade \
     sqlite3 
 
 COPY --from=build /app/Ro.Inventario.Web/out ./
-COPY --from=build /app/.aspnet/https/inventario_gordopechocho.pfx /root/.aspnet/DataProtection-Keys
+COPY --from=build /app/.aspnet/https /root/.aspnet/DataProtection-Keys/
 ENTRYPOINT ["dotnet", "Ro.Inventario.Web.dll", "--urls", "https://0.0.0.0:5002;http://0.0.0.0:5003"]
