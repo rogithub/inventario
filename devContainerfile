@@ -28,6 +28,7 @@ RUN apt-get update && apt-get -y upgrade \
     && apt-get install -y --allow-unauthenticated \
     sqlite3 
 
+COPY --from=build /app/Ro.Inventario.Web/out/runtimes/linux-64/native/SQLite.Interop.dll ./
 COPY --from=build /app/Ro.Inventario.Web/out ./
 COPY --from=build /app/.aspnet/https /root/.aspnet/DataProtection-Keys/
 ENTRYPOINT ["dotnet", "Ro.Inventario.Web.dll", "--urls", "https://0.0.0.0:5002;http://0.0.0.0:5003"]
