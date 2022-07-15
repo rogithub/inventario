@@ -6,7 +6,11 @@ PROJ_DIR="Ro.Inventario.Web"
 CONTAINER_FILE="./devContainerfile"
 DB_PATH="./$PROJ_DIR/Db-dev"
 CONT_DB_PATH="/app/Db"
-PORT="5002:5002"
+PORT="5002"
+CERTS_PATH="./ssl-dev-certs"
+CONTAINER_CERTS_PATH="/root/.aspnet/DataProtection-Keys"
+SSL_CERT="inventario_gordopechocho.pfx"
+SSL_CERT_PWD="gordopechocho"
 
 echo "--> 🚀 Ro script deploying podman container DEVELOPMENT"
 # Get latest
@@ -33,7 +37,10 @@ podman build -f $CONTAINER_FILE -t $IMAGE_NAME
 
 echo "--> Running container"
 ## Run
-podman run -v $DB_PATH:$CONT_DB_PATH -d --name $CONTAINER_NAME -p $PORT $IMAGE_NAME
+podman run -v $DB_PATH:$CONT_DB_PATH -e ASPNETCORE_HTTPS_PORT=$PORT \
+-e ASPNETCORE_Kestrel__Certificates__Default__Password=$SSL_CERT_PWD \
+-e ASPNETCORE_Kestrel__Certificates__Default__Path=$CONTAINER_CERTS_PATH/$SSL_CERT \
+-v $CERTS_PATH:$CONTAINER_CERTS_PATH/ -d --name $CONTAINER_NAME -p $PORT:$PORT $IMAGE_NAME
 
 echo "--> Should be listed bellow"
 podman ps
