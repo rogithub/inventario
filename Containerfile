@@ -17,7 +17,7 @@ RUN dotnet publish -c Release -o out
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
 WORKDIR /app
-# COPY dep-raspi/* ./
+COPY dep-raspi/* ./
 # ===============Not Required=====================
 # no se required si usas podman_deploy.sh script 
 ## COPY Ro.Inventario.Web/Db/inventario.db ./
