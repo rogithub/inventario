@@ -15,7 +15,7 @@ RUN dotnet publish -c Release -o out
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
 WORKDIR /app
-COPY dep-raspi/* ./
+# COPY dep-raspi/* ./
 # ===============Not Required=====================
 # no se required si usas podman_deploy.sh script 
 ## COPY Ro.Inventario.Web/Db/inventario.db ./
@@ -31,4 +31,4 @@ RUN apt-get update && apt-get -y upgrade \
     sqlite3 
 
 COPY --from=build /app/Ro.Inventario.Web/out ./
-ENTRYPOINT ["dotnet", "Ro.Inventario.Web.dll", "--urls", "http://0.0.0.0:5002;http://0.0.0.0:5003"]
+ENTRYPOINT ["dotnet", "Ro.Inventario.Web.dll", "--urls", "https://0.0.0.0:5002;http://0.0.0.0:5003"]
