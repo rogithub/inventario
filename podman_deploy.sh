@@ -40,7 +40,7 @@ echo "--> Running container"
 podman run -v $DB_PATH:$CONT_DB_PATH -e ASPNETCORE_HTTPS_PORT=$PORT \
 -e ASPNETCORE_Kestrel__Certificates__Default__Password=$SSL_CERT_PWD \
 -e ASPNETCORE_Kestrel__Certificates__Default__Path=$CONTAINER_CERTS_PATH/$SSL_CERT \
--v $CERTS_PATH:$CONTAINER_CERTS_PATH/ -d --name $CONTAINER_NAME -p $PORT:$PORT $IMAGE_NAME
+-d --name $CONTAINER_NAME -p $PORT:$PORT $IMAGE_NAME
 
 
 echo "--> Should be listed bellow"
