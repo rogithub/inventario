@@ -1,15 +1,12 @@
 import { BinderService } from '../services/binderService';
 import { Api } from '../services/api';
 
-
-export enum TipoAjuste
-{
-      Venta = 0,
-      Merma = 1,
-      IngresoSinCompra = 2
+export enum TipoAjuste {
+    Venta = 0,
+    Merma = 1,
+    IngresoSinCompra = 2
 }
-export interface StockAjusteModel
-{
+export interface StockAjusteModel {
     productoId: string;
     tipoAjuste: TipoAjuste;
     cantidad: number;
@@ -25,6 +22,7 @@ export class Stock {
     public motivo: KnockoutObservable<string>;
     public cantidad: KnockoutObservable<number>;
     public stockFinal: KnockoutComputed<number>;
+    public isValid: KnockoutComputed<boolean>;
 
     constructor() {
         this.url = "productos/descargar";
@@ -43,6 +41,11 @@ export class Stock {
                 default: return 0;
             }
         });
+        this.isValid = ko.computed<boolean>(function () {
+            if (isNaN(self.cantidad())) return false;
+
+            return true;
+        });
     }
     public bind(): void {
         const self = this;
@@ -51,17 +54,17 @@ export class Stock {
 
     public async guardar(): Promise<void> {
         const self = this;
-        
+
         let data: StockAjusteModel = {
             productoId: $("#hidProductoId").val() as string,
             cantidad: Math.abs(self.cantidad()),
             motivo: self.motivo(),
-            tipoAjuste: self.operacion() === "agregar" ? 
-                        TipoAjuste.IngresoSinCompra : 
-                        TipoAjuste.Merma
-        };        
+            tipoAjuste: self.operacion() === "agregar" ?
+                TipoAjuste.IngresoSinCompra :
+                TipoAjuste.Merma
+        };
 
-        await self.api.post(`Productos/Stock`, data);        
+        await self.api.post(`Productos/Stock`, data);
 
         alert("¡Guardado!");
         window.location.href = `${document.baseURI}Productos`;

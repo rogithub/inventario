@@ -60,6 +60,11 @@ public class ProductosController : Controller
         return View(new CompraNuevosProductos());
     }
 
+    public IActionResult Etiquetas()
+    {
+        return View();
+    }
+
     public async Task<IActionResult> Stock(Guid id)
     {
         var p = await _pBuscar.GetOne(id);

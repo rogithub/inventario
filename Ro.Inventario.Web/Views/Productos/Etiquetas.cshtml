@@ -1,0 +1,81 @@
+@{
+    ViewData["Title"] = "Productos";
+}
+
+@section Header {
+<link rel="stylesheet" href="~/lib/autoComplete.js-10.2.7/css/autoComplete.css">
+}
+@section Scripts {
+
+<script src="~/lib/autoComplete.js-10.2.7/autoComplete.min.js"></script>
+<script src="~/js/shared.js"></script>
+<script src="~/js/etiquetas.js"></script>
+<script type="text/javascript">
+
+    //https://tarekraafat.github.io/autoComplete.js/#/playground
+    const autoCompleteJS = new autoComplete({
+        placeHolder: "Buscar productos...",
+        resultItem: {
+            highlight: true
+        },
+        data: {
+            src: async (query) => {
+                try {
+                    console.log(query);
+                    // Fetch Data from external Source
+                    const source = await fetch(`${document.baseURI}busquedas/productos?pattern=${query}`);
+                    // Data should be an array of `Objects` or `Strings`
+                    const data = await source.json();
+
+                    return data;
+                } catch (error) {
+                    return error;
+                }
+            },
+            keys: ["nombre"] // Data source 'Object' key to be searched
+        }
+    });
+
+</script>
+}
+
+
+<div id="etiquetasPage">
+
+    <h2>Etiquetas</h2>
+
+    <input id="autoComplete" style="width: 800px;" />
+
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th scope="col">NID</th>
+                <th scope="col">Producto</th>
+                <th scope="col">Categoria</th>
+                <th scope="col">Unidad de Medida</th>
+                <th scope="col">Precio de Venta</th>
+                <th scope="col">Codigo Item</th>
+                <th scope="col">Codigo Caja</th>
+                <th scope="col">Stock</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: { data: lines, as: 'p' }">
+            <tr>
+                <th scope="row" data-bind="text: p.nid"></th>
+                <td data-bind="text: p.nombre"></td>
+                <td data-bind="text: p.categoria"></td>
+                <td data-bind="text: p.unidadMedida"></td>
+                <td data-bind="text: p.precioVentaPesos"></td>
+                <td data-bind="text: p.codigoBarrasItem"></td>
+                <td data-bind="text: p.codigoBarrasCaja"></td>
+                <td data-bind="text: p.stock"></td>
+                <td>
+                    <button type="button" class="btn btn-outline-danger btn-sm"
+                        data-bind="click: $parent.borrar.bind($parent)">Quitar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>

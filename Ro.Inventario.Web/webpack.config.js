@@ -5,7 +5,8 @@ module.exports = {
         ventas: './scripts/pages/ventas.ts',
         devoluciones: './scripts/pages/devoluciones.ts',
         productos: './scripts/pages/productos.ts',
-        stock: './scripts/pages/stock.ts'
+        stock: './scripts/pages/stock.ts',
+        etiquetas: './scripts/pages/etiquetas.ts'
     },
     mode: 'production',
     optimization: {
