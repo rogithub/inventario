@@ -8,6 +8,7 @@
 @section Scripts {
 
 <script src="~/lib/autoComplete.js-10.2.7/autoComplete.min.js"></script>
+<script src="~/lib/qrcode.min.js"></script>
 <script src="~/js/shared.js"></script>
 <script src="~/js/etiquetas.js"></script>
 <script type="text/javascript">
@@ -36,8 +37,22 @@
         }
     });
 
+    let toQr = (elementId, id) => {
+        // https://davidshimjs.github.io/qrcodejs/
+        new QRCode(document.getElementById(elementId), id);
+    };
+
 </script>
 }
+
+
+
+
+<script type="text/html" id="QrCode">
+    <div class="center" data-bind="attr: { id: id }"></div>
+</script>
+
+
 
 
 <div id="etiquetasPage">
@@ -49,7 +64,7 @@
     <table class="table table-sm">
         <thead>
             <tr>
-                <th scope="col">NID</th>
+                <th scope="col">QR</th>
                 <th scope="col">Producto</th>
                 <th scope="col">Categoria</th>
                 <th scope="col">Unidad de Medida</th>
@@ -62,7 +77,10 @@
         </thead>
         <tbody data-bind="foreach: { data: lines, as: 'p' }">
             <tr>
-                <th scope="row" data-bind="text: p.nid"></th>
+                <th scope="row">
+                    <!-- ko template: { name: "QrCode", afterRender: () => toQr(p.id, p.id) } -->
+                    <!-- /ko -->
+                </th>
                 <td data-bind="text: p.nombre"></td>
                 <td data-bind="text: p.categoria"></td>
                 <td data-bind="text: p.unidadMedida"></td>
