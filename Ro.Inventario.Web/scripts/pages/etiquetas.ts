@@ -31,6 +31,9 @@ export class Etiquetas {
         const self = this;
         self.autocomplete.addEventListener("selection", function (e: any) {
             let p = e.detail.selection.value as IProduct;
+
+            if (self.lines().filter(l => l.id === p.id).length > 0) return;
+
             p.precioVentaPesos = ko.computed<string>(() => toCurrency(p.precioVenta), p);
             self.lines.push(p);
             $(self.autocomplete).val("");

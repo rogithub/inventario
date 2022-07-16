@@ -39,20 +39,56 @@
 
     let toQr = (elementId, id) => {
         // https://davidshimjs.github.io/qrcodejs/
-        new QRCode(document.getElementById(elementId), id);
+        new QRCode(document.getElementById(elementId), {
+            text: id,
+            width: 128,
+            height: 128,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
     };
 
 </script>
 }
 
 
-
-
 <script type="text/html" id="QrCode">
-    <div class="center" data-bind="attr: { id: id }"></div>
+    <div style="margin-left:10px" data-bind="attr: { id: id }"></div>
 </script>
 
+<script type="text/html" id="ProductCard">
 
+    <div class="card">
+        <div class="row">
+            <div class="col">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item text-center">
+                        <a data-bind="click: $parent.borrar.bind($parent)">                    
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            </svg>
+                        </a>
+                    </li>
+
+                </ul> 
+            </div>
+        </div>
+        <div class="row g-0">
+            <div class="col-md-4">
+                <!-- ko template: { name: "QrCode", afterRender: () => toQr(p.id, p.id) } -->
+                <!-- /ko -->
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title" data-bind="text: p.nombre"></h5>
+                    <h5 class="card-title" data-bind="text: p.precioVentaPesos"></h5>           
+                    <p data-bind="text: p.unidadMedida"></p>   
+                </div>                
+            </div>
+        </div>     
+    </div>
+</script>
 
 
 <div id="etiquetasPage">
@@ -61,39 +97,13 @@
 
     <input id="autoComplete" style="width: 800px;" />
 
-    <table class="table table-sm">
-        <thead>
-            <tr>
-                <th scope="col">QR</th>
-                <th scope="col">Producto</th>
-                <th scope="col">Categoria</th>
-                <th scope="col">Unidad de Medida</th>
-                <th scope="col">Precio de Venta</th>
-                <th scope="col">Codigo Item</th>
-                <th scope="col">Codigo Caja</th>
-                <th scope="col">Stock</th>
-                <th scope="col">Acciones</th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: { data: lines, as: 'p' }">
-            <tr>
-                <th scope="row">
-                    <!-- ko template: { name: "QrCode", afterRender: () => toQr(p.id, p.id) } -->
-                    <!-- /ko -->
-                </th>
-                <td data-bind="text: p.nombre"></td>
-                <td data-bind="text: p.categoria"></td>
-                <td data-bind="text: p.unidadMedida"></td>
-                <td data-bind="text: p.precioVentaPesos"></td>
-                <td data-bind="text: p.codigoBarrasItem"></td>
-                <td data-bind="text: p.codigoBarrasCaja"></td>
-                <td data-bind="text: p.stock"></td>
-                <td>
-                    <button type="button" class="btn btn-outline-danger btn-sm"
-                        data-bind="click: $parent.borrar.bind($parent)">Quitar</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="row row-cols-1 row-cols-md-3 g-4 pt-1">
+        <!-- ko foreach: { data: lines, as: 'p' } -->
+        <div class="col">
+            <!-- ko template: { name: "ProductCard" } -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+    </div>
 
 </div>

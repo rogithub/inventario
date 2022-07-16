@@ -21,6 +21,8 @@ var Etiquetas = /** @class */ (function () {
         var self = this;
         self.autocomplete.addEventListener("selection", function (e) {
             var p = e.detail.selection.value;
+            if (self.lines().filter(function (l) { return l.id === p.id; }).length > 0)
+                return;
             p.precioVentaPesos = ko.computed(function () { return (0, toCurrency_1.default)(p.precioVenta); }, p);
             self.lines.push(p);
             $(self.autocomplete).val("");
