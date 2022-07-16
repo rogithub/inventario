@@ -54,7 +54,7 @@
 
 
 <script type="text/html" id="QrCode">
-    <div style="margin-left:10px" data-bind="attr: { id: id }"></div>
+    <div style="margin-left:10px;margin-bottom:10px" data-bind="attr: { id: id }"></div>
 </script>
 
 <script type="text/html" id="ProductCard">
@@ -82,8 +82,10 @@
             <div class="col-md-8">
                 <div class="card-body">
                     <h5 class="card-title" data-bind="text: p.nombre"></h5>
-                    <h5 class="card-title" data-bind="text: p.precioVentaPesos"></h5>           
-                    <p data-bind="text: p.unidadMedida"></p>   
+                    <h5>
+                        <span data-bind="text: p.precioVentaPesos"></span> 
+                        <span data-bind="text: p.unidadMedida"></span>
+                    </h5>   
                 </div>                
             </div>
         </div>     
