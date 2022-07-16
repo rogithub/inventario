@@ -4,22 +4,6 @@
 
 @section Header {
 <link rel="stylesheet" href="~/lib/autoComplete.js-10.2.7/css/autoComplete.css">
-<style type="text/css">
-    @@media print {
-        .printable {
-            background-color: white;
-            height: 100%;
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            margin: 0;
-            padding: 15px;
-            font-size: 14px;
-            line-height: 18px;
-        }
-    }
-</style>
 }
 @section Scripts {
 
@@ -63,15 +47,7 @@
             colorLight: "#ffffff",
             correctLevel: QRCode.CorrectLevel.H
         });
-    };
-
-    let imprimir = () => {
-        window.print();
-    };
-
-    $(function () {
-        $(".imprimir").on("click", imprimir);
-    });
+    };    
 </script>
 }
 
@@ -104,11 +80,13 @@
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title" data-bind="text: p.nombre"></h5>
-                    <h5>
+                    <p>
+                        <span data-bind="text: p.nombre"></span>
+                    </p>
+                    <p>
                         <span data-bind="text: p.precioVentaPesos"></span> 
                         <span data-bind="text: p.unidadMedida"></span>
-                    </h5>   
+                    </p>   
                 </div>                
             </div>
         </div>     
@@ -117,17 +95,11 @@
 
 
 <div id="etiquetasPage">
-
     <h2>Etiquetas</h2>
 
     <input id="autoComplete" style="width: 800px;" />
-    <div class="float-end">
-        <button type="button" class="btn btn-primary imprimir">
-            Imprimir
-        </button>
-    </div>
 
-    <div class="row row-cols-1 row-cols-md-3 g-4 pt-1 printable">
+    <div class="row row-cols-1 row-cols-md-3 g-1 pt-4">
         <!-- ko foreach: { data: lines, as: 'p' } -->
         <div class="col">
             <!-- ko template: { name: "ProductCard" } -->
