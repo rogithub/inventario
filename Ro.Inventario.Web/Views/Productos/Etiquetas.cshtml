@@ -49,6 +49,10 @@
         });
     };
 
+    let print = () => {
+        window.print();
+    };
+
 </script>
 }
 
@@ -98,8 +102,13 @@
     <h2>Etiquetas</h2>
 
     <input id="autoComplete" style="width: 800px;" />
+    <div class="float-end">
+        <button type="button" class="btn btn-primary" onclick="print">
+            Imprimir
+        </button>
+    </div>
 
-    <div class="row row-cols-1 row-cols-md-3 g-4 pt-1">
+    <div class="row row-cols-1 row-cols-md-3 g-4 pt-1" id="printable">
         <!-- ko foreach: { data: lines, as: 'p' } -->
         <div class="col">
             <!-- ko template: { name: "ProductCard" } -->
