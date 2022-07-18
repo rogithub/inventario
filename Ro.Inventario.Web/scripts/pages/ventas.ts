@@ -2,7 +2,6 @@ import { BinderService } from '../services/binderService';
 import { Api } from '../services/api';
 import toCurrency from '../shared/toCurrency';
 import beep from '../shared/beep';
-import { Html5QrcodeScanner, Html5QrcodeScanType } from "html5-qrcode";
 
 export interface IProduct {
     nid: number;
@@ -70,8 +69,7 @@ export class Venta {
     public time: KnockoutObservable<string>;
     public fecha: Date;
     public aMoneda = toCurrency;
-    public showQrScan: KnockoutObservable<boolean>;    
-    public qrScanner: Html5QrcodeScanner;
+    public showQrScan: KnockoutObservable<boolean>;        
 
     constructor() {
         this.fecha = new Date();
@@ -92,23 +90,7 @@ export class Venta {
         this.date = ko.observable<string>(`${this.fecha.getFullYear()}-${mesStr}-${diaStr}`);
         this.time = ko.observable<string>(`${horasStr}:${minutosStr}`);
         this.showQrScan = ko.observable<boolean>();        
-        const self = this;
-
-        this.qrScanner =new Html5QrcodeScanner(
-            "reader",
-            { 
-                fps: 1, 
-                qrbox: {
-                    width: 250, 
-                    height: 250
-                } ,
-                supportedScanTypes: 
-                [
-                    Html5QrcodeScanType.SCAN_TYPE_CAMERA
-                ]
-            }, false);
-        self.qrScanner.render(self.onScanSuccess.bind(self), self.onScanFailure.bind(self));
-
+        const self = this;        
         
         self.autocomplete.addEventListener("selection", function (e: any) {
             let p = e.detail.selection.value as IProduct;
@@ -232,7 +214,12 @@ export class Venta {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    var page = new Venta();
+    let page = new Venta();
     page.bind();
     console.log("binding ko");
+    
+    $("#reader").on("onScanSuccess", (e, decodedText, decodedResult) => {        
+        page.onScanSuccess(decodedText, decodedResult);
+    });
+
 }, false);

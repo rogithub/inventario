@@ -7,6 +7,7 @@
 @section Scripts {
 
 <script src="~/lib/autoComplete.js-10.2.7/autoComplete.min.js"></script>
+<script src="~/lib/html5-qrcode.min.js"></script>
 <script src="~/js/shared.js"></script>
 <script src="~/js/ventas.js"></script>
 <script type="text/javascript">    
@@ -33,6 +34,32 @@
             },
             keys: ["nombre"] // Data source 'Object' key to be searched
         }
+    });
+
+    let onScanFailure = (error) => {        
+        //console.dir(error);
+    };
+
+    let onScanSuccess = (decodedText, decodedResult) => {        
+        console.log(`buscando por código ${decodedText}`);          
+        $("#reader").trigger("onScanSuccess", [decodedText, decodedResult]);
+    }
+
+    $(() => {
+        let qrScanner = new Html5QrcodeScanner(
+            "reader",
+            { 
+                fps: 1, 
+                qrbox: {
+                    width: 250, 
+                    height: 250
+                } ,
+                supportedScanTypes: 
+                [
+                    Html5QrcodeScanType.SCAN_TYPE_CAMERA
+                ]
+        }, false);
+        qrScanner.render(onScanSuccess, onScanFailure);
     });
 
 </script>
