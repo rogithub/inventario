@@ -1,5 +1,44 @@
 BEGIN TRANSACTION;
 
+CREATE TABLE IF NOT EXISTS "Users" (
+       "Id"  TEXT NOT NULL UNIQUE,
+       "Email"	          TEXT NOT NULL UNIQUE,
+       "IsActive"              INTEGER DEFAULT 0,
+       "PasswordHash"	   BLOB NOT NULL,
+       "PasswordSalt"	   BLOB NOT NULL,
+       "DateCreated"	TEXT NOT NULL,
+       PRIMARY KEY("Id")
+);
+
+CREATE TABLE IF NOT EXISTS "Roles" (
+       "Id"	TEXT NOT NULL UNIQUE,
+       "Role"	TEXT NOT NULL UNIQUE,
+       PRIMARY KEY("Id")
+);
+
+CREATE TABLE IF NOT EXISTS "User_Roles" (
+       "Id"	TEXT NOT NULL UNIQUE,
+       "RoleId" TEXT NOT NULL,
+       "UserId" TEXT NOT NULL,       
+       PRIMARY KEY("Id"),
+       FOREIGN KEY("RoleId") REFERENCES "Roles"("Id") ON DELETE CASCADE
+       FOREIGN KEY("UserId") REFERENCES "Users"("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS "Reset_Password" (
+       "Id"                    TEXT NOT NULL UNIQUE,
+       "UserId"                TEXT NOT NULL,       
+       "UsedDate"	          TEXT NULL,
+       "ExpiryDate"	          TEXT NOT NULL,
+       PRIMARY KEY("Id"),
+       FOREIGN KEY("UserId") REFERENCES "Users"("Id") ON DELETE CASCADE
+);
+
+-- Init data
+INSERT INTO Roles  (Id, Role) VALUES ('82d97bc9-c2d2-4eae-b7ca-754fd2dfe53a', 'Admin');
+INSERT INTO Roles  (Id, Role) VALUES ('28694aae-6193-4678-8c93-b1b9654a503f', 'Vendedor');
+INSERT INTO Roles  (Id, Role) VALUES ('524354a2-ab68-4474-a2a0-ed6217029a55', 'Gerente');
+
 CREATE TABLE IF NOT EXISTS "Settings" (
        "Key"  	       TEXT NOT NULL UNIQUE,
        "Value"         TEXT NULL,
