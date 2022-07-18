@@ -1,8 +1,20 @@
 using Ro.Inventario.Web.Repos;
 using Ro.Inventario.Web.Services;
 using Ro.SQLite.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+
+builder.Services
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options => {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/Denied";
+        options.LogoutPath = "/Account/Logout";
+    });
 
 var dbPath = builder.Configuration.GetSection("DbPath").Value;
 var interopPath = builder.Configuration.GetSection("InteropPath").Value;
@@ -28,9 +40,10 @@ builder.Services.AddScoped<IProductosService, ProductosService>();
 builder.Services.AddScoped<IVentasService, VentasService>();
 builder.Services.AddScoped<ISettingsRepo, SettingsRepo>();
 builder.Services.AddScoped<IDevolucionesProductosRepo, DevolucionesProductosRepo>();
+builder.Services.AddScoped<IUsersRepo, UsersRepo>();
+builder.Services.AddScoped<IChangePasswordRepo, ChangePasswordRepo>();
+builder.Services.AddScoped<IRolesRepo, RolesRepo>();
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
@@ -46,6 +59,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
