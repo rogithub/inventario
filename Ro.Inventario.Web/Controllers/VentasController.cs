@@ -8,7 +8,7 @@ using Ro.Inventario.Web.Services;
 
 namespace Ro.Inventario.Web.Controllers;
 
-public class VentasController : Controller
+public class VentasController : BaseController
 {
     private readonly IAjustesProductosRepo _ventasProds;
     private readonly IAjustesRepo _ventas;
@@ -93,12 +93,5 @@ public class VentasController : Controller
         var intVentaProducts = await _ventasProds.BulkSave(prods);
 
         return Json(new int[] { intVenta, intVentaProducts });
-    }
-
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
+    }    
 }

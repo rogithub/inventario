@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Login";
+    var returnUrl = ViewData["ReturnUrl"] as string;
+    var error = TempData["Error"] as string;
+}
+
+<div>
+    <h1 class="display-4">Login</h1>
+
+@if(!string.IsNullOrEmpty(error))
+{
+    <h2 class="alert-danger">@error</h2>
+}
+
+    <form action="login?returnUrl=@System.Net.WebUtility.UrlEncode(returnUrl)" method="post">
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" name="email" aria-describedby="emailHelp">
+            <div id="emailHelp" class="form-text">Correo electrónico.</div>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" name="password">
+        </div>
+        <a class="btn btn-secondary" 
+        asp-action="Registro"
+        asp-controller="Account">Registro</a>
+        <button type="submit" class="btn btn-primary">Entrar</button>
+    </form>
+</div>
+

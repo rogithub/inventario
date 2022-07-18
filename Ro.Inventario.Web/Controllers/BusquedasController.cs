@@ -7,7 +7,7 @@ using Ro.Inventario.Web.Repos;
 
 namespace Ro.Inventario.Web.Controllers;
 
-public class BusquedasController : Controller
+public class BusquedasController : BaseController
 {
     private readonly IBusquedaProductosRepo _productos;
     private readonly ILogger<BusquedasController> _logger;
@@ -31,11 +31,5 @@ public class BusquedasController : Controller
     {
         var prods = await _productos.SearchByQr(qr);
         return Json(prods.ToArray());
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }

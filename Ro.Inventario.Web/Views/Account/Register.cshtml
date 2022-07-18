@@ -1,0 +1,31 @@
+@{
+    ViewData["Title"] = "Register";
+    var error = TempData["Error"] as string;
+}
+
+<div>
+    <form asp-action="Register" asp-controller="Account" method="post">
+        <h4 class="display-4">Crear Usuario</h4>
+        <hr>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" name="Email" aria-describedby="emailHelp">
+            <div id="emailHelp" class="form-text">Correo electrónico.</div>
+        </div>
+        <div class="mb-3">
+            <label for="role" class="form-label">Role</label>
+            <input type="text" class="form-control" name="Role" aria-describedby="detptoHelp">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" name="Password">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Confirmación de Password</label>
+            <input type="password" class="form-control" name="PasswordConfirm">
+        </div>
+        <button type="submit" class="btn btn-primary">Crear Cuenta</button>
+    </form>
+</div>
+
