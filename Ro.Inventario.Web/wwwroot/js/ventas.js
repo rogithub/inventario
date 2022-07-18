@@ -48,7 +48,6 @@ var binderService_1 = __webpack_require__(575);
 var api_1 = __webpack_require__(711);
 var toCurrency_1 = __webpack_require__(613);
 var beep_1 = __webpack_require__(427);
-var html5_qrcode_1 = __webpack_require__(321);
 var ProductLine = /** @class */ (function () {
     function ProductLine(product) {
         this.aMoneda = toCurrency_1.default;
@@ -90,17 +89,6 @@ var Venta = /** @class */ (function () {
         this.time = ko.observable("".concat(horasStr, ":").concat(minutosStr));
         this.showQrScan = ko.observable();
         var self = this;
-        this.qrScanner = new html5_qrcode_1.Html5QrcodeScanner("reader", {
-            fps: 1,
-            qrbox: {
-                width: 250,
-                height: 250
-            },
-            supportedScanTypes: [
-                html5_qrcode_1.Html5QrcodeScanType.SCAN_TYPE_CAMERA
-            ]
-        }, false);
-        self.qrScanner.render(self.onScanSuccess.bind(self), self.onScanFailure.bind(self));
         self.autocomplete.addEventListener("selection", function (e) {
             var p = e.detail.selection.value;
             self.lines.push(new ProductLine(p));
@@ -222,6 +210,10 @@ document.addEventListener('DOMContentLoaded', function () {
     var page = new Venta();
     page.bind();
     console.log("binding ko");
+    $("#reader").on("onScanSuccess", function (e, a, b) {
+        console.dir(a);
+        page.onScanSuccess(a, b);
+    });
 }, false);
 
 
@@ -302,44 +294,9 @@ exports["default"] = (function () {
 /******/ 		};
 /******/ 	})();
 /******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/global */
-/******/ 	(() => {
-/******/ 		__webpack_require__.g = (function() {
-/******/ 			if (typeof globalThis === 'object') return globalThis;
-/******/ 			try {
-/******/ 				return this || new Function('return this')();
-/******/ 			} catch (e) {
-/******/ 				if (typeof window === 'object') return window;
-/******/ 			}
-/******/ 		})();
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/jsonp chunk loading */
