@@ -91,6 +91,4 @@ public class RolesRepo : IRolesRepo
 		var count = await Db.ExecuteScalar(cmd);
 		return ((int)count) > 0;
 	}
-
-
 }
