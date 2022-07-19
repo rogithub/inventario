@@ -69,7 +69,7 @@ public class DevolucionesProductosRepo : IDevolucionesProductosRepo
                 parameters.Add(string.Format("@userUpdatedId_dos{0}", i).ToParam(DbType.String, it.UserUpdatedId.ToString()));
 
                 var insertAjusteProd = @"INSERT INTO AjustesProductos (Id,ProductoId,AjusteId,Cantidad,PrecioUnitarioVenta,Notas,UserUpdatedId,DateStamp)
-                                SELECT @insertApId{0},ProductoId,@nuevoAjuste{0},@insertApCantidad{0},PrecioUnitarioVenta,@mermaNotas{0},@userUpdatedId_tres{0},dateStamp_tres{0}
+                                SELECT @insertApId{0},ProductoId,@nuevoAjuste{0},@insertApCantidad{0},PrecioUnitarioVenta,@mermaNotas{0},@userUpdatedId_tres{0},@dateStamp_tres{0}
                                  FROM AjustesProductos WHERE Id=@existingApId{0};";
                 sb.AppendLine(string.Format(insertAjusteProd, i));
                 

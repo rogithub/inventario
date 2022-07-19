@@ -22,7 +22,7 @@ public class AjustesRepo : IAjustesRepo
     public Task<int> Save(Ajuste it)
     {
         var sql = @"INSERT INTO Ajustes (Id,Pago,Cambio,FechaAjuste,TipoAjuste,IvaVenta,UserUpdatedId) VALUES 
-                    (@id,@pago,@cambio,@fechaAjuste,@tipoAjuste,@ivaVenta);";
+                    (@id,@pago,@cambio,@fechaAjuste,@tipoAjuste,@ivaVenta,@userUpdatedId);";
         var cmd = sql.ToCmd
         (
             "@id".ToParam(DbType.String, it.Id.ToString()),
