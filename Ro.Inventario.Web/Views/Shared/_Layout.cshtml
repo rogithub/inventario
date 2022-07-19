@@ -80,6 +80,27 @@
                         </li>
                         }
                     </ul>
+                    <ul class="navbar-nav d-flex">
+                        @if(User != null && User.Identity !=null && User.Identity.IsAuthenticated) 
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="ddAuthenticatedUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="ddAuthenticatedUser">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Account" asp-action="Logout">Salir</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        
+                        }else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-route-returnUrl='@Url.Action("Index","Home")' asp-controller="Account" asp-action="Login">Entrar</a>
+                            </li>
+                        }
+                    </ul>
                 </div>
             </div>
         </nav>
