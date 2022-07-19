@@ -4,9 +4,11 @@ using Ro.Inventario.Web.Models;
 using Ro.Inventario.Web.Services;
 using Ro.Inventario.Web.Repos;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Ro.Inventario.Web.Controllers;
 
+[Authorize]
 public class ProductosController : BaseController
 {
     private readonly ILogger<ProductosController> _logger;
@@ -32,7 +34,7 @@ public class ProductosController : BaseController
         _productosSvc = productosService;
         _pValidator = pValidator;
     }
-
+    
     public IActionResult Index()
     {
         return View();
@@ -43,7 +45,7 @@ public class ProductosController : BaseController
         var m = await _productosSvc.LoadModel(id);
         return View(m);
     }
-
+    
     [HttpPost]
     public async Task<IActionResult> Editar(ProductoDotnetModel m)
     {
@@ -64,7 +66,7 @@ public class ProductosController : BaseController
     {
         return View();
     }
-
+    
     public async Task<IActionResult> Stock(Guid id)
     {
         var p = await _pBuscar.GetOne(id);

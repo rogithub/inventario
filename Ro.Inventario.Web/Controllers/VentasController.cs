@@ -5,9 +5,11 @@ using Ro.Inventario.Web.Models;
 using Ro.Inventario.Web.Entities;
 using Ro.Inventario.Web.Repos;
 using Ro.Inventario.Web.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Ro.Inventario.Web.Controllers;
 
+[Authorize]
 public class VentasController : BaseController
 {
     private readonly IAjustesProductosRepo _ventasProds;

@@ -1,9 +1,11 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Ro.Inventario.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Ro.Inventario.Web.Controllers;
 
+[Authorize]
 public class DescargasController : BaseController
 {
     private readonly ILogger<DescargasController> _logger;
