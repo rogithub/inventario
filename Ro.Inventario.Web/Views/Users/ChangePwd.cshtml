@@ -1,0 +1,31 @@
+@{
+    ViewData["Title"] = "Register";
+    var error = TempData["Error"] as string;
+}
+
+
+@if (Model != null) {
+<div>
+    <form asp-action="ChangePwd" asp-controller="Users" method="post">
+        <h4 class="display-4">Cambiar Password</h4>
+        <input type="hidden" name="RequestId" value="@Model.RequestId" />        
+        <hr>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" value="@Model.Email" name="Email" disabled readonly>            
+        </div>        
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" name="Password">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Confirmación de Password</label>
+            <input type="password" class="form-control" name="PasswordConfirm">
+        </div>
+        <button type="submit" class="btn btn-primary">Cambiar Password</button>
+    </form>
+</div>
+}else{
+    throw new Exception("Model is null");
+}

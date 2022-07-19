@@ -1,0 +1,29 @@
+@{
+    ViewData["Title"] = "Usuarios";
+    @model Ro.Inventario.Web.Models.RegisterEmail;
+}
+<h1>Crear Usuario</h1>
+
+<div>
+    <form asp-action="AddUser" asp-controller="Users" method="post">        
+        <div asp-validation-summary="All" class="text-danger"></div>
+        
+        <div class="mb-3">
+            <label for="Email" class="form-label">Email</label>
+            <input asp-for="Email" type="email" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label for="Departamento" class="form-label">Departamento</label>
+            <input asp-for="Departamento" type="text" class="form-control" />
+        </div>
+
+        <div>
+            <a class="btn btn-secondary" 
+                    asp-action="Index"
+                    asp-controller="Users">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>        
+    </form>
+</div>
+
