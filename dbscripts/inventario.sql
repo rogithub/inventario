@@ -35,9 +35,9 @@ CREATE TABLE IF NOT EXISTS "Reset_Password" (
 );
 
 -- Init data
-INSERT INTO Roles  (Id, Role) VALUES ('82d97bc9-c2d2-4eae-b7ca-754fd2dfe53a', 'Admin');
-INSERT INTO Roles  (Id, Role) VALUES ('28694aae-6193-4678-8c93-b1b9654a503f', 'Vendedor');
-INSERT INTO Roles  (Id, Role) VALUES ('524354a2-ab68-4474-a2a0-ed6217029a55', 'Gerente');
+INSERT INTO Roles  (Id, Role) VALUES ('0950f2c8-339a-48aa-87c7-fd920af037b7', 'Admin');
+INSERT INTO Roles  (Id, Role) VALUES ('9eed0ad1-9d4d-4a23-bf7e-214fea797650', 'Vendedor');
+INSERT INTO Roles  (Id, Role) VALUES ('1bae3fa2-3b0a-4eb5-a9b2-5a5e5bed275a', 'Gerente');
 
 CREATE TABLE IF NOT EXISTS "Settings" (
        "Key"                TEXT NOT NULL UNIQUE,
