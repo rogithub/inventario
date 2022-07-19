@@ -60,9 +60,8 @@
                                         asp-controller="Productos">Etiquetas</a>
                                 </li>
                             </ul>
-                        </li>
-                        
-                        @if(User != null && User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Gerente"))
+                        </li>                        
+                        @if(User != null && User.Identity != null && User.Identity.IsAuthenticated && (User.IsInRole("Gerente") || User.IsInRole("Admin")))
                         {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="ddPlantillas" role="button"
@@ -76,6 +75,25 @@
                                 <li>
                                     <a class="dropdown-item" asp-action="BaseDeDatos" asp-controller="Descargas">
                                         Base de datos
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        }
+                        @if(User != null && User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="ddlUsuarios" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Usuarios
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="ddlUsuarios">
+                                <li>
+                                    <a class="dropdown-item" asp-action="Index" asp-controller="Users">Usuarios</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-action="AddUser" asp-controller="Users">
+                                        Nuevo
                                     </a>
                                 </li>
                             </ul>
