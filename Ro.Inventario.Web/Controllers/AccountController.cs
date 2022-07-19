@@ -122,6 +122,10 @@ public class AccountController : BaseController
 			var entity = new Login();
 			entity.Email = email;
 			entity.Password = password;
+
+			returnUrl = System.Net.WebUtility.UrlDecode(returnUrl);
+			_logger.LogInformation("Return url {url}", returnUrl);			
+
 			if (!await _usersRepo.HasAccess(entity))
 			{
 				_logger.LogWarning("Intento fallito de login {user}", entity.Email);

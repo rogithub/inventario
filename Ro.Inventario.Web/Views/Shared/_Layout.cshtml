@@ -27,6 +27,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home"
                                 asp-action="Index">Inicio</a>
                         </li>
+                        
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="ddVentas" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
@@ -60,6 +61,7 @@
                                 </li>
                             </ul>
                         </li>
+                        
                         @if(User != null && User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Gerente"))
                         {
                         <li class="nav-item dropdown">
@@ -97,7 +99,7 @@
                         }else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-route-returnUrl='@Url.Action("Index","Home")' asp-controller="Account" asp-action="Login">Entrar</a>
+                                <a class="nav-link text-dark" asp-route-returnUrl='@Url.Action("Index","Home")' asp-controller="Account" asp-action="Login">Iniciar sesión</a>
                             </li>
                         }
                     </ul>
