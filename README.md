@@ -70,6 +70,8 @@ sqlite3 Db-dev/inventario.db
 ## Export Db data from BASH
 ``` bash
 $ sqlite3 Db-dev/inventario.db .dump | grep INSERT
+
+$ sqlite3 ../Ro.Inventario.Web/Db-dev/inventario.db < INSERTS.sql
 ```
 
 ## user & groups
