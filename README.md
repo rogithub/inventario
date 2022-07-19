@@ -59,6 +59,19 @@ podman build -f Containerfile -t inventario-img && podman run -v $(pwd)/Ro.Inven
 podman exec inventario sqlite3 /app/Db/inventario.db < ./dbscripts/reportes.sql
 ```
 
+## Export Db data
+``` bash
+sqlite3 Db-dev/inventario.db
+.output ./backup.sql
+.dump
+.exit
+```
+
+## Export Db data from BASH
+``` bash
+$ sqlite3 Db-dev/inventario.db .dump | grep INSERT
+```
+
 ## user & groups
 ``` bash
 id
