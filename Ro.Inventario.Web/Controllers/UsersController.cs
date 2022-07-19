@@ -87,22 +87,29 @@ public class UsersController : BaseController
 
     [HttpPost]
     [Authorize(Roles="Admin")]
-    public async Task<IActionResult> AddUser(Register m)
+    public async Task<IActionResult> AddUser(RegisterEmail m)
     {		
       if (ModelState.IsValid == false)
       {
         return View(m);
       }
+
+      var roleExists = await _rolesRepo.RoleExists(m.Role);
+      if (!roleExists)
+      {
+        ModelState.AddModelError("Role", "Role no existe en la base de datos");
+        return View(m);
+      }      
       
       try {
         var e = new Register();
         e.Email = m.Email;
         e.Password = e.Id.ToString();
         var rows = await _usersRepo.Create(e);
-        var count = await _rolesRepo.AddToRole(Guid.NewGuid(), e.Id, "User");
+        var count = await _rolesRepo.AddToRole(Guid.NewGuid(), e.Id, m.Role);
         if (count != 1)
         {
-        throw new Exception("Role User not found.");
+          throw new Exception("Role User not found.");
         }
       }
       catch (Exception ex) {

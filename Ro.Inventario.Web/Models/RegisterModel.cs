@@ -6,14 +6,13 @@ public class RegisterEmail
     public RegisterEmail()
     {
         this.Email = string.Empty; 
-        this.Departamento = string.Empty;        
+        this.Role = string.Empty;        
     }
     [Required(ErrorMessage = "Email requerido")]
     [EmailAddress(ErrorMessage = "Correo no válido")]
     public string Email { get; set; }   
-    [Required(ErrorMessage = "Departamento requerido")]
-    [StringLength(255, ErrorMessage = "Departamento debe tener entre 4 y 255 caractéres", MinimumLength = 4)]    
-    public string Departamento { get; set; }     
+    [Required(ErrorMessage = "Role requerido")]    
+    public string Role { get; set; }   
 }
 
 public class RegisterModel

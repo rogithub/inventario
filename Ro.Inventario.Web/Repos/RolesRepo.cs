@@ -9,6 +9,7 @@ namespace Ro.Inventario.Web.Repos;
 public interface IRolesRepo
 {
 	Task<IEnumerable<string>> GetRoles(Guid userId);
+	Task<bool> RoleExists(string role);
     Task<IDictionary<string, Guid>> GetRoles();
     Task<int> AddToRole(Guid id, Guid userId, Guid roleId);
 	Task<int> AddToRole(Guid id, Guid userId, string role);
@@ -79,5 +80,17 @@ public class RolesRepo : IRolesRepo
 
 		return Db.ExecuteNonQuery(cmd);
 	}
+
+	public async Task<bool> RoleExists(string role)
+	{
+		string sql = "INSERT count(*) FROM Roles WHERE Role=@role;";
+		var cmd = sql.ToCmd(			
+			"@role".ToParam(DbType.String, role)
+		);
+
+		var count = await Db.ExecuteScalar(cmd);
+		return ((int)count) > 0;
+	}
+
 
 }
