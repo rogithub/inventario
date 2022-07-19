@@ -124,6 +124,7 @@ public class AccountController : BaseController
 			entity.Password = password;
 			if (!await _usersRepo.HasAccess(entity))
 			{
+				_logger.LogWarning("Intento fallito de login {user}", entity.Email);
 				ViewData["ReturnUrl"] = returnUrl;
 				TempData["Error"] = "Error. Su email o password no es correcto.";
 				return View("Login");

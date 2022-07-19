@@ -12,7 +12,7 @@
     <h2 class="alert-danger">@error</h2>
 }
 
-    <form action="login?returnUrl=@System.Net.WebUtility.UrlEncode(returnUrl)" method="post">
+    <form asp-action="Login" asp-controller="Account" asp-route-returnUrl="@System.Net.WebUtility.UrlEncode(returnUrl)" method="post">
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" name="email" aria-describedby="emailHelp">
