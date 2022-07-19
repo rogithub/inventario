@@ -23,7 +23,8 @@ public class Ajuste: IUserUpdated
             FechaVenta = a.FechaAjuste,
             Pago = a.Pago,
             Cambio = a.Cambio,
-            Iva = a.Iva
+            Iva = a.Iva,
+            UserUpdatedId = a.UserUpdatedId
         };
     }
 }

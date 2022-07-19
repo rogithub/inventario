@@ -9,7 +9,7 @@ namespace Ro.Inventario.Web.Services;
 public interface IProductosService
 {
     Task<ProductoDotnetModel> LoadModel(Guid productoId);
-    Task Actualizar(ProductoDotnetModel model);
+    Task Actualizar(ProductoDotnetModel model, Guid userId);
 }
 
 public class ProductosService : IProductosService
@@ -62,7 +62,7 @@ public class ProductosService : IProductosService
         return p;
     }
 
-    public async Task Actualizar(ProductoDotnetModel m)
+    public async Task Actualizar(ProductoDotnetModel m, Guid userId)
     {
         _logger.LogInformation("Guardando producto {id}", m.Id);
         _logger.LogInformation("Nombre {Nombre}", m.Nombre);
@@ -80,6 +80,7 @@ public class ProductosService : IProductosService
             m.UnidadMedidaId != i.UnidadMedidaId)
         {
             _logger.LogInformation("Editando valores de producto {id}", m.Id);
+            i.UserUpdatedId = userId;
             i.Nombre = m.Nombre;
             i.UnidadMedidaId = m.UnidadMedidaId;
             i.CodigoBarrasItem = string.IsNullOrWhiteSpace(m.CodigoBarrasItem) ? string.Empty : m.CodigoBarrasItem;
@@ -104,7 +105,8 @@ public class ProductosService : IProductosService
                 FechaCreado = DateTime.Now,
                 Id = Guid.NewGuid(),
                 PrecioVenta = m.PrecioVenta,
-                ProductoId = m.Id
+                ProductoId = m.Id,
+                UserUpdatedId = userId
             } };
             await _precios.BulkSave(precios);
         }

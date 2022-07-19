@@ -26,7 +26,7 @@ public class ProductoNuevoLinea
     public string UnidadDeMedida { get; set; }
     public string Categoria { get; set; }
 
-    public Producto ToEntity(Dictionary<string,Guid> unidadesMedida)
+    public Producto ToEntity(Dictionary<string,Guid> unidadesMedida, Guid userId)
     {
         var p = new Producto();
         p.Id = this.Id;
@@ -34,7 +34,7 @@ public class ProductoNuevoLinea
         p.CodigoBarrasItem = this.CodigoBarrasItem;
         p.CodigoBarrasCaja = this.CodigoBarrasCaja;
         p.UnidadMedidaId = unidadesMedida[this.UnidadDeMedida];        
-            
+        p.UserUpdatedId = userId;
         return p;
     }
 }

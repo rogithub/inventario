@@ -51,7 +51,7 @@ public class ProductosController : BaseController
         {
             return View(m);
         }
-        await _productosSvc.Actualizar(m);
+        await _productosSvc.Actualizar(m, GetUserId());
         return RedirectToAction("Index", "Productos");
     }
 
@@ -74,7 +74,7 @@ public class ProductosController : BaseController
     [HttpPost]
     public async Task<IActionResult> Stock([FromBody] StockAjusteModel model)
     {
-        var val = await _ventasSvc.GuardarAjusteStock(model);
+        var val = await _ventasSvc.GuardarAjusteStock(model, GetUserId());
         return Json(new { updated = val });
     }
 
@@ -95,7 +95,7 @@ public class ProductosController : BaseController
             return View(model);
         }
 
-        await _comprasSvc.ProcessModel(model, lines);
+        await _comprasSvc.ProcessModel(model, lines, GetUserId());
 
         return RedirectToAction("Index", "Home");
     }

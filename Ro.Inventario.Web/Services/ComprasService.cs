@@ -6,7 +6,7 @@ namespace Ro.Inventario.Web.Services;
 
 public interface  IComprasService
 {
-    Task ProcessModel(CompraNuevosProductos model, IEnumerable<string> lines);
+    Task ProcessModel(CompraNuevosProductos model, IEnumerable<string> lines, Guid userId);
 }
 
 public class ComprasService: IComprasService
@@ -42,7 +42,7 @@ public class ComprasService: IComprasService
         _pValidator = pValidator;
     }    
 
-    private async Task ProcesarProductosNuevos(ProductoNuevoLinea[] productLines, Compra compra)
+    private async Task ProcesarProductosNuevos(ProductoNuevoLinea[] productLines, Compra compra, Guid userId)
     {
         var unidadesMedida = (from p in productLines select p.UnidadDeMedida);
         var uMedidaCounter = await _uMedida.BulkSave(unidadesMedida.ToArray());
@@ -54,7 +54,7 @@ public class ComprasService: IComprasService
         _logger.LogInformation("{categoriasCounter} Categorias guardadas", categoriasCounter);        
         var dCategorias = await _categorias.GetDictionary();
 
-        var productos = (from p in productLines select p.ToEntity(dUnidadMedida));
+        var productos = (from p in productLines select p.ToEntity(dUnidadMedida, userId));
         var prodCounter = await _producto.BulkSave(productos.ToArray());
         _logger.LogInformation("{prodCounter} Produtos nuevos guardados", prodCounter);
 
@@ -73,7 +73,8 @@ public class ComprasService: IComprasService
             select new PrecioProducto()
             {
                 ProductoId = p.Id,
-                PrecioVenta = p.PrecioVenta
+                PrecioVenta = p.PrecioVenta,
+                UserUpdatedId = userId
             });        
         var preciosCounter = await _precios.BulkSave(preciosProds.ToArray());
         _logger.LogInformation("{preciosCounter} Produtos asociados a un precio", preciosCounter);
@@ -91,7 +92,7 @@ public class ComprasService: IComprasService
         _logger.LogInformation("{productosEnCompra} Produtos NUEVOS asociados a esta compra", productosEnCompra);
     }
 
-    private async Task ActualizarElPrecioVenta(Guid productoId, decimal precioVenta)
+    private async Task ActualizarElPrecioVenta(Guid productoId, decimal precioVenta, Guid userId)
     {
         var precio = await _precios.GetOneForProduct(productoId);
         if (precio.PrecioVenta != precioVenta)
@@ -101,18 +102,19 @@ public class ComprasService: IComprasService
                 FechaCreado = DateTime.Now,
                 Id = Guid.NewGuid(),
                 PrecioVenta = precioVenta,
-                ProductoId = productoId
+                ProductoId = productoId,
+                UserUpdatedId = userId
             } };
             await _precios.BulkSave(precios);
         }
     }
     
 
-    private async Task ProcesarProductosExistentes(ProductoNuevoLinea[] productLines, Compra compra)
+    private async Task ProcesarProductosExistentes(ProductoNuevoLinea[] productLines, Compra compra, Guid userId)
     {        
         foreach (var p in productLines)
         {
-            await ActualizarElPrecioVenta(p.Id, p.PrecioVenta);
+            await ActualizarElPrecioVenta(p.Id, p.PrecioVenta, userId);
         }
 
         var productosComprados = 
@@ -129,7 +131,7 @@ public class ComprasService: IComprasService
     }
 
     public async Task ProcessModel(CompraNuevosProductos model, 
-        IEnumerable<string> lines)
+        IEnumerable<string> lines, Guid userId)
     {        
         var productLines = _pValidator.ParseProducts(lines).ToArray();
 
@@ -138,12 +140,13 @@ public class ComprasService: IComprasService
         compra.FechaFactura = model.FechaFactura;
         compra.CostoPaqueteria = model.CostoPaqueteria;
         compra.TotalFactura = model.TotalFactura;
+        compra.UserUpdatedId = userId;
         await _compras.Save(compra);
         _logger.LogInformation("Generando compra {id}", compra.Id);
         
         var nuevos = (from p in productLines where p.EsNuevo select p).ToArray();
-        await ProcesarProductosNuevos(nuevos, compra);
+        await ProcesarProductosNuevos(nuevos, compra, userId);
         var existentes = (from p in productLines where !p.EsNuevo select p).ToArray();
-        await ProcesarProductosExistentes(existentes, compra);
+        await ProcesarProductosExistentes(existentes, compra, userId);
     }
 }

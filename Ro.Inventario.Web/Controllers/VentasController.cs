@@ -50,12 +50,15 @@ public class VentasController : BaseController
         return View();
     }
 
+    [HttpPost]
     public async Task<IActionResult> DevolverProductos([FromBody]DevolucionProductoSaveModel[] model)
-    {        
-        var prods = (from it in model select new DevolucionProducto(){
+    {       
+        var userId = GetUserId();
+        var prods = (from it in model select new DevolucionProducto() {
             AjusteProductoId = it.AjusteProductoId,
             CantidadEnBuenasCondiciones = it.CantidadEnBuenasCondiciones,
-            CantidadEnMalasCondiciones = it.CantidadEnMalasCondiciones
+            CantidadEnMalasCondiciones = it.CantidadEnMalasCondiciones,
+            UserUpdatedId = userId
         }).ToArray();
         var data = await _ventasService.DevolverProductos(prods);
          return Json(data);
@@ -70,10 +73,12 @@ public class VentasController : BaseController
     [HttpPost]
     public async Task<IActionResult> Guardar([FromBody] VentaModel model)
     {
+        var userId = GetUserId();
         var v = new Venta();
         v.Pago = model.Pago;
         v.Cambio = model.Cambio;
         v.FechaVenta = model.Fecha;
+        v.UserUpdatedId = userId;
         v.Iva = await _settings.GetValue("IVA", (iva) => decimal.Parse(iva));
         var intVenta = await _ventas.Save(v);
         var prods = (from l in model.Items
@@ -82,7 +87,8 @@ public class VentasController : BaseController
                          ProductoId = l.ProductoId,
                          AjusteId = v.Id,
                          Cantidad = l.Cantidad,
-                         PrecioUnitario = l.PrecioUnitario
+                         PrecioUnitario = l.PrecioUnitario,
+                         UserUpdatedId = userId
                      }).ToArray();
 
         _logger.LogInformation("Venta id {id}", v.Id.ToString());
