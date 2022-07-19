@@ -26,7 +26,8 @@ public class ProductosRepo : IProductosRepo
     public Task<int> BulkSave(Producto[] list)
     {
         var parameters = new List<IDbDataParameter>();
-        var sqlLine = "INSERT INTO Productos (Id,Nombre,UnidadMedidaId,CodigoBarrasItem,CodigoBarrasCaja) VALUES (@id{0},@nombre{0},@unidadMedidaId{0},@codigoItem{0},@codigoCaja{0});";
+        var sqlLine = @"INSERT INTO Productos (Id,Nombre,UnidadMedidaId,CodigoBarrasItem,CodigoBarrasCaja,DateStamp,UserUpdatedId) VALUES 
+                                               (@id{0},@nombre{0},@unidadMedidaId{0},@codigoItem{0},@codigoCaja{0},@dateStamp{0},@userUpdatedId{0});";
         var sb = new StringBuilder();
         for (int i = 0; i < list.Length; i++)
         {
@@ -37,6 +38,8 @@ public class ProductosRepo : IProductosRepo
             parameters.Add(string.Format("@unidadMedidaId{0}", i).ToParam(DbType.String, it.UnidadMedidaId.ToString()));
             parameters.Add(string.Format("@codigoItem{0}", i).ToParam(DbType.String, it.CodigoBarrasItem));
             parameters.Add(string.Format("@codigoCaja{0}", i).ToParam(DbType.String, it.CodigoBarrasCaja));
+            parameters.Add(string.Format("@dateStamp{0}", i).ToParam(DbType.String, DateTime.Now.ToString(DATE_FORMAT)));
+            parameters.Add(string.Format("@userUpdatedId{0}", i).ToParam(DbType.String, it.UserUpdatedId.ToString()));
         }
         var cmd = sb.ToString().ToCmd(parameters.ToArray());
         return Db.ExecuteNonQuery(cmd);
@@ -48,7 +51,9 @@ public class ProductosRepo : IProductosRepo
                         Nombre=@nombre,
                         UnidadMedidaId=@unidadMedidaId,
                         CodigoBarrasItem=@codigoItem,
-                        CodigoBarrasCaja=@codigoCaja
+                        CodigoBarrasCaja=@codigoCaja,
+                        DateStamp=@dateStamp,
+                        UserUpdatedId=@userUpdatedId                        
                     WHERE Id=@id";
         var cmd = sql.ToCmd
         (
@@ -56,28 +61,33 @@ public class ProductosRepo : IProductosRepo
             "@nombre".ToParam(DbType.String, it.Nombre),
             "@unidadMedidaId".ToParam(DbType.String, it.UnidadMedidaId.ToString()),
             "@codigoItem".ToParam(DbType.String, it.CodigoBarrasItem),
-            "@codigoCaja".ToParam(DbType.String, it.CodigoBarrasCaja)
+            "@codigoCaja".ToParam(DbType.String, it.CodigoBarrasCaja),
+            "@dateStamp".ToParam(DbType.String, DateTime.Now.ToString(DATE_FORMAT)),
+            "@userUpdatedId".ToParam(DbType.String, it.UserUpdatedId.ToString())
         );
         return Db.ExecuteNonQuery(cmd);
     }
 
     public Task<int> Save(Producto it)
     {
-        var sql = "INSERT INTO Productos (Id,Nombre,UnidadMedidaId,CodigoBarrasItem,CodigoBarrasCaja) VALUES (@id,@nombre,@unidadMedidaId,@codigoItem,@codigoCaja)";
+        var sql = @"INSERT INTO Productos (Id,Nombre,UnidadMedidaId,CodigoBarrasItem,CodigoBarrasCaja,DateStamp,UserUpdatedId) 
+                            VALUES (@id,@nombre,@unidadMedidaId,@codigoItem,@codigoCaja,@dateStamp,@userUpdatedId)";
         var cmd = sql.ToCmd
         (
             "@id".ToParam(DbType.String, it.Id.ToString()),
             "@nombre".ToParam(DbType.String, it.Nombre),
             "@unidadMedidaId".ToParam(DbType.String, it.UnidadMedidaId.ToString()),
             "@codigoItem".ToParam(DbType.String, it.CodigoBarrasItem),
-            "@codigoCaja".ToParam(DbType.String, it.CodigoBarrasCaja)
+            "@codigoCaja".ToParam(DbType.String, it.CodigoBarrasCaja),
+            "@dateStamp".ToParam(DbType.String, DateTime.Now.ToString(DATE_FORMAT)),
+            "@userUpdatedId".ToParam(DbType.String, it.UserUpdatedId.ToString())
         );
         return Db.ExecuteNonQuery(cmd);
     }
 
     public Task<Producto> GetOne(Guid id)
     {
-        var sql = "SELECT Id,Nombre,UnidadMedidaId,CodigoBarrasItem,CodigoBarrasCaja FROM Productos WHERE Id = @id";
+        var sql = "SELECT Id,Nombre,UnidadMedidaId,CodigoBarrasItem,CodigoBarrasCaja,UserUpdatedId FROM Productos WHERE Id = @id";
         var cmd = sql.ToCmd
         (
             "@id".ToParam(DbType.String, id.ToString())
@@ -87,9 +97,11 @@ public class ProductosRepo : IProductosRepo
 
     private Producto GetData(IDataReader dr)
     {
+        var userId = dr.GetString("UserUpdatedId");
         return new Producto()
         {
             Id = Guid.Parse(dr.GetString("Id")),
+            UserUpdatedId = string.IsNullOrWhiteSpace(userId) ? Guid.Empty : Guid.Parse(userId),
             UnidadMedidaId = Guid.Parse(dr.GetString("UnidadMedidaId")),
             Nombre = dr.GetString("Nombre"),
             CodigoBarrasItem = dr.GetString("CodigoBarrasItem"),

@@ -1,6 +1,6 @@
 namespace Ro.Inventario.Web.Entities;
 
-public class Devolucion
+public class Devolucion: IUserUpdated
 {
     public Devolucion()
     {
@@ -10,6 +10,7 @@ public class Devolucion
         Fecha = DateTime.Now;
     }
     public Guid Id { get; set; }
+    public Guid UserUpdatedId { get; set; }
     public Guid AjusteId { get; set; }
     public Guid ProductoId { get; set; }
     public decimal Cantidad { get; set; }

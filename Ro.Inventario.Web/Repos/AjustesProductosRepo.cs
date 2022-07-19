@@ -25,8 +25,8 @@ public class AjustesProductosRepo : IAjustesProductosRepo
     public Task<int> BulkSave(AjusteProducto[] list)
     {
         var parameters = new List<IDbDataParameter>();
-        var sqlLine = @"INSERT INTO AjustesProductos (Id,ProductoId,AjusteId,Cantidad,Notas,PrecioUnitarioVenta) 
-                        VALUES (@id{0},@productoId{0},@ajusteId{0},@cantidad{0},@notas{0},@precioUnitarioVenta{0});";
+        var sqlLine = @"INSERT INTO AjustesProductos (Id,ProductoId,AjusteId,Cantidad,Notas,PrecioUnitarioVenta,DateStamp,UserUpdatedId) 
+                        VALUES (@id{0},@productoId{0},@ajusteId{0},@cantidad{0},@notas{0},@precioUnitarioVenta{0},@dateStamp{0},@userUpdatedId{0});";
         var sb = new StringBuilder();
         for (int i = 0; i < list.Length; i++)
         {
@@ -38,6 +38,8 @@ public class AjustesProductosRepo : IAjustesProductosRepo
             parameters.Add(string.Format("@cantidad{0}", i).ToParam(DbType.Decimal, it.Cantidad));
             parameters.Add(string.Format("@notas{0}", i).ToParam(DbType.String, it.Notas));
             parameters.Add(string.Format("@precioUnitarioVenta{0}", i).ToParam(DbType.Decimal, it.PrecioUnitario));
+            parameters.Add(string.Format("@dateStamp{0}", i).ToParam(DbType.String, DateTime.Now.ToString(DATE_FORMAT)));
+            parameters.Add(string.Format("@userUpdatedId{0}", i).ToParam(DbType.String, it.UserUpdatedId.ToString()));
         }
         var cmd = sb.ToString().ToCmd(parameters.ToArray());
         return Db.ExecuteNonQuery(cmd);
@@ -45,8 +47,8 @@ public class AjustesProductosRepo : IAjustesProductosRepo
 
     public Task<int> Save(AjusteProducto it)
     {
-        var sql = @"INSERT INTO AjustesProductos (Id,ProductoId,AjusteId,Cantidad,Notas,PrecioUnitarioVenta) VALUES 
-                    (@id,@productoId,@ajusteId,@cantidad,@notas,@precioUnitarioVenta);";
+        var sql = @"INSERT INTO AjustesProductos (Id,ProductoId,AjusteId,Cantidad,Notas,PrecioUnitarioVenta,DateStamp,UserUpdatedId) VALUES 
+                    (@id,@productoId,@ajusteId,@cantidad,@notas,@precioUnitarioVenta,@dateStamp,@userUpdatedId);";
         var cmd = sql.ToCmd
         (
             "@id".ToParam(DbType.String, it.Id.ToString()),
@@ -54,14 +56,16 @@ public class AjustesProductosRepo : IAjustesProductosRepo
             "@ajusteId".ToParam(DbType.String, it.AjusteId.ToString()),
             "@cantidad".ToParam(DbType.Decimal, it.Cantidad),
             "@notas".ToParam(DbType.String, it.Notas),
-            "@precioUnitarioVenta".ToParam(DbType.Decimal, it.PrecioUnitario)
+            "@precioUnitarioVenta".ToParam(DbType.Decimal, it.PrecioUnitario),
+            "@dateStamp".ToParam(DbType.String, DateTime.Now.ToString(DATE_FORMAT)),
+            "@userUpdatedId".ToParam(DbType.String, it.UserUpdatedId.ToString())
         );
         return Db.ExecuteNonQuery(cmd);
     }
 
     public Task<AjusteProducto> GetOne(Guid id)
     {
-        var sql = "SELECT Id,ProductoId,AjusteId,Cantidad,Notas,PrecioUnitarioVenta FROM AjustesProductos WHERE Id = @id";
+        var sql = "SELECT Id,ProductoId,AjusteId,Cantidad,Notas,PrecioUnitarioVenta,UserUpdatedId FROM AjustesProductos WHERE Id = @id";
         var cmd = sql.ToCmd
         (
             "@id".ToParam(DbType.String, id.ToString())
@@ -71,7 +75,7 @@ public class AjustesProductosRepo : IAjustesProductosRepo
 
     public Task<IEnumerable<AjusteProducto>> GetForAjuste(Guid ajusteId)
     {
-        var sql = @"SELECT    Id,ProductoId,AjusteId,Cantidad,Notas,PrecioUnitarioVenta
+        var sql = @"SELECT    Id,ProductoId,AjusteId,Cantidad,Notas,PrecioUnitarioVenta,UserUpdatedId
                       FROM    AjustesProductos 
                      WHERE    AjusteId = @ajusteId;";
         var cmd = sql.ToCmd
@@ -84,9 +88,11 @@ public class AjustesProductosRepo : IAjustesProductosRepo
 
     private AjusteProducto GetData(IDataReader dr)
     {
+        var userId = dr.GetString("UserUpdatedId");
         return new AjusteProducto()
         {
             Id = Guid.Parse(dr.GetString("Id")),
+            UserUpdatedId = string.IsNullOrWhiteSpace(userId) ? Guid.Empty : Guid.Parse(userId),
             ProductoId = Guid.Parse(dr.GetString("ProductoId")),
             AjusteId = Guid.Parse(dr.GetString("AjusteId")),
             Cantidad = dr.GetDecimal("Cantidad"),

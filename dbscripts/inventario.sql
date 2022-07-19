@@ -40,8 +40,8 @@ INSERT INTO Roles  (Id, Role) VALUES ('28694aae-6193-4678-8c93-b1b9654a503f', 'V
 INSERT INTO Roles  (Id, Role) VALUES ('524354a2-ab68-4474-a2a0-ed6217029a55', 'Gerente');
 
 CREATE TABLE IF NOT EXISTS "Settings" (
-       "Key"  	       TEXT NOT NULL UNIQUE,
-       "Value"         TEXT NULL,
+       "Key"                TEXT NOT NULL UNIQUE,
+       "Value"              TEXT NULL,
        PRIMARY KEY("Key")
 );
 
@@ -66,7 +66,10 @@ CREATE TABLE IF NOT EXISTS "Productos" (
        "Nombre"         TEXT NOT NULL,
        "UnidadMedidaId" TEXT,
        "CodigoBarrasItem" TEXT, -- Si el item tiene codigo de barras por ejemplo codigo barras en un lapiz
-       "CodigoBarrasCaja" TEXT       
+       "CodigoBarrasCaja" TEXT,
+       "UserUpdatedId"    TEXT,
+       "DateStamp"        TEXT,       
+       FOREIGN KEY("UserUpdatedId") REFERENCES "Users"("Id") ON DELETE SET NULL -- MIGHT show error
 );
 
 CREATE VIRTUAL TABLE Productos_fst USING fts5 (
@@ -96,8 +99,10 @@ CREATE TABLE IF NOT EXISTS "PreciosProductos" (
        "ProductoId"       TEXT NOT NULL,
        "FechaCreado"	  TEXT NOT NULL, -- el ultimo creado es el bueno       
        "PrecioVenta"	  NUMERIC,       -- Precio unitario de venta al publico incluyendo impuestos aplicables
+       "UserUpdatedId"    TEXT,       
        PRIMARY KEY("Id"),
-       FOREIGN KEY("ProductoId") REFERENCES "Productos"("Id") ON DELETE CASCADE
+       FOREIGN KEY("ProductoId") REFERENCES "Productos"("Id") ON DELETE CASCADE,
+       FOREIGN KEY("UserUpdatedId") REFERENCES "Users"("Id") ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS "CategoriasProductos" (
@@ -117,7 +122,9 @@ CREATE TABLE IF NOT EXISTS "Compras" (
        "CostoPaqueteria"   NUMERIC, -- decimal
        "TotalFactura"      NUMERIC, -- decimal
        "PorcentajeFacturaIVA" NUMERIC, -- decimal
-       PRIMARY KEY("Id")
+       "UserUpdatedId"    TEXT,       
+       PRIMARY KEY("Id"),
+       FOREIGN KEY("UserUpdatedId") REFERENCES "Users"("Id") ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS "ComprasProductos" (
@@ -139,7 +146,9 @@ CREATE TABLE IF NOT EXISTS "Ajustes" (
        "FechaAjuste"  TEXT NOT NULL,
        "TipoAjuste"   INTEGER DEFAULT 0, -- 0 es Venta       
        "IvaVenta"     NUMERIC, --IVA solo ventas
-       PRIMARY KEY("Id")
+       "UserUpdatedId"    TEXT,
+       PRIMARY KEY("Id"),
+       FOREIGN KEY("UserUpdatedId") REFERENCES "Users"("Id") ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS "AjustesProductos" (
@@ -149,9 +158,12 @@ CREATE TABLE IF NOT EXISTS "AjustesProductos" (
        "Cantidad"               NUMERIC, -- decimal
        "PrecioUnitarioVenta"    NUMERIC, -- Precio Unitario solo ventas
        "Notas"                  TEXT,
+       "UserUpdatedId"          TEXT,
+       "DateStamp"              TEXT,
        PRIMARY KEY("Id"),
        FOREIGN KEY("ProductoId") REFERENCES "Productos"("Id") ON DELETE CASCADE
        FOREIGN KEY("AjusteId") REFERENCES "Ajustes"("Id") ON DELETE CASCADE
+       FOREIGN KEY("UserUpdatedId") REFERENCES "Users"("Id") ON DELETE SET NULL
 
 );
 
@@ -164,8 +176,10 @@ CREATE TABLE IF NOT EXISTS "DevolucionesProductos" (
                                         -- Productos en buen estado vuelven al stock, por el hecho de reducir su cantidad en
                                         -- la venta original. Para productos en mal estado, se reduce la cantidad en la
                                         -- venta y se captura una merma. 
+       "UserUpdatedId"    TEXT,       
        PRIMARY KEY("Id"),
-       FOREIGN KEY("AjusteProductoId") REFERENCES "AjustesProductos"("Id") ON DELETE CASCADE
+       FOREIGN KEY("AjusteProductoId") REFERENCES "AjustesProductos"("Id") ON DELETE CASCADE,
+       FOREIGN KEY("UserUpdatedId") REFERENCES "Users"("Id") ON DELETE SET NULL
 );
 
 COMMIT;

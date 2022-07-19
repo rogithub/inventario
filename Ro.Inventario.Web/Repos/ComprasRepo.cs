@@ -21,8 +21,8 @@ public class ComprasRepo : IComprasRepo
     
     public Task<int> Save(Compra it)
     {
-        var sql = @"INSERT INTO Compras (Id,Proveedor,FechaFactura,FechaCreado,CostoPaqueteria,TotalFactura,PorcentajeFacturaIVA) VALUES 
-                    (@id,@proveedor,@fechaFactura,@fechaCreado,@costoPaqueteria,@totalFactura,@porcentajeFacturaIVA);";
+        var sql = @"INSERT INTO Compras (Id,Proveedor,FechaFactura,FechaCreado,CostoPaqueteria,TotalFactura,PorcentajeFacturaIVA,UserUpdatedId) VALUES 
+                    (@id,@proveedor,@fechaFactura,@fechaCreado,@costoPaqueteria,@totalFactura,@porcentajeFacturaIVA,@userUpdatedId);";
         var cmd = sql.ToCmd
         (
             "@id".ToParam(DbType.String, it.Id.ToString()),
@@ -31,14 +31,15 @@ public class ComprasRepo : IComprasRepo
             "@fechaCreado".ToParam(DbType.String, it.FechaCreado.ToString(DATE_FORMAT)),
             "@costoPaqueteria".ToParam(DbType.Decimal, it.CostoPaqueteria),
             "@totalFactura".ToParam(DbType.Decimal, it.TotalFactura),
-            "@porcentajeFacturaIVA".ToParam(DbType.Decimal, it.PorcentajeFacturaIVA)
+            "@porcentajeFacturaIVA".ToParam(DbType.Decimal, it.PorcentajeFacturaIVA),
+            "@userUpdatedId".ToParam(DbType.String, it.UserUpdatedId.ToString())
         );
         return Db.ExecuteNonQuery(cmd);
     }
 
     public Task<Compra> GetOne(Guid id)
     {
-        var sql = "SELECT Id,Proveedor,FechaFactura,FechaCreado,CostoPaqueteria,TotalFactura,PorcentajeFacturaIVA FROM Compras WHERE Id = @id";
+        var sql = "SELECT Id,Proveedor,FechaFactura,FechaCreado,CostoPaqueteria,TotalFactura,PorcentajeFacturaIVA,UserUpdatedId FROM Compras WHERE Id = @id";
         var cmd = sql.ToCmd
         (            
             "@id".ToParam(DbType.String, id.ToString())
@@ -49,9 +50,11 @@ public class ComprasRepo : IComprasRepo
 
     private Compra GetData(IDataReader dr)
     {
+        var userId = dr.GetString("UserUpdatedId");
         return new Compra()
         {
             Id = Guid.Parse(dr.GetString("Id")),
+            UserUpdatedId = string.IsNullOrWhiteSpace(userId) ? Guid.Empty : Guid.Parse(userId),
             Proveedor = dr.GetString("Proveedor"),
             FechaFactura = DateTime.Parse(dr.GetString("FechaFactura")),
             FechaCreado = DateTime.Parse(dr.GetString("FechaCreado")),

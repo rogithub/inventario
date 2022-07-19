@@ -26,7 +26,8 @@ public class PreciosProductosRepo : IPreciosProductosRepo
     public Task<int> BulkSave(PrecioProducto[] list)
     {
         var parameters = new List<IDbDataParameter>();
-        var sqlLine = "INSERT INTO PreciosProductos (Id,ProductoId,FechaCreado,PrecioVenta) VALUES (@id{0},@productoId{0},@fechaCreado{0},@precioVenta{0});";
+        var sqlLine = @"INSERT INTO PreciosProductos (Id,ProductoId,FechaCreado,PrecioVenta,UserUpdatedId) 
+                        VALUES (@id{0},@productoId{0},@fechaCreado{0},@precioVenta{0},@userUpdatedId{0});";
         var sb = new StringBuilder();
         for (int i = 0; i < list.Length; i++)
         {
@@ -36,6 +37,7 @@ public class PreciosProductosRepo : IPreciosProductosRepo
             parameters.Add(string.Format("@productoId{0}", i).ToParam(DbType.String, it.ProductoId.ToString()));
             parameters.Add(string.Format("@fechaCreado{0}", i).ToParam(DbType.String, it.FechaCreado.ToString(DATE_FORMAT)));
             parameters.Add(string.Format("@precioVenta{0}", i).ToParam(DbType.Decimal, it.PrecioVenta));
+            parameters.Add(string.Format("@userUpdatedId{0}", i).ToParam(DbType.String, it.UserUpdatedId.ToString()));
         }
         var cmd = sb.ToString().ToCmd(parameters.ToArray());
         return Db.ExecuteNonQuery(cmd);
@@ -43,21 +45,22 @@ public class PreciosProductosRepo : IPreciosProductosRepo
 
     public Task<int> Save(PrecioProducto it)
     {
-        var sql = @"INSERT INTO PreciosProductos (Id,ProductoId,FechaCreado,PrecioVenta) VALUES 
-                    (@id,@productoId,@fechaCreado,@precioVenta);";
+        var sql = @"INSERT INTO PreciosProductos (Id,ProductoId,FechaCreado,PrecioVenta,UserUpdatedId) VALUES 
+                    (@id,@productoId,@fechaCreado,@precioVenta,@userUpdatedId);";
         var cmd = sql.ToCmd
         (
             "@id".ToParam(DbType.String, it.Id.ToString()),
             "@productoId".ToParam(DbType.String, it.ProductoId.ToString()),
             "@fechaCreado".ToParam(DbType.String, it.FechaCreado.ToString(DATE_FORMAT)),
-            "@precioVenta".ToParam(DbType.Decimal, it.PrecioVenta)
+            "@precioVenta".ToParam(DbType.Decimal, it.PrecioVenta),
+            "@userUpdatedId".ToParam(DbType.String, it.UserUpdatedId.ToString())
         );
         return Db.ExecuteNonQuery(cmd);
     }
 
     public Task<PrecioProducto> GetOne(Guid id)
     {
-        var sql = "SELECT Id,ProductoId,FechaCreado,PrecioVenta FROM PreciosProductos WHERE Id = @id;";
+        var sql = "SELECT Id,ProductoId,FechaCreado,PrecioVenta,UserUpdatedId FROM PreciosProductos WHERE Id = @id;";
         var cmd = sql.ToCmd
         (
             "@id".ToParam(DbType.String, id.ToString())
@@ -67,7 +70,7 @@ public class PreciosProductosRepo : IPreciosProductosRepo
 
     public Task<PrecioProducto> GetOneForProduct(Guid productoId)
     {
-        var sql = @"SELECT    Id,ProductoId,FechaCreado,PrecioVenta 
+        var sql = @"SELECT    Id,ProductoId,FechaCreado,PrecioVenta,UserUpdatedId
                       FROM    PreciosProductos 
                      WHERE    ProductoId = @productoId
                      ORDER BY datetime(FechaCreado) DESC LIMIT 1;";
@@ -81,9 +84,11 @@ public class PreciosProductosRepo : IPreciosProductosRepo
 
     private PrecioProducto GetData(IDataReader dr)
     {
+        var userId = dr.GetString("UserUpdatedId");
         return new PrecioProducto()
         {
             Id = Guid.Parse(dr.GetString("Id")),
+            UserUpdatedId = string.IsNullOrWhiteSpace(userId) ? Guid.Empty : Guid.Parse(userId),
             ProductoId = Guid.Parse(dr.GetString("ProductoId")),
             FechaCreado = DateTime.Parse(dr.GetString("FechaCreado")),
             PrecioVenta = dr.GetDecimal("PrecioVenta")

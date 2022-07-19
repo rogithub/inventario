@@ -21,7 +21,7 @@ public class AjustesRepo : IAjustesRepo
 
     public Task<int> Save(Ajuste it)
     {
-        var sql = @"INSERT INTO Ajustes (Id,Pago,Cambio,FechaAjuste,TipoAjuste,IvaVenta) VALUES 
+        var sql = @"INSERT INTO Ajustes (Id,Pago,Cambio,FechaAjuste,TipoAjuste,IvaVenta,UserUpdatedId) VALUES 
                     (@id,@pago,@cambio,@fechaAjuste,@tipoAjuste,@ivaVenta);";
         var cmd = sql.ToCmd
         (
@@ -30,14 +30,15 @@ public class AjustesRepo : IAjustesRepo
             "@cambio".ToParam(DbType.Decimal, it.Cambio),
             "@fechaAjuste".ToParam(DbType.String, it.FechaAjuste.ToString(DATE_FORMAT)),
             "@tipoAjuste".ToParam(DbType.Int32, (int)it.TipoAjuste),
-            "@ivaVenta".ToParam(DbType.Decimal, it.Iva)
+            "@ivaVenta".ToParam(DbType.Decimal, it.Iva),
+            "@userUpdatedId".ToParam(DbType.String, it.UserUpdatedId.ToString())
         );
         return Db.ExecuteNonQuery(cmd);
     }
 
     public Task<Ajuste> GetOne(Guid id)
     {
-        var sql = "SELECT Id,Pago,Cambio,FechaAjuste,TipoAjuste,IvaVenta FROM Ajustes WHERE Id = @id";
+        var sql = "SELECT Id,Pago,Cambio,FechaAjuste,TipoAjuste,IvaVenta,UserUpdatedId FROM Ajustes WHERE Id = @id";
         var cmd = sql.ToCmd
         (
             "@id".ToParam(DbType.String, id.ToString())
@@ -59,9 +60,11 @@ public class AjustesRepo : IAjustesRepo
 
     private Ajuste GetData(IDataReader dr)
     {
+        var userId = dr.GetString("UserUpdatedId");
         return new Ajuste()
-        {
+        {            
             Id = Guid.Parse(dr.GetString("Id")),
+            UserUpdatedId = string.IsNullOrWhiteSpace(userId) ? Guid.Empty : Guid.Parse(userId),
             Pago = dr.GetDecimal("Pago"),
             Cambio = dr.GetDecimal("Cambio"),
             FechaAjuste = DateTime.Parse(dr.GetString("FechaAjuste")),
