@@ -83,7 +83,7 @@ public class RolesRepo : IRolesRepo
 
 	public async Task<bool> RoleExists(string role)
 	{
-		string sql = "INSERT count(*) FROM Roles WHERE Role=@role;";
+		string sql = "SELECT count(*) FROM Roles WHERE Role=@role;";
 		var cmd = sql.ToCmd(			
 			"@role".ToParam(DbType.String, role)
 		);
