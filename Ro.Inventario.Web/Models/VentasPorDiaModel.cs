@@ -6,7 +6,7 @@ namespace Ro.Inventario.Web.Models;
 
 public class ProductoCantidadModel : Producto
 {
-    public ProductoCantidadModel(Producto p, decimal cantidad)
+    public ProductoCantidadModel(Producto p, decimal cantidad, decimal precioUnitario)
     {
         this.Id = p.Id;
         this.Cantidad = cantidad;
@@ -14,8 +14,10 @@ public class ProductoCantidadModel : Producto
         this.CodigoBarrasItem = p.CodigoBarrasItem;
         this.Nombre = p.Nombre;
         this.UnidadMedidaId = p.UnidadMedidaId;
+        this.PrecioUnitario = precioUnitario;
     }
     public decimal Cantidad { get; set; }
+    public decimal PrecioUnitario { get; set; }
 }
 
 public class VentasPorDiaRowModel

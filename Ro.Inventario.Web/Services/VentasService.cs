@@ -100,7 +100,7 @@ public class VentasService : IVentasService
             foreach (var it in ajustesProductos)
             {
                 var producto = await _productos.GetOne(it.ProductoId);
-                var p = new ProductoCantidadModel(producto, it.Cantidad);
+                var p = new ProductoCantidadModel(producto, it.Cantidad, it.PrecioUnitario);
                 productos.Add(p);
             }
             lista.Add(new VentasPorDiaRowModel(v, productos.ToArray()));
