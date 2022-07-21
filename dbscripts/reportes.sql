@@ -82,6 +82,17 @@ GROUP BY FechaAjuste
 ORDER BY FechaAjuste;
 
 
+DROP VIEW IF EXISTS rpt_estimado_ventas_mensual;
+CREATE VIEW rpt_estimado_ventas_mensual
+SELECT 
+       strftime("%m-%Y", FechaAjuste) as 'Mes',
+	   SUM(NumeroVentas) as NumeroVentas,
+	   SUM(Inversion) as Inversion,
+	   SUM(Venta) as Venta,
+	   SUM(Ganancia) as Ganancia
+       FROM rpt_estimado_ventas GROUP BY strftime("%m-%Y", FechaAjuste);
+
+
 -- Rendimiento
 DROP VIEW IF EXISTS rpt_rendimiento_productos;
 CREATE VIEW rpt_rendimiento_productos
