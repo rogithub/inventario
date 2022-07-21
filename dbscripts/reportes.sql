@@ -84,6 +84,7 @@ ORDER BY FechaAjuste;
 
 DROP VIEW IF EXISTS rpt_estimado_ventas_mensual;
 CREATE VIEW rpt_estimado_ventas_mensual
+AS
 SELECT 
        strftime("%m-%Y", FechaAjuste) as 'Mes',
 	   SUM(NumeroVentas) as NumeroVentas,
