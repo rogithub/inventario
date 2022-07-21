@@ -26,31 +26,53 @@
 
 @foreach (var r in Model.Rows)
 {
-    <table class="table">
-    <thead>
-        <tr class="table-primary">
-            <th scope="col">Cantidad</th>
-            <th scope="col">
-                Venta @(Array.IndexOf(Model.Rows, r)+1)
-                a las @r.Venta.FechaVenta.ToShortTimeString()
-                | Pagó @r.Venta.Pago.ToString("C", localizacion)
-                cambio @r.Venta.Cambio.ToString("C", localizacion)
-                | Total @((r.Venta.Pago - r.Venta.Cambio).ToString("C", localizacion))
-            </th>
-            <th>
-                <a class="btn btn-warning" asp-route-ventaId="@r.Venta.Id" asp-action="Devoluciones" asp-controller="Ventas">Devoluciones</a>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var p in r.Productos)
-            {
-                <tr>
-                    <td>@p.Cantidad</td>
-                    <td>@p.Nombre</td>
-                    <td></td>
-                </tr>
-            }
-        </tbody>
+    <table class="table g-3">
+        <thead>
+            <tr class="">
+                <th>
+                    
+                </th>
+                <th scope="col" colspan="2">
+                    Venta @(Array.IndexOf(Model.Rows, r)+1)
+                    a las @r.Venta.FechaVenta.ToShortTimeString()
+                    | Pagó @r.Venta.Pago.ToString("C", localizacion),
+                    cambio @r.Venta.Cambio.ToString("C", localizacion)
+                    (<a asp-route-ventaId="@r.Venta.Id" asp-action="Devoluciones" asp-controller="Ventas">Devoluciones</a>)
+                </th>    
+                <th>
+                    
+                </th>        
+            </tr>
+            <tr class="table-primary">
+                <th scope="col">Cantidad</th>
+                <th scope="col"> Nombre</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Total</th>            
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in r.Productos)
+                {
+                    <tr>
+                        <td>@p.Cantidad</td>
+                        <td>@p.Nombre</td>
+                        <td>@p.PrecioUnitario.ToString("C", localizacion)</td>
+                        <td>
+                            @{var total = p.PrecioUnitario*p.Cantidad;}
+                            @total.ToString("C", localizacion)
+                        </td>
+                    </tr>
+                }
+        </tbody>   
+        <tfoot>     
+             <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    @((r.Venta.Pago - r.Venta.Cambio).ToString("C", localizacion))
+                </td>
+            </tr>
+        </tfoot>
     </table>
 }
