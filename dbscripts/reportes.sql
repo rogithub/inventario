@@ -101,9 +101,10 @@ AS
 SELECT 
 	p.Nombre, 
 	v.PrecioUnitarioVenta - v.UltimoPrecioCompra as Rendimiento, 
-	SUM(v.Cantidad) as VecesVendido
-FROM Productos p JOIN v_ventas_productos v on p.Id = v.ProductoId 
-GROUP BY p.Id 
+	SUM(v.Cantidad) as VecesVendido,
+	p.Stock
+FROM v_inventario p JOIN v_ventas_productos v on p.Id = v.ProductoId 
+GROUP BY p.Id
 ORDER BY FechaAjuste DESC;
 
 COMMIT;
