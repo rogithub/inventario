@@ -14,11 +14,9 @@ public class DatabaseProvider
     public string InteropPath  { get; set; }
     public string ScriptsPath  { get; set; }
     public string[] InitScripts  { get; set; }    
-    private readonly ITestOutputHelper output;
-
-    public DatabaseProvider(ITestOutputHelper output)
-    {
-        this.output = output;        
+    
+    public DatabaseProvider()
+    {        
         this.InitScripts = new string[] 
         {
             "inventario.sql",
@@ -35,11 +33,7 @@ public class DatabaseProvider
             .Build();
         this.DbPath = config.GetSection("DbPath").Value;
         this.InteropPath = config.GetSection("InteropPath").Value;
-        this.ScriptsPath = config.GetSection("ScriptsPath").Value;
-
-        output.WriteLine(this.DbPath);
-        output.WriteLine(this.InteropPath);
-        output.WriteLine(this.ScriptsPath);
+        this.ScriptsPath = config.GetSection("ScriptsPath").Value;        
     }
 
 

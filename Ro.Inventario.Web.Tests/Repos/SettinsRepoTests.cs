@@ -42,7 +42,7 @@ public class SettinsRepoTests
     [Fact]
     public async Task Integration_Settings()
     {
-        var dbSetup = new DatabaseProvider(output);
+        var dbSetup = new DatabaseProvider();
         await dbSetup.InitDb();
 
         var s = new Setting()
