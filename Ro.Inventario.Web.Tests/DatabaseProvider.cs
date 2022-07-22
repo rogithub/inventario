@@ -4,42 +4,60 @@ using System.Data.Common;
 using System.Data;
 using System.IO;
 using Xunit.Abstractions;
-
+using Microsoft.Extensions.Configuration;
 
 namespace Ro.Inventario.Web.Tests;
 
 public class DatabaseProvider
 {
-    public string ConnectionString  { get; set; }
+    public string DbPath  { get; set; }
     public string InteropPath  { get; set; }
     public string ScriptsPath  { get; set; }
-    public string[] InitScripts  { get; set; }
-    public IDbAsync Db { get; set; }
+    public string[] InitScripts  { get; set; }    
     private readonly ITestOutputHelper output;
 
     public DatabaseProvider(ITestOutputHelper output)
     {
-        this.output = output;
-        this.ConnectionString = "Data Source=:memory:;";// "FullUri=file::memory:?cache=shared";
-        this.InteropPath = "/home/ro/Documents/code/inventario/Ro.Inventario.Web/bin/Debug/net6.0/runtimes/linux-x64/native/SQLite.Interop.dll";
-        this.ScriptsPath = "/home/ro/Documents/code/inventario/dbscripts";
+        this.output = output;        
         this.InitScripts = new string[] 
         {
             "inventario.sql",
             "reportes.sql"
         };
-
-        this.Db = new Database(this.ConnectionString, new DbTasks(this.InteropPath));        
+        Configure();
     }    
 
-    public async Task InitDb()
+    private void Configure()
     {        
+        var config = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())            
+            .AddJsonFile("appsettings.Testing.json", optional: true)
+            .Build();
+        this.DbPath = config.GetSection("DbPath").Value;
+        this.InteropPath = config.GetSection("InteropPath").Value;
+        this.ScriptsPath = config.GetSection("ScriptsPath").Value;
+
+        output.WriteLine(this.DbPath);
+        output.WriteLine(this.InteropPath);
+        output.WriteLine(this.ScriptsPath);
+    }
+
+
+    public async Task InitDb()
+    {     
+        File.Delete(this.DbPath);
+        var db = GetDb();
         foreach (var fileName in this.InitScripts)
         {
             var path = Path.Join(this.ScriptsPath, fileName);
-            string sql = File.ReadAllText(path);
-            output.WriteLine(sql);
-            await this.Db.ExecuteNonQuery(sql.ToCmd());
+            string sql = File.ReadAllText(path);            
+            await db.ExecuteNonQuery(sql.ToCmd());
         }
+    }
+
+    public IDbAsync GetDb()
+    {     
+        var connString = string.Format("Data Source={0}; Version=3;", this.DbPath);
+        return new Database(connString, new DbTasks(this.InteropPath));
     }
 }

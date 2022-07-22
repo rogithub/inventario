@@ -14,7 +14,7 @@ public class SettinsRepoTests
     {
         this.output = output;
     }
-    /*
+    
     [Fact]
     public async Task GetValue()
     {
@@ -37,14 +37,13 @@ public class SettinsRepoTests
         });
 
         Assert.Equal(decimal.Zero, actual);
-    }
-    */
+    }    
 
     [Fact]
     public async Task Integration_Settings()
     {
         var dbSetup = new DatabaseProvider(output);
-        await dbSetup.InitDb();        
+        await dbSetup.InitDb();
 
         var s = new Setting()
         {
@@ -52,7 +51,7 @@ public class SettinsRepoTests
             Value = "0.16"
         };
 
-        var sut = new SettingsRepo(dbSetup.Db);
+        var sut = new SettingsRepo(dbSetup.GetDb());
 
         var actual = await sut.GetValue(s.Key, (value) => {
             Assert.Equal(s.Value, value);
