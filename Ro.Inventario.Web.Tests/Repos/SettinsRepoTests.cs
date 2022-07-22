@@ -9,10 +9,12 @@ namespace Ro.Inventario.Web.Tests;
 
 public class SettinsRepoTests
 {
-    private readonly ITestOutputHelper output;
+    private readonly ITestOutputHelper _output;
+    private readonly DatabaseProvider _dbProvider;
     public SettinsRepoTests(ITestOutputHelper output)
     {
-        this.output = output;
+        this._output = output;
+        this._dbProvider = new DatabaseProvider();
     }
     
     [Fact]
@@ -41,9 +43,8 @@ public class SettinsRepoTests
 
     [Fact]
     public async Task Integration_Settings()
-    {
-        var dbSetup = new DatabaseProvider();
-        await dbSetup.InitDb();
+    {        
+        await _dbProvider.InitDb();
 
         var s = new Setting()
         {
@@ -51,7 +52,7 @@ public class SettinsRepoTests
             Value = "0.16"
         };
 
-        var sut = new SettingsRepo(dbSetup.GetDb());
+        var sut = new SettingsRepo(_dbProvider.GetDb());
 
         var actual = await sut.GetValue(s.Key, (value) => {
             Assert.Equal(s.Value, value);
