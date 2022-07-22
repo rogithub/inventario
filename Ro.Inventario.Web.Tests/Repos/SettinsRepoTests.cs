@@ -23,11 +23,11 @@ public class SettinsRepoTests
         mDb.Setup(x => x.GetOneRow(
             It.IsAny<DbCommand>(),
             It.IsAny<Func<IDataReader, Setting>>()
-        )).Returns(()=> Task.FromResult(s));
+        )).ReturnsAsync(s);
 
         var sut = new SettingsRepo(mDb.Object);        
 
-        var actual = await sut.GetValue("IVA", (value) => {
+        var actual = await sut.GetValue(s.Key, (value) => {
             return decimal.Parse(value);
         });
 
