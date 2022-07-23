@@ -5,53 +5,55 @@ using System.Data;
 using System.IO;
 using Xunit.Abstractions;
 using Microsoft.Extensions.Configuration;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Ro.Inventario.Web.Tests;
 
-public class DatabaseProvider
+public static class DatabaseProvider
 {
-    public string DbPath  { get; set; }
-    public string InteropPath  { get; set; }
-    public string ScriptsPath  { get; set; }
-    public string[] InitScripts  { get; set; }    
-    
-    public DatabaseProvider()
-    {        
-        this.InitScripts = new string[] 
+    public static string DbPath { get; set; }
+    public static string InteropPath { get; set; }
+    public static string ScriptsPath { get; set; }
+    public static string[] InitScripts { get; set; }
+
+    static DatabaseProvider()
+    {
+        InitScripts = new string[]
         {
             "inventario.sql",
             "reportes.sql"
         };
         Configure();
-    }    
+    }
 
-    private void Configure()
-    {        
+    private static void Configure()
+    {
         var config = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())            
+            .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.Testing.json", optional: true)
             .Build();
-        this.DbPath = config.GetSection("DbPath").Value;
-        this.InteropPath = config.GetSection("InteropPath").Value;
-        this.ScriptsPath = config.GetSection("ScriptsPath").Value;        
+        DbPath = config.GetSection("DbPath").Value;
+        InteropPath = config.GetSection("InteropPath").Value;
+        ScriptsPath = config.GetSection("ScriptsPath").Value;
     }
 
 
-    public async Task InitDb()
-    {     
-        File.Delete(this.DbPath);
+    public static void InitDb()
+    {
+        File.Delete(DbPath);
         var db = GetDb();
-        foreach (var fileName in this.InitScripts)
+        foreach (var fileName in InitScripts)
         {
-            var path = Path.Join(this.ScriptsPath, fileName);
-            string sql = File.ReadAllText(path);            
-            await db.ExecuteNonQuery(sql.ToCmd());
+            var path = Path.Join(ScriptsPath, fileName);
+            string sql = File.ReadAllText(path);
+            db.ExecuteNonQuery(sql.ToCmd()).Wait();
         }
     }
 
-    public IDbAsync GetDb()
-    {     
-        var connString = string.Format("Data Source={0}; Version=3;", this.DbPath);
-        return new Database(connString, new DbTasks(this.InteropPath));
+    public static IDbAsync GetDb()
+    {
+        var connString = string.Format("Data Source={0}; Version=3;", DbPath);
+        return new Database(connString, new DbTasks(InteropPath));
     }
 }

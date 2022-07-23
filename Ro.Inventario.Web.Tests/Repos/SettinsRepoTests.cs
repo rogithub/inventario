@@ -7,16 +7,15 @@ using Xunit.Abstractions;
 
 namespace Ro.Inventario.Web.Tests;
 
+[TestBeforeAfter()]
 public class SettinsRepoTests
 {
     private readonly ITestOutputHelper _output;
-    private readonly DatabaseProvider _dbProvider;
     public SettinsRepoTests(ITestOutputHelper output)
     {
         this._output = output;
-        this._dbProvider = new DatabaseProvider();
     }
-    
+
     [Fact]
     public async Task GetValue()
     {
@@ -32,34 +31,34 @@ public class SettinsRepoTests
             It.IsAny<Func<IDataReader, Setting>>()
         )).ReturnsAsync(s);
 
-        var sut = new SettingsRepo(mDb.Object);        
+        var sut = new SettingsRepo(mDb.Object);
 
-        var actual = await sut.GetValue(s.Key, (value) => {
+        var actual = await sut.GetValue(s.Key, (value) =>
+        {
             return decimal.Parse(value);
         });
 
         Assert.Equal(decimal.Zero, actual);
-    }    
+    }
 
     [Fact]
     public async Task Integration_Settings()
-    {        
-        await _dbProvider.InitDb();
-
+    {
         var s = new Setting()
         {
             Key = "IVA",
             Value = "0.16"
         };
 
-        var sut = new SettingsRepo(_dbProvider.GetDb());
+        var sut = new SettingsRepo(DatabaseProvider.GetDb());
 
-        var actual = await sut.GetValue(s.Key, (value) => {
+        var actual = await sut.GetValue(s.Key, (value) =>
+        {
             Assert.Equal(s.Value, value);
             return decimal.Parse(value);
         });
 
         Assert.Equal(decimal.Parse(s.Value), actual);
-        
-    }    
+
+    }
 }
