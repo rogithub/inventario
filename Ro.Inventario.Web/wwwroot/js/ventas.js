@@ -210,9 +210,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var page = new Venta();
     page.bind();
     console.log("binding ko");
-    $("#reader").on("onScanSuccess", function (e, a, b) {
-        console.dir(a);
-        page.onScanSuccess(a, b);
+    $("#reader").on("onScanSuccess", function (e, decodedText, decodedResult) {
+        page.onScanSuccess(decodedText, decodedResult);
     });
 }, false);
 
