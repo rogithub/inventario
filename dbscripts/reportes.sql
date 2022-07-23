@@ -107,6 +107,37 @@ FROM v_inventario p JOIN v_ventas_productos v on p.Id = v.ProductoId
 GROUP BY p.Id
 ORDER BY FechaAjuste DESC;
 
+
+DROP VIEW IF EXISTS rpt_compras_mensual;
+CREATE VIEW rpt_compras_mensual
+AS
+SELECT 
+       strftime("%m-%Y", FechaFactura) as 'Mes',
+	   COUNT(DISTINCT(Id)) as NumeroCompras,
+	   SUM(cast(TotalFactura AS FLOAT)) as Inversion
+FROM Compras GROUP BY strftime("%m-%Y", FechaFactura);
+
+
+-- simulating full outer join
+-- https://www.sqlitetutorial.net/sqlite-full-outer-join/
+DROP VIEW IF EXISTS rpt_retorno_inversion_mensual;
+CREATE VIEW rpt_retorno_inversion_mensual
+AS
+SELECT 
+	v.Mes, c.NumeroCompras, c.Inversion as TotalCompras, v.NumeroVentas,
+	v.Inversion, v.Venta, v.Ganancia
+FROM rpt_estimado_ventas_mensual v 
+LEFT JOIN rpt_compras_mensual c USING(Mes)
+UNION ALL
+SELECT 
+	c.Mes, c.NumeroCompras, c.Inversion as TotalCompras, v.NumeroVentas,
+	v.Inversion, v.Venta, v.Ganancia
+FROM rpt_compras_mensual c
+LEFT JOIN rpt_estimado_ventas_mensual v  USING(Mes)
+WHERE v.Mes IS NULL
+ORDER BY Mes;
+
+
 COMMIT;
 
 
